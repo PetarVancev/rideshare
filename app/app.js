@@ -1,14 +1,17 @@
 const express = require("express");
 const dotenv = require("dotenv");
+const bodyParser = require("body-parser");
 
 const dbCon = require("./db");
 
 // Route imports
 const geoLocationRoutes = require("./routes/geoLocationRoutes");
+const registerRoutes = require("./routes/registerRoutes");
 
 dotenv.config();
 
 const app = express();
+app.use(bodyParser.json());
 const port = process.env.PORT || 3000;
 
 // Test if db connected
@@ -22,6 +25,8 @@ dbCon.getConnection((err) => {
 
 // Routes
 app.use("/locations", geoLocationRoutes);
+
+app.use("/register", registerRoutes);
 
 app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
