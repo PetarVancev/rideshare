@@ -6,7 +6,7 @@ const dbCon = require("./db");
 
 // Route imports
 const geoLocationRoutes = require("./routes/geoLocationRoutes");
-const registerRoutes = require("./routes/registerRoutes");
+const authRoutes = require("./routes/authRoutes");
 
 dotenv.config();
 
@@ -26,7 +26,7 @@ dbCon.getConnection((err) => {
 // Routes
 app.use("/locations", geoLocationRoutes);
 
-app.use("/register", registerRoutes);
+app.use("/auth", authRoutes);
 
 app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);

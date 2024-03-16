@@ -1,10 +1,14 @@
 const express = require("express");
 const registerController = require("../controllers/registerController");
+const loginController = require("../controllers/loginController");
 
 const router = express.Router();
 
 //Register a new passenger
-router.post("/passenger", registerController.registerPassenger);
+router.post("/register/passenger", registerController.registerPassenger);
+
+//Login a new driver
+router.post("/login/passenger", loginController.loginPassenger);
 
 //Check if email already has an account
 router.get("/passenger/check-email", async (req, res) => {
@@ -47,7 +51,10 @@ router.get("/passenger/check-phone", async (req, res) => {
 });
 
 //Register a new driver
-router.post("/driver", registerController.registerDriver);
+router.post("/register/driver", registerController.registerDriver);
+
+//Login a new driver
+router.post("/login/driver", loginController.loginDriver);
 
 //Check if email already has an account
 router.get("/driver/check-email", async (req, res) => {

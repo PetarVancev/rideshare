@@ -81,4 +81,5 @@ module.exports = {
   registerDriver,
   userEmailExists,
   userPhoneExists,
+  userTypeToDbTableName,
 };
