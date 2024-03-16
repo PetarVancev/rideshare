@@ -1,6 +1,7 @@
 const express = require("express");
 const registerController = require("../controllers/registerController");
 const loginController = require("../controllers/loginController");
+const passwordResetController = require("../controllers/passwordResetController");
 
 const router = express.Router();
 
@@ -50,6 +51,18 @@ router.get("/passenger/check-phone", async (req, res) => {
   }
 });
 
+// Request a password reset
+router.post(
+  "/passenger/request-password-reset",
+  passwordResetController.requestPassengerPasswordReset
+);
+
+// Reset password
+router.post(
+  "/passenger/password-reset",
+  passwordResetController.resetPassengerPassword
+);
+
 //Register a new driver
 router.post("/register/driver", registerController.registerDriver);
 
@@ -95,5 +108,17 @@ router.get("/driver/check-phone", async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
+
+// Request a password reset
+router.post(
+  "/driver/request-password-reset",
+  passwordResetController.requestDriverPasswordReset
+);
+
+// Reset password
+router.post(
+  "/driver/password-reset",
+  passwordResetController.resetDriverPassword
+);
 
 module.exports = router;

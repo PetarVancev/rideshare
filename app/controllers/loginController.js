@@ -1,5 +1,7 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const crypto = require("crypto");
+const nodemailer = require("nodemailer");
 
 const dbCon = require("../db");
 const userTypeToDbTableName =
@@ -39,7 +41,7 @@ async function loginUser(userType, req, res) {
 
     // If email and password are valid, create a JWT token
     const token = jwt.sign(
-      { userId: user.id, email: user.email },
+      { userId: user.id, userType: userType, email: user.email },
       process.env.JWT_SECRET,
       {
         expiresIn: "6h", // Token expiration
@@ -62,4 +64,8 @@ async function loginDriver(req, res) {
   return await loginUser("driver", req, res);
 }
 
-module.exports = { loginPassenger, loginDriver };
+module.exports = {
+  loginPassenger,
+  loginDriver,
+  findUserByEmail,
+};
