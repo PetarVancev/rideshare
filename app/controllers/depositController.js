@@ -2,6 +2,9 @@ const jwt = require("jsonwebtoken");
 const dbCon = require("../db");
 
 async function deposit(req, res) {
+  // Set denomination amount here
+  const denomination = 300;
+
   const token = req.headers.authorization;
 
   if (!token) {
@@ -14,11 +17,19 @@ async function deposit(req, res) {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const amount = req.body.amount;
 
+    if (amount % denomination != 0) {
+      return res
+        .status(403)
+        .json({
+          error: "You can only deposit in denominations of " + denomination,
+        });
+    }
+
     const userType = decoded.userType;
     const passengerId = decoded.userId;
 
     if (userType != "passenger") {
-      return res.status(401).json({ error: "Only passengers can deposit" });
+      return res.status(403).json({ error: "Only passengers can deposit" });
     }
 
     // Acquire a connection from the pool

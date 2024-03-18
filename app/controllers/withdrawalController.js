@@ -34,7 +34,7 @@ async function requestWithdraw(req, res) {
     const driverId = decoded.userId;
 
     if (userType != "driver") {
-      return res.status(401).json({ error: "Only drivers can withdraw" });
+      return res.status(403).json({ error: "Only drivers can withdraw" });
     }
 
     // Acquire a connection from the pool
@@ -58,7 +58,7 @@ async function requestWithdraw(req, res) {
 
     if (currentBalance < amount) {
       await connection.rollback();
-      return res.status(404).json({ message: "Insufficient balance" });
+      return res.status(402).json({ message: "Insufficient balance" });
     }
 
     const newBalance = currentBalance - amount;
