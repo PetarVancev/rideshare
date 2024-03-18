@@ -9,6 +9,7 @@ const geoLocationRoutes = require("./routes/geoLocationRoutes");
 const authRoutes = require("./routes/authRoutes");
 const ridesRoutes = require("./routes/ridesRoutes");
 const walletRoutes = require("./routes/walletRoutes");
+const reviewsRoutes = require("./routes/reviewsRoutes");
 
 dotenv.config();
 
@@ -30,6 +31,7 @@ app.use("/locations", geoLocationRoutes);
 app.use("/auth", authRoutes);
 app.use("/rides", ridesRoutes);
 app.use("/wallet", walletRoutes);
+app.use("/reviews", reviewsRoutes);
 
 app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);

@@ -1,4 +1,3 @@
 Reservations w pick up loc
-Ride reviews
 
 Confirmation system
