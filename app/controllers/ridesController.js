@@ -151,10 +151,19 @@ async function searchForRides(req, res) {
   const { from_loc_id, to_loc_id, date_time } = req.query;
 
   try {
-    const sql = `SELECT id,driver_id, from_loc_id, to_loc_id, date_time, total_seats,free_seats, price, car_model, car_color FROM rides 
-                WHERE from_loc_id = ? AND to_loc_id = ? AND DATE(date_time) = ?`;
+    // Include the main location and its sublocations in the search
+    const sql = `SELECT id, driver_id, from_loc_id, to_loc_id, date_time, total_seats, free_seats, price, car_model, car_color FROM rides 
+                WHERE (from_loc_id = ? OR from_loc_id IN (SELECT id FROM locations WHERE part_of = ?)) 
+                  AND (to_loc_id = ? OR to_loc_id IN (SELECT id FROM locations WHERE part_of = ?))
+                  AND DATE(date_time) = ?`;
 
-    const [rides] = await dbCon.query(sql, [from_loc_id, to_loc_id, date_time]);
+    const [rides] = await dbCon.query(sql, [
+      from_loc_id,
+      from_loc_id,
+      to_loc_id,
+      to_loc_id,
+      date_time,
+    ]);
 
     return res.status(200).json(rides);
   } catch (error) {

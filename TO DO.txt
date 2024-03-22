@@ -1,3 +1,14 @@
-Reservations w pick up loc
+Reservations w pick up loc (we can leave for future)
+-Steps
+1.Passenger suggests a pick up location, reservation status is P - proposed
+2.Mail is sent to Driver
+3.And everytime a driver refreshes page he gets all reservations made for his ride that are status P (need a route for this)
+4.Driver confirms or declines(reservation is deleted from table )
+5.Passenger gets mail if declined or confirmed. (also need route for passenger to see 'R' - reserved reservations and another route for passenger to se 'P' - proposed reservations)
+Also after every new reservation that is/becomes 'R' we need to check if there are enough spaces left in the ride, and delete the proposed reservations for which there aren't anough free spaces after the new reservation
+
+Maybe also Notifications table in DB??
 
 Confirmation system
+
+Can't post a ride if no driver license info provided???
