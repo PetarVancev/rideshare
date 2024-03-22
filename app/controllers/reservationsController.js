@@ -300,9 +300,17 @@ async function getMyReservations(req, res) {
     }
 
     const getReservationsQuery = `
-      SELECT * 
-      FROM reservations 
-      WHERE passenger_id = ? ${statusFilter}
+      SELECT 
+        reservations.*, 
+        driver_accounts.phone_num AS driver_phone
+      FROM 
+        reservations 
+      INNER JOIN 
+        rides ON reservations.ride_id = rides.id 
+      INNER JOIN 
+        driver_accounts ON rides.driver_id = driver_accounts.id
+      WHERE 
+        reservations.passenger_id = ? ${statusFilter}
     `;
     const [reservations] = await dbCon.query(getReservationsQuery, [
       passengerId,

@@ -1,6 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const bodyParser = require("body-parser");
+const cors = require("cors");
 
 const dbCon = require("./db");
 
@@ -17,6 +18,13 @@ dotenv.config();
 
 const app = express();
 app.use(bodyParser.json());
+app.use(
+  cors({
+    origin: "http://localhost:3001",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 const port = process.env.PORT || 3000;
 
 // Test if db connected
