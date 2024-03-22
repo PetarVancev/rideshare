@@ -273,4 +273,46 @@ async function confirmArrival(req, res) {
   }
 }
 
-module.exports = { instantReserve, confirmArrival };
+async function getMyReservations(req, res) {
+  const token = req.headers.authorization;
+
+  if (!token) {
+    return res.status(401).json({ error: "Unauthorized: Token missing" });
+  }
+
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+  const userType = decoded.userType;
+  const passengerId = decoded.userId;
+
+  if (userType !== "passenger") {
+    return res
+      .status(403)
+      .json({ error: "Only passengers can view reservations" });
+  }
+
+  try {
+    let status = req.query.status || "";
+    let statusFilter = "";
+
+    if (status) {
+      statusFilter = ` AND status = '${status}'`;
+    }
+
+    const getReservationsQuery = `
+      SELECT * 
+      FROM reservations 
+      WHERE passenger_id = ? ${statusFilter}
+    `;
+    const [reservations] = await dbCon.query(getReservationsQuery, [
+      passengerId,
+    ]);
+
+    return res.status(200).json(reservations);
+  } catch (error) {
+    console.error("Error when fetching passenger reservations:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+
+module.exports = { instantReserve, confirmArrival, getMyReservations };

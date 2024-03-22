@@ -9,6 +9,4 @@ Also after every new reservation that is/becomes 'R' we need to check if there a
 
 Maybe also Notifications table in DB??
 
-Complain system
-
 Can't post a ride if no driver license info provided???
