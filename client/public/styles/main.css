@@ -1,0 +1,109 @@
+/* General */
+body {
+  color: #022c66;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: #022c66 !important;
+  font-weight: bold !important;
+}
+
+button.dark-button {
+  border: none;
+  background-color: #022c66;
+}
+
+button.dark-button:hover,
+button.dark-button:active {
+  background-color: #022c66;
+}
+
+button.transparent-button {
+  border: none;
+  background-color: rgba(0, 0, 0, 0);
+  color: #022c66;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.pl-0 {
+  padding-left: 0 !important;
+}
+
+/* Navbar */
+
+.container .navbar-toggler {
+  padding-left: 0;
+  border: 0;
+}
+
+.container .navbar-toggler:focus {
+  box-shadow: none;
+}
+
+.container .navbar-toggler .navbar-toggler-icon {
+  background-image: url(../images/hamburger-icon.svg);
+  fill: #022c66;
+}
+
+/* Login and register */
+
+.auth-container h2 {
+  font-size: 1rem;
+}
+
+.auth-forms input {
+  background-color: #edf0f7;
+  margin-bottom: 12px;
+  border: 0;
+}
+
+.auth-forms input::placeholder,
+.auth-forms .form-label {
+  color: #022c66;
+  font-weight: bold;
+  font-size: 0.875rem;
+}
+
+.auth-forms input[type="radio"] {
+  background-color: white;
+  border: 2px solid #022c66;
+}
+
+.auth-forms input[type="radio"]:checked {
+  background-color: #022c66;
+  color: #022c66;
+  --bs-form-check-bg-image: none !important;
+}
+
+.auth-forms input[type="radio"]:focus {
+  box-shadow: none;
+}
+
+.auth-forms .form-label {
+  font-weight: bold;
+  font-size: 0.875rem;
+}
+
+.auth-text-input {
+  min-height: 56px;
+}
+
+.auth-container button {
+  min-height: 56px;
+  margin-top: 10px;
+  font-weight: bold;
+  font-size: 0.875rem;
+}
+
+.forgot-password {
+  color: #022c66;
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: bold;
+}
