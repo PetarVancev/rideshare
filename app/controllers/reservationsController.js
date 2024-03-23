@@ -91,6 +91,74 @@ async function insertReservation(
   ]);
 }
 
+async function isDriverAssociatedWithReservation(driverId, reservationId) {
+  const checkDriverQuery = `
+    SELECT COUNT(*) AS count
+    FROM rides r
+    INNER JOIN reservations rs ON r.id = rs.ride_id
+    WHERE r.driver_id = ? AND rs.id = ?;
+  `;
+  const [result] = await dbCon.query(checkDriverQuery, [
+    driverId,
+    reservationId,
+  ]);
+  return result[0].count > 0;
+}
+
+async function updateDriverLocationAndStatus(
+  latitude,
+  longitude,
+  reservationId
+) {
+  const updateQuery = `
+    UPDATE reservations
+    SET driver_lat = ?, driver_lon = ?, driver_arrived = true
+    WHERE id = ?;
+  `;
+
+  await dbCon.query(updateQuery, [latitude, longitude, reservationId]);
+}
+
+function isValidCoordinates(lat, lon) {
+  if (!lat || !lon) {
+    return false;
+  }
+
+  const latitude = parseFloat(lat);
+  const longitude = parseFloat(lon);
+  console.log(latitude);
+  console.log(longitude);
+
+  if (isNaN(latitude) || isNaN(longitude)) {
+    return false;
+  }
+
+  if (latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180) {
+    return false;
+  }
+
+  const latStr = lat.toString();
+  const lonStr = lon.toString();
+  if (
+    !hasMinimumDecimalPlaces(latStr, 5) ||
+    !hasMinimumDecimalPlaces(lonStr, 5)
+  ) {
+    return false;
+  }
+
+  return true;
+}
+
+function hasMinimumDecimalPlaces(str, minDecimals) {
+  const decimalIndex = str.indexOf(".");
+  if (decimalIndex === -1) {
+    return false;
+  }
+
+  const decimalPartLength = str.length - 1 - decimalIndex;
+  return decimalPartLength >= minDecimals;
+}
+
 async function instantReserve(req, res) {
   const token = req.headers.authorization;
 
@@ -323,4 +391,66 @@ async function getMyReservations(req, res) {
   }
 }
 
-module.exports = { instantReserve, confirmArrival, getMyReservations };
+async function confirmDriverAtPickup(req, res) {
+  try {
+    const token = req.headers.authorization;
+
+    if (!token) {
+      return res.status(401).json({ error: "Unauthorized: Token missing" });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    const userType = decoded.userType;
+    const driverId = decoded.userId;
+
+    const reservationId = req.query.reservationId;
+    const driverLatitude = req.body.latitude;
+    const driverLongitude = req.body.longitude;
+
+    if (userType !== "driver") {
+      return res
+        .status(403)
+        .json({ error: "Only drivers can confirm arrival at pick-up" });
+    }
+
+    const isValidLocation = isValidCoordinates(driverLatitude, driverLongitude);
+    if (!isValidLocation) {
+      return res.status(403).json({
+        error:
+          "You must provide valid location to confirm that you are at pick-up",
+      });
+    }
+    // Check if the driver is associated with the reservation
+    const isAssociated = await isDriverAssociatedWithReservation(
+      driverId,
+      reservationId
+    );
+    if (!isAssociated) {
+      return res
+        .status(403)
+        .json({ error: "This reservation is not associated with the driver" });
+    }
+
+    // Update driver location and status in the reservations table
+    await updateDriverLocationAndStatus(
+      driverLatitude,
+      driverLongitude,
+      reservationId
+    );
+
+    return res
+      .status(200)
+      .json({ message: "Driver succesfuly confirmed that the is at pick-up" });
+  } catch (error) {
+    console.error("Error when updating driver location and status:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+
+module.exports = {
+  instantReserve,
+  confirmArrival,
+  getMyReservations,
+  confirmDriverAtPickup,
+};

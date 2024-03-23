@@ -5,6 +5,7 @@ async function payToDriver(
   rideId,
   amount
 ) {
+  const percentWeCharge = 0.25;
   try {
     const getDriverBalanceQuery =
       "SELECT balance FROM driver_accounts WHERE id = ?";
@@ -14,8 +15,8 @@ async function payToDriver(
       throw new Error("Driver not found");
     }
 
+    amount = amount * (1 - percentWeCharge);
     const currentBalance = driver[0].balance;
-
     const newBalance = currentBalance + amount;
 
     const updateDriverBalanceQuery =
