@@ -3,10 +3,9 @@ import axios from "axios";
 import { AuthContext } from "./AuthContext";
 import { useNavigate } from "react-router-dom";
 import { Container, Row, Col, Form, Button, Alert } from "react-bootstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 
 import NavBar from "./NavBar";
+import BackButton from "./BackButton";
 
 const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
@@ -43,10 +42,7 @@ const Login = () => {
     <div>
       <NavBar />
       <Container>
-        <button className="transparent-button pl-0 mb-4 mt-3">
-          <FontAwesomeIcon icon={faChevronLeft} size="xs" />
-          &nbsp;&nbsp;Назад
-        </button>
+        <BackButton />
         <div className="auth-container">
           <h2>Најави се</h2>
           <Form onSubmit={handleSubmit} className="auth-forms">

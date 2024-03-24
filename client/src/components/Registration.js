@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Container, Row, Col, Form, Button, Alert } from "react-bootstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 
 import NavBar from "./NavBar";
+import BackButton from "./BackButton";
 
 const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
@@ -40,10 +39,7 @@ const Registration = () => {
     <div>
       <NavBar />
       <Container>
-        <button className="transparent-button pl-0 mb-4 mt-3">
-          <FontAwesomeIcon icon={faChevronLeft} size="xs" />
-          &nbsp;&nbsp;Назад
-        </button>
+        <BackButton />
         <div className="auth-container">
           <h2>Податоци за вас</h2>
           <Form onSubmit={handleSubmit} className="auth-forms">

@@ -37,6 +37,10 @@ button.transparent-button {
 
 /* Navbar */
 
+.navbar {
+  height: 58px;
+}
+
 .container .navbar-toggler {
   padding-left: 0;
   border: 0;
@@ -49,6 +53,14 @@ button.transparent-button {
 .container .navbar-toggler .navbar-toggler-icon {
   background-image: url(../images/hamburger-icon.svg);
   fill: #022c66;
+}
+
+.navbar.blue {
+  background-color: #022c66 !important;
+}
+
+.navbar.blue .container .navbar-toggler .navbar-toggler-icon {
+  background-image: url(../images/hamburger-icon-white.svg);
 }
 
 /* Login and register */
@@ -106,4 +118,74 @@ button.transparent-button {
   text-decoration: none;
   font-size: 0.875rem;
   font-weight: bold;
+}
+
+/* Home page */
+
+.home-background {
+  height: 100vh;
+  background: linear-gradient(to bottom, #022c66 50%, transparent 50%);
+}
+
+.search-inputs {
+  display: flex;
+  width: 100%;
+  border-bottom: 1px solid #022c66;
+  padding-bottom: 5px;
+  margin-top: 10px;
+}
+
+.search-inputs input,
+.spaces-dropdown {
+  margin-left: 10px;
+  border: 0;
+  width: 100%;
+}
+
+.search-inputs input:focus {
+  border: 0 !important;
+  outline: none;
+}
+
+.search-inputs input::placeholder,
+.search-inputs input,
+.spaces-dropdown,
+.autocomplete-dropdown ul li {
+  color: #022c66;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.autocomplete-dropdown ul {
+  padding-left: 0;
+  background-color: white;
+}
+
+.autocomplete-dropdown ul li div {
+  padding-left: 2px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+.home-container {
+  height: calc(100vh - 58px);
+}
+
+/* For Chrome */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  display: none;
+}
+
+/* For Firefox */
+input[type="date"]::-moz-calendar-picker-indicator {
+  display: none;
+}
+
+/* For Edge */
+input[type="date"]::-ms-clear {
+  display: none;
+}
+
+.date-pick-field {
+  padding-left: 0 !important;
 }

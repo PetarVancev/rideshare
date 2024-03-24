@@ -7,6 +7,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 // Components
 import Login from "./components/LoginForm";
 import Registration from "./components/Registration";
+import Home from "./components/Home";
 import { AuthProvider } from "./components/AuthContext";
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
     <AuthProvider>
       <Router>
         <Routes>
+          <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Registration />} />{" "}
         </Routes>
