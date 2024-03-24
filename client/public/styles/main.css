@@ -39,6 +39,7 @@ button.transparent-button {
 
 .navbar {
   height: 58px;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.05); /* Adjust values as needed */
 }
 
 .container .navbar-toggler {
@@ -57,10 +58,54 @@ button.transparent-button {
 
 .navbar.blue {
   background-color: #022c66 !important;
+  box-shadow: none;
 }
 
 .navbar.blue .container .navbar-toggler .navbar-toggler-icon {
   background-image: url(../images/hamburger-icon-white.svg);
+}
+
+/* Bottom bar */
+
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: white;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 10px 0;
+  border-top: 1px solid #022c66;
+  box-shadow: 0px -5px 10px rgba(0, 0, 0, 0.1);
+}
+
+.bottom-bar .icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #555;
+  text-decoration: none;
+}
+
+.bottom-bar .icon svg path {
+  color: #555;
+  fill: #555;
+}
+
+.bottom-bar .icon.selected span,
+.bottom-bar .icon.selected svg path {
+  color: #022c66;
+  fill: #022c66;
+}
+
+.icon i {
+  font-size: 24px;
+}
+.icon span {
+  font-size: 12px;
+  margin-top: 5px;
 }
 
 /* Login and register */
@@ -127,12 +172,18 @@ button.transparent-button {
   background: linear-gradient(to bottom, #022c66 50%, transparent 50%);
 }
 
+.search-ride-card {
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1), 0px 0px 4px rgba(0, 0, 0, 0.1); /* Adjust values for shadow down and to the sides */
+}
+
 .search-inputs {
   display: flex;
   width: 100%;
   border-bottom: 1px solid #022c66;
-  padding-bottom: 5px;
-  margin-top: 10px;
+  padding-bottom: 0;
+  margin-top: 20px;
+  justify-content: end;
+  height: 36px;
 }
 
 .search-inputs input,
@@ -140,11 +191,23 @@ button.transparent-button {
   margin-left: 10px;
   border: 0;
   width: 100%;
+  padding-bottom: 5px;
+}
+
+.search-inputs img,
+.spaces-dropdown img {
+  height: 30px;
+  padding-bottom: 5px;
+}
+
+.search-inputs .p-autocomplete-loader {
+  display: none !important;
 }
 
 .search-inputs input:focus {
   border: 0 !important;
   outline: none;
+  box-shadow: none;
 }
 
 .search-inputs input::placeholder,
@@ -159,12 +222,17 @@ button.transparent-button {
 .autocomplete-dropdown ul {
   padding-left: 0;
   background-color: white;
+  border: 1px solid #022c66;
 }
 
-.autocomplete-dropdown ul li div {
+.autocomplete-dropdown ul li {
   padding-left: 2px;
-  padding-top: 2px;
-  padding-bottom: 2px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+
+.autocomplete-dropdown ul li:hover {
+  background-color: rgba(2, 44, 102, 0.1);
 }
 
 .home-container {
@@ -188,4 +256,21 @@ input[type="date"]::-ms-clear {
 
 .date-pick-field {
   padding-left: 0 !important;
+  color: inherit;
+}
+
+.date-pick-field:focus {
+  color: #022c66 !important;
+}
+
+button.search-button {
+  box-sizing: border-box;
+  width: 100%;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-size: 1rem;
+  font-weight: bold;
+  margin-top: 10px !important;
 }

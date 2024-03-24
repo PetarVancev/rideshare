@@ -5,12 +5,17 @@ import { Dropdown } from "primereact/dropdown";
 import axios from "axios";
 
 import NavBar from "./NavBar";
+import BottomBar from "./BottomBar";
 
 const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 const Home = () => {
+  const currentDate = new Date().toISOString().split("T")[0];
+
   const [from, setFrom] = useState("");
-  const [to, setTo] = useState("");
+  const [fromId, setFromId] = useState("");
+  const [to, setTo] = useState();
+  const [toId, setToId] = useState();
   const [seatsNumber, setSeatsNumber] = useState(1);
   const [dateTime, setDateTime] = useState("");
   const [locationSuggestions, setLocationSuggestions] = useState([]);
@@ -43,22 +48,32 @@ const Home = () => {
 
   const handleFromSuggestionClick = (e) => {
     setFrom(e.value.name);
+    setFromId(e.value.id);
   };
 
   const handleToSuggestionClick = (e) => {
     setTo(e.value.name);
+    setToId(e.value.id);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log(from);
+    console.log(fromId);
+    console.log(seatsNumber);
   };
 
   return (
     <div className="home-background">
       <NavBar type="blue" />
+      <BottomBar />
       <Container className="home-container">
         <div className="d-flex align-items-center justify-content-center h-100">
           <Card className="search-ride-card">
             <Card.Body>
               <Form>
                 <Form.Group controlId="fromLocation">
-                  <div className="search-inputs">
+                  <div className="search-inputs mt-1">
                     <img src="images/location-icon.svg" />
                     <AutoComplete
                       value={from}
@@ -97,6 +112,7 @@ const Home = () => {
                       type="date"
                       value={dateTime}
                       onChange={(e) => setDateTime(e.target.value)}
+                      min={currentDate}
                     />
                   </div>
                 </Form.Group>
@@ -131,11 +147,15 @@ const Home = () => {
                     />
                   </div>
                 </Form.Group>
-                <Button className="dark-button col-12 mt-4" type="submit">
-                  Пребарај
-                </Button>
               </Form>
             </Card.Body>
+            <Button
+              className="dark-button col-12 mt-4 search-button"
+              type="submit"
+              onClick={handleSubmit}
+            >
+              Пребарај
+            </Button>
           </Card>
         </div>
       </Container>
