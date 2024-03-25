@@ -3,6 +3,7 @@ import { Card, Form, Button, Container } from "react-bootstrap";
 import { AutoComplete } from "primereact/autocomplete";
 import { Dropdown } from "primereact/dropdown";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 import NavBar from "./NavBar";
 import BottomBar from "./BottomBar";
@@ -10,6 +11,7 @@ import BottomBar from "./BottomBar";
 const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 const Home = () => {
+  const navigate = useNavigate();
   const currentDate = new Date().toISOString().split("T")[0];
 
   const [from, setFrom] = useState("");
@@ -17,7 +19,7 @@ const Home = () => {
   const [to, setTo] = useState();
   const [toId, setToId] = useState();
   const [seatsNumber, setSeatsNumber] = useState(1);
-  const [dateTime, setDateTime] = useState("");
+  const [date, setDate] = useState("");
   const [locationSuggestions, setLocationSuggestions] = useState([]);
 
   const seats = [
@@ -58,9 +60,8 @@ const Home = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(from);
-    console.log(fromId);
-    console.log(seatsNumber);
+    const url = `/results?from=${fromId}&to=${toId}&date=${date}`;
+    navigate(url);
   };
 
   return (
@@ -110,8 +111,8 @@ const Home = () => {
                     <Form.Control
                       className="date-pick-field"
                       type="date"
-                      value={dateTime}
-                      onChange={(e) => setDateTime(e.target.value)}
+                      value={date}
+                      onChange={(e) => setDate(e.target.value)}
                       min={currentDate}
                     />
                   </div>

@@ -9,6 +9,7 @@ import Login from "./components/LoginForm";
 import Registration from "./components/Registration";
 import Home from "./components/Home";
 import SearchResults from "./components/SearchResults";
+import PasswordResetForm from "./components/PasswordResetForm";
 import { AuthProvider } from "./components/AuthContext";
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Registration />} />
           <Route path="/results" element={<SearchResults />} />
+          <Route path="/reset-password" element={<PasswordResetForm />} />
         </Routes>
       </Router>
     </AuthProvider>

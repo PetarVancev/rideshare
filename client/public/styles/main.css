@@ -382,3 +382,7 @@ button.reserve-button {
   font-weight: bold;
   margin-top: 10px !important;
 }
+
+.rides-count {
+  color: #022c66;
+}

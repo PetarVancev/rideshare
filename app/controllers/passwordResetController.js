@@ -65,7 +65,7 @@ async function handlePasswordReset(userType, req, res) {
         `You are receiving this email because you (or someone else) have requested to reset the password for your account.\n\n` +
         `Please click on the following link to reset your password: ${
           process.env.CLIENT_URL
-        }/reset/${token}?expires=${expirationTime.getTime()}\n\n` +
+        }/reset-password?token=${token}&expires=${expirationTime.getTime()}\n\n` +
         `This link will expire in 1 hour.\n\n` +
         `If you did not request this, please ignore this email and your password will remain unchanged.\n`,
     };

@@ -14,7 +14,7 @@ const NavBar = ({ type }) => {
     <Navbar bg="white" variant="light" expand="lg" className={colorClass}>
       <Container>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Brand href="#home">
+        <Navbar.Brand href="/">
           <img src={"/images/logo" + logoColor + ".png"} alt="Logo" />
         </Navbar.Brand>
         <Nav className="ml-auto">
