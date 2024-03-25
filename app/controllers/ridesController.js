@@ -152,10 +152,35 @@ async function searchForRides(req, res) {
 
   try {
     // Include the main location and its sublocations in the search
-    const sql = `SELECT id, driver_id, from_loc_id, to_loc_id, date_time, total_seats, free_seats, price, car_model, car_color FROM rides 
-                WHERE (from_loc_id = ? OR from_loc_id IN (SELECT id FROM locations WHERE part_of = ?)) 
-                  AND (to_loc_id = ? OR to_loc_id IN (SELECT id FROM locations WHERE part_of = ?))
-                  AND DATE(date_time) = ?`;
+    const sql = `SELECT 
+    r.id, 
+    r.driver_id, 
+    r.from_loc_id, 
+    r.to_loc_id, 
+    r.date_time, 
+    r.total_seats, 
+    r.free_seats, 
+    r.price, 
+    r.car_model, 
+    r.car_color, 
+    d.name AS driver_name, 
+    from_loc.name AS from_location_name, 
+    to_loc.name AS to_location_name
+FROM 
+    rides AS r
+JOIN 
+    driver_accounts AS d ON r.driver_id = d.id
+JOIN 
+    locations AS from_loc ON r.from_loc_id = from_loc.id
+JOIN 
+    locations AS to_loc ON r.to_loc_id = to_loc.id
+WHERE 
+    (r.from_loc_id = ? OR r.from_loc_id IN (SELECT id FROM locations WHERE parent_location_id = ?)) 
+    AND 
+    (r.to_loc_id = ? OR r.to_loc_id IN (SELECT id FROM locations WHERE parent_location_id = ?))
+    AND 
+    DATE(r.date_time) = ?
+    `;
 
     const [rides] = await dbCon.query(sql, [
       from_loc_id,

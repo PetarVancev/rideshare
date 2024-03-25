@@ -35,6 +35,23 @@ button.transparent-button {
   padding-left: 0 !important;
 }
 
+.body-bold-medium {
+  font-size: 1rem;
+  font-weight: 700 !important;
+  line-height: 150%;
+}
+
+.body-xs {
+  font-size: 0.875rem;
+  line-height: 150%;
+}
+
+.body-bold-xs {
+  font-size: 0.875rem;
+  font-weight: 700 !important;
+  line-height: 150%;
+}
+
 /* Navbar */
 
 .navbar {
@@ -264,6 +281,97 @@ input[type="date"]::-ms-clear {
 }
 
 button.search-button {
+  box-sizing: border-box;
+  width: 100%;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-size: 1rem;
+  font-weight: bold;
+  margin-top: 10px !important;
+}
+
+/* Ride cards */
+
+.card.ride-result-card {
+  margin-top: 20px;
+  border: 1px solid #4ac777;
+  box-shadow: 0px 10px 10px -10px rgba(0, 0, 0, 0.2),
+    0px -10px 10px -10px rgba(0, 0, 0, 0.2);
+}
+
+.driver-info h3 {
+  margin-bottom: 0;
+}
+
+.driver-info a {
+  color: #4ac777 !important;
+  text-decoration: none;
+}
+
+.ride-price-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 20px;
+  padding-right: 20px;
+  background-color: #022c66;
+  color: #4ac777;
+  border-top-left-radius: 45%;
+  border-bottom-left-radius: 45%;
+}
+
+.ride-result-card .card-header {
+  padding-right: 0 !important;
+  background-color: white;
+  border-bottom: 1px solid #667e9e;
+}
+
+.destination-info .journey-location {
+  margin-bottom: 0 !important;
+}
+
+.destination-info span {
+  font-size: 11px;
+  color: #4e6c94;
+}
+
+.journey-indicator {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.time-info h4 {
+  color: #667e9e !important;
+  margin-bottom: -3px;
+}
+
+.time-info .departure-info {
+  padding-right: 10px;
+}
+
+.time-info .travel-time {
+  padding-left: 10px;
+}
+
+.time-info .departure-info {
+  border-right: 1px solid #667e9e;
+}
+
+.time-info .departure-info {
+  color: #022c66;
+}
+
+.time-info .border-bot {
+  padding-bottom: 5px;
+  border-bottom: 1px solid #667e9e;
+}
+
+button.reserve-button {
+  line-height: 150%;
+  letter-spacing: 1px;
+  color: #4ac777;
   box-sizing: border-box;
   width: 100%;
   border-top-left-radius: 0px;

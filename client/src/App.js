@@ -8,6 +8,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Login from "./components/LoginForm";
 import Registration from "./components/Registration";
 import Home from "./components/Home";
+import SearchResults from "./components/SearchResults";
 import { AuthProvider } from "./components/AuthContext";
 
 function App() {
@@ -17,7 +18,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Registration />} />{" "}
+          <Route path="/register" element={<Registration />} />
+          <Route path="/results" element={<SearchResults />} />
         </Routes>
       </Router>
     </AuthProvider>
