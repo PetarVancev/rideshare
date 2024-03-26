@@ -52,6 +52,10 @@ button.transparent-button {
   line-height: 150%;
 }
 
+.alert {
+  margin-top: 10px;
+}
+
 /* Navbar */
 
 .navbar {

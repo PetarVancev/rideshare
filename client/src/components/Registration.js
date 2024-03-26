@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Container, Row, Col, Form, Button, Alert } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 import NavBar from "./NavBar";
 import BackButton from "./BackButton";
@@ -9,6 +10,8 @@ import BottomBar from "./BottomBar";
 const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 const Registration = () => {
+  const navigate = useNavigate();
+
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
@@ -20,20 +23,43 @@ const Registration = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const passwordRegex = /^(?=.*[A-ZА-Ш]).{8,}$/i;
+    if (!passwordRegex.test(password)) {
+      setError(
+        "Лозинката мора да има најмалку 8 карактери и една голема буква"
+      );
+      return;
+    }
     try {
-      const response = await axios.post(`${backendUrl}/auth/register/driver`, {
-        email,
-        password,
-      });
-      setMessage(response.data.message);
+      const response = await axios.post(
+        `${backendUrl}/auth/register/${userType}`,
+        {
+          email,
+          password,
+          name,
+          phone_num: phone,
+        }
+      );
+      setError("");
+      setMessage(
+        "Успешно е креиран вашиот профил, ќе бидете пренасочени на страната за најава"
+      );
+      setTimeout(() => {
+        navigate("/login");
+      }, 3000);
     } catch (error) {
-      console.error("Registration failed:", error.response.data.error);
-      setError(error.response.data.error);
+      if (error.response && error.response.data) {
+        setMessage("");
+        setError(error.response.data.error);
+      } else {
+        setMessage("");
+        setError("An unexpected error occurred. Please try again.");
+      }
     }
   };
 
   const handleUserTypeChange = (e) => {
-    setUserType(e.target.value); // Update the role state when the radio input changes
+    setUserType(e.target.value);
   };
 
   return (

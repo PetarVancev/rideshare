@@ -7,13 +7,12 @@ const findUserByEmail = require("./loginController").findUserByEmail;
 const userTypeToDbTableName =
   require("./registerController").userTypeToDbTableName;
 
-async function verifyResetToken(userType, email, resetToken) {
+async function getResetTokenUser(resetToken) {
   try {
-    const user = await findUserByEmail(userType, email);
-    const sql = `SELECT * FROM password_reset_tokens WHERE ${userType}_id = ? AND token = ? AND expires_at > NOW()`;
-    const [rows] = await dbCon.query(sql, [user.id, resetToken]);
+    const sql = `SELECT * FROM password_reset_tokens WHERE token = ? AND expires_at > NOW()`;
+    const [rows] = await dbCon.query(sql, [resetToken]);
 
-    return rows.length > 0;
+    return rows;
   } catch (error) {
     console.error("Error verifying reset token:", error);
     throw error;
@@ -30,7 +29,7 @@ async function deleteResetToken(token) {
   }
 }
 
-async function handlePasswordReset(userType, req, res) {
+async function requestPasswordReset(userType, req, res) {
   const { email } = req.body;
 
   try {
@@ -65,7 +64,7 @@ async function handlePasswordReset(userType, req, res) {
         `You are receiving this email because you (or someone else) have requested to reset the password for your account.\n\n` +
         `Please click on the following link to reset your password: ${
           process.env.CLIENT_URL
-        }/reset-password?token=${token}&expires=${expirationTime.getTime()}\n\n` +
+        }/reset-password?token=${token}&usertype=${userType}&expires=${expirationTime.getTime()}\n\n` +
         `This link will expire in 1 hour.\n\n` +
         `If you did not request this, please ignore this email and your password will remain unchanged.\n`,
     };
@@ -85,21 +84,21 @@ async function handlePasswordReset(userType, req, res) {
 }
 
 async function requestPassengerPasswordReset(req, res) {
-  return await handlePasswordReset("passenger", req, res);
+  return await requestPasswordReset("passenger", req, res);
 }
 
 async function requestDriverPasswordReset(req, res) {
-  return await handlePasswordReset("driver", req, res);
+  return await requestPasswordReset("driver", req, res);
 }
 
 async function resetPassword(userType, req, res) {
-  const { email, resetToken, newPassword } = req.body;
+  const { resetToken, newPassword } = req.body;
 
   try {
     // Verify the reset token
-    const isValidToken = await verifyResetToken(userType, email, resetToken);
+    const resetTokenUser = await getResetTokenUser(resetToken);
 
-    if (!isValidToken) {
+    if (!(resetTokenUser.length > 0)) {
       return res.status(400).json({ error: "Invalid reset token" });
     }
 
@@ -108,9 +107,10 @@ async function resetPassword(userType, req, res) {
     const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
 
     const tableName = userTypeToDbTableName(userType);
-    const user = await findUserByEmail(userType, email);
+    const idFieldName = userType + "_id";
+    const userId = resetTokenUser[0][idFieldName];
     const sql = `UPDATE ${tableName} SET password = ? WHERE id = ?`;
-    await dbCon.query(sql, [hashedPassword, user.id]);
+    await dbCon.query(sql, [hashedPassword, userId]);
 
     await deleteResetToken(resetToken);
 
