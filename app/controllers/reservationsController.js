@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const dbCon = require("../db");
 
 const transactionsController = require("./transactionsController");
+const locationsController = require("./geoLocationController");
 
 async function checkReservationOwnership(
   connection,
@@ -347,30 +348,34 @@ async function getMyReservations(req, res) {
   if (!token) {
     return res.status(401).json({ error: "Unauthorized: Token missing" });
   }
-
-  const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-  const userType = decoded.userType;
-  const passengerId = decoded.userId;
-
-  if (userType !== "passenger") {
-    return res
-      .status(403)
-      .json({ error: "Only passengers can view reservations" });
-  }
-
   try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    const userType = decoded.userType;
+    const passengerId = decoded.userId;
+
+    if (userType !== "passenger") {
+      return res
+        .status(403)
+        .json({ error: "Only passengers can view reservations" });
+    }
+
     let status = req.query.status || "";
     let statusFilter = "";
 
     if (status) {
-      statusFilter = ` AND status = '${status}'`;
+      statusFilter = ` AND reservations.status = '${status}'`;
     }
 
     const getReservationsQuery = `
       SELECT 
         reservations.*, 
-        driver_accounts.phone_num AS driver_phone
+        rides.*, 
+        driver_accounts.name AS driver_name,
+        CASE
+          WHEN reservations.status = 'C' THEN driver_accounts.phone_num
+          ELSE NULL
+        END AS driver_phone
       FROM 
         reservations 
       INNER JOIN 
@@ -384,7 +389,46 @@ async function getMyReservations(req, res) {
       passengerId,
     ]);
 
-    return res.status(200).json(reservations);
+    // Separate reservations, rides, and drivers into individual objects
+    const formattedReservations = await Promise.all(
+      reservations.map(async (reservation) => {
+        const [fromLocation] = await locationsController.getLocation(
+          reservation.from_loc_id
+        );
+        const [toLocation] = await locationsController.getLocation(
+          reservation.to_loc_id
+        );
+
+        return {
+          reservation: {
+            id: reservation.id,
+            status: reservation.status,
+            num_seats: reservation.num_seats,
+            price: reservation.num_seats * reservation.price,
+            // Add other reservation properties as needed
+          },
+          ride: {
+            id: reservation.ride_id,
+            from_loc_id: reservation.from_loc_id,
+            from_location_name: fromLocation.name,
+            to_loc_id: reservation.to_loc_id,
+            to_location_name: toLocation.name,
+            date_time: reservation.date_time,
+            ride_duration: reservation.ride_duration,
+            // Add other ride properties as needed
+          },
+          driver: {
+            id: reservation.driver_id,
+            name: reservation.driver_name,
+            phone_num:
+              reservation.status === "C" ? reservation.driver_phone : null,
+            // Add other driver properties as needed
+          },
+        };
+      })
+    );
+
+    return res.status(200).json(formattedReservations);
   } catch (error) {
     console.error("Error when fetching passenger reservations:", error);
     return res.status(500).json({ error: "Internal Server Error" });

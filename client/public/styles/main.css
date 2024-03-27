@@ -41,6 +41,12 @@ button.transparent-button {
   line-height: 150%;
 }
 
+.body-bold-s {
+  font-size: 0.9rem;
+  font-weight: 700 !important;
+  line-height: 150%;
+}
+
 .body-xs {
   font-size: 0.875rem;
   line-height: 150%;
@@ -54,6 +60,10 @@ button.transparent-button {
 
 .alert {
   margin-top: 10px;
+}
+
+.heading-xs {
+  font-size: 20px;
 }
 
 /* Navbar */
@@ -322,14 +332,16 @@ button.search-button {
   padding-right: 20px;
   background-color: #022c66;
   color: #4ac777;
-  border-top-left-radius: 45%;
-  border-bottom-left-radius: 45%;
+  border-top-left-radius: 30%;
+  border-bottom-left-radius: 30%;
 }
 
-.ride-result-card .card-header {
+.card .card-header {
   padding-right: 0 !important;
   background-color: white;
   border-bottom: 1px solid #667e9e;
+  padding-top: 20px;
+  padding-bottom: 15px;
 }
 
 .destination-info .journey-location {
@@ -389,4 +401,91 @@ button.reserve-button {
 
 .rides-count {
   color: #022c66;
+}
+
+/* My rides */
+
+.category-select {
+  border-bottom: 1px solid #022c66;
+  padding-bottom: 5px;
+}
+
+.category-select div a {
+  padding-bottom: 10px;
+  text-decoration: none;
+  color: #8095b2 !important;
+}
+
+.category-select div a.selected span {
+  color: #022c66 !important;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #022c66;
+}
+
+.card.my-ride-card {
+  margin-top: 20px;
+  border: 1px solid #022c66;
+  box-shadow: 0px 10px 10px -10px rgba(0, 0, 0, 0.2),
+    0px -10px 10px -10px rgba(0, 0, 0, 0.2);
+}
+
+.card.my-ride-card .card-body {
+  padding: 0 0 30px 0;
+}
+
+.card.my-ride-card .card-body > div {
+  padding: 1rem 1rem;
+}
+
+.card.my-ride-card .journey-indicator {
+  padding: 0;
+}
+
+.card.my-ride-card .destination-info h4 {
+  margin-bottom: 0 !important;
+}
+
+.card.my-ride-card .destination-info span {
+  font-size: 0.875rem;
+}
+
+.card.my-ride-card .date-info {
+  background-color: #022c66;
+}
+
+.card.my-ride-card .date-info h4 {
+  color: #4ac777 !important;
+}
+
+.card.my-ride-card .date-info {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.card.my-ride-card .date-info .first {
+  border-right: 1px solid white;
+}
+
+.card.my-ride-card .date-info span {
+  font-size: 0.75rem;
+  color: white;
+  font-weight: 600;
+}
+
+.card.my-ride-card .additional-actions {
+  border-bottom: 1px solid #bfbfbf;
+  color: #022c66;
+}
+
+.card.my-ride-card .arrived-button {
+  background-color: #4ac777;
+  width: 200px;
+  height: 50px;
+  margin: auto;
+}
+
+.card.my-ride-card .confirmation-actions a {
+  margin-top: 8px;
+  color: #022c66;
+  text-decoration: none;
 }

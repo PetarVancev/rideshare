@@ -33,10 +33,12 @@ const Login = () => {
       );
       setToken(response.data.token);
       localStorage.setItem("token", response.data.token);
-      navigate("/home");
+      localStorage.setItem("userType", userType); // Store the user type in local storage
+      navigate("/");
     } catch (error) {
       setToken(null);
       localStorage.removeItem("token");
+      localStorage.removeItem("userType"); // Remove user type from local storage in case of error
       if (error.response && error.response.data) {
         setError(error.response.data.message);
       } else {

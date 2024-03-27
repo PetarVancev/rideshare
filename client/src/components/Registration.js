@@ -50,7 +50,7 @@ const Registration = () => {
     } catch (error) {
       if (error.response && error.response.data) {
         setMessage("");
-        setError(error.response.data.error);
+        setError(error.response.data.message);
       } else {
         setMessage("");
         setError("An unexpected error occurred. Please try again.");

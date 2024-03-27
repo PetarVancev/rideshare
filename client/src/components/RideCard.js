@@ -3,9 +3,38 @@ import { Card, Button } from "react-bootstrap";
 
 const RideCard = ({ ride }) => {
   const departureDateTime = new Date(ride.date_time);
-  const hours = departureDateTime.getHours();
-  const minutes = departureDateTime.getMinutes();
-  const departureTime = `${hours}:${minutes}`;
+  const departureHours = departureDateTime
+    .getHours()
+    .toString()
+    .padStart(2, "0");
+  const departureMinutes = departureDateTime
+    .getMinutes()
+    .toString()
+    .padStart(2, "0");
+  const departureTime = `${departureHours}:${departureMinutes}`;
+
+  let arrivalTime = "";
+  let rideDuration = "";
+
+  if (ride.ride_duration) {
+    const [rideDurationHours, rideDurationMinutes] = ride.ride_duration
+      .split(":")
+      .map(Number);
+    const arrivalDateTime = new Date(departureDateTime);
+    arrivalDateTime.setHours(departureDateTime.getHours() + rideDurationHours);
+    arrivalDateTime.setMinutes(
+      departureDateTime.getMinutes() + rideDurationMinutes
+    );
+    const arrivalHours = arrivalDateTime.getHours().toString().padStart(2, "0");
+    const arrivalMinutes = arrivalDateTime
+      .getMinutes()
+      .toString()
+      .padStart(2, "0");
+    arrivalTime = `${arrivalHours}:${arrivalMinutes}`;
+    rideDuration = `${rideDurationHours
+      .toString()
+      .padStart(2, "0")}:${rideDurationMinutes.toString().padStart(2, "0")}`;
+  }
   return (
     <Card className="ride-result-card">
       <Card.Header className="d-flex justify-content-between">
@@ -34,7 +63,7 @@ const RideCard = ({ ride }) => {
               <h4 className="journey-location body-bold-xs">
                 {ride.to_location_name}
               </h4>
-              <span>06:35</span>
+              <span>{arrivalTime}</span>
             </div>
           </div>
         </div>
@@ -46,7 +75,7 @@ const RideCard = ({ ride }) => {
             </div>
             <div className="travel-time">
               <h4 className="body-bold-xs">Време на патување</h4>
-              <span className="body-bold-xs">1:45</span>
+              <span className="body-bold-xs">{rideDuration}</span>
             </div>
           </div>
         </div>

@@ -7,6 +7,12 @@ Reservations w pick up loc (we can leave for future)
 5.Passenger gets mail if declined or confirmed. (also need route for passenger to see 'R' - reserved reservations and another route for passenger to se 'P' - proposed reservations)
 Also after every new reservation that is/becomes 'R' we need to check if there are enough spaces left in the ride, and delete the proposed reservations for which there aren't anough free spaces after the new reservation
 
-Maybe also Notifications table in DB??
-
 Can't post a ride if no driver license info provided???
+
+Ride duration in db is set as Time, so it cant accept rides longer than 24h
+
+Backend fix situations when jwt expired
+
+Client get userType on login
+
+Reservations based on user type, and redirect to login if not

@@ -1,5 +1,26 @@
 const dbCon = require("../db");
 
+async function getLocation(locationId) {
+  try {
+    const sql = `
+      SELECT 
+        l.id,
+        l.name,
+        l.parent_location_id
+      FROM 
+        locations AS l
+      WHERE 
+        l.id = ?
+    `;
+
+    const [locations] = await dbCon.query(sql, [locationId]);
+    return locations;
+  } catch (error) {
+    console.error("Error when retrieving locations:", error);
+    throw error;
+  }
+}
+
 async function locationsLookup(req, res) {
   try {
     const geoName = req.query.name;
@@ -18,4 +39,4 @@ async function locationsLookup(req, res) {
   }
 }
 
-module.exports = { locationsLookup };
+module.exports = { locationsLookup, getLocation };

@@ -2,6 +2,8 @@ const jwt = require("jsonwebtoken");
 
 const dbCon = require("../db");
 
+const locationsController = require("./geoLocationController");
+
 // Driver functions
 async function postRide(req, res) {
   const token = req.headers.authorization;
@@ -151,35 +153,41 @@ async function searchForRides(req, res) {
   const { from_loc_id, to_loc_id, date_time } = req.query;
 
   try {
-    // Include the main location and its sublocations in the search
-    const sql = `SELECT 
-    r.id, 
-    r.driver_id, 
-    r.from_loc_id, 
-    r.to_loc_id, 
-    r.date_time, 
-    r.total_seats, 
-    r.free_seats, 
-    r.price, 
-    r.car_model, 
-    r.car_color, 
-    d.name AS driver_name, 
-    from_loc.name AS from_location_name, 
-    to_loc.name AS to_location_name
-FROM 
-    rides AS r
-JOIN 
-    driver_accounts AS d ON r.driver_id = d.id
-JOIN 
-    locations AS from_loc ON r.from_loc_id = from_loc.id
-JOIN 
-    locations AS to_loc ON r.to_loc_id = to_loc.id
-WHERE 
-    (r.from_loc_id = ? OR r.from_loc_id IN (SELECT id FROM locations WHERE parent_location_id = ?)) 
-    AND 
-    (r.to_loc_id = ? OR r.to_loc_id IN (SELECT id FROM locations WHERE parent_location_id = ?))
-    AND 
-    DATE(r.date_time) = ?
+    // Get locations for from and to
+    const fromLocation = await locationsController.getLocation(from_loc_id);
+    const toLocation = await locationsController.getLocation(to_loc_id);
+
+    // Your existing code for fetching rides remains unchanged
+    const sql = `
+      SELECT 
+        r.id, 
+        r.driver_id, 
+        r.from_loc_id, 
+        r.to_loc_id, 
+        r.date_time, 
+        r.ride_duration,
+        r.total_seats, 
+        r.free_seats, 
+        r.price, 
+        r.car_model, 
+        r.car_color, 
+        d.name AS driver_name, 
+        from_loc.name AS from_location_name, 
+        to_loc.name AS to_location_name
+      FROM 
+        rides AS r
+      JOIN 
+        driver_accounts AS d ON r.driver_id = d.id
+      JOIN 
+        locations AS from_loc ON r.from_loc_id = from_loc.id
+      JOIN 
+        locations AS to_loc ON r.to_loc_id = to_loc.id
+      WHERE 
+        (r.from_loc_id = ? OR r.from_loc_id IN (SELECT id FROM locations WHERE parent_location_id = ?)) 
+        AND 
+        (r.to_loc_id = ? OR r.to_loc_id IN (SELECT id FROM locations WHERE parent_location_id = ?))
+        AND 
+        DATE(r.date_time) = ?
     `;
 
     const [rides] = await dbCon.query(sql, [
@@ -189,6 +197,11 @@ WHERE
       to_loc_id,
       date_time,
     ]);
+
+    rides.forEach((ride) => {
+      ride.from_location_name = ride.from_location_name;
+      ride.to_location_name = ride.to_location_name;
+    });
 
     return res.status(200).json(rides);
   } catch (error) {

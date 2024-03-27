@@ -26,7 +26,7 @@ const BottomBar = () => {
         </svg>
         <span>Пребарај</span>
       </div>
-      <div className="icon" onClick={() => navigateTo("/search")}>
+      <div className="icon" onClick={() => navigateTo("/")}>
         <svg
           width="24"
           height="24"
@@ -42,7 +42,7 @@ const BottomBar = () => {
         </svg>
         <span>Допаднати</span>
       </div>
-      <div className="icon" onClick={() => navigateTo("/add")}>
+      <div className="icon" onClick={() => navigateTo("/my-rides")}>
         <svg
           width="24"
           height="24"
@@ -58,7 +58,7 @@ const BottomBar = () => {
         </svg>
         <span>Патувања</span>
       </div>
-      <div className="icon" onClick={() => navigateTo("/favorites")}>
+      <div className="icon" onClick={() => navigateTo("/")}>
         <svg
           width="24"
           height="24"
@@ -74,7 +74,7 @@ const BottomBar = () => {
         </svg>
         <span>Паричник</span>
       </div>
-      <div className="icon" onClick={() => navigateTo("/profile")}>
+      <div className="icon" onClick={() => navigateTo("/")}>
         <svg
           width="24"
           height="24"
