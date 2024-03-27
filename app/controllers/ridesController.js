@@ -188,6 +188,8 @@ async function searchForRides(req, res) {
         (r.to_loc_id = ? OR r.to_loc_id IN (SELECT id FROM locations WHERE parent_location_id = ?))
         AND 
         DATE(r.date_time) = ?
+        ORDER BY 
+        r.date_time ASC;
     `;
 
     const [rides] = await dbCon.query(sql, [

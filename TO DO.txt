@@ -9,10 +9,6 @@ Also after every new reservation that is/becomes 'R' we need to check if there a
 
 Can't post a ride if no driver license info provided???
 
-Ride duration in db is set as Time, so it cant accept rides longer than 24h
-
-Backend fix situations when jwt expired
-
-Client get userType on login
-
 Reservations based on user type, and redirect to login if not
+
+Naredno - sredi my reservations fetching based on selected category and style and handle buttons, backend put token verifying in try catch and log invalid token errors, handle logged status and login redirects

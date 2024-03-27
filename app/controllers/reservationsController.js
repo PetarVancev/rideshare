@@ -384,6 +384,8 @@ async function getMyReservations(req, res) {
         driver_accounts ON rides.driver_id = driver_accounts.id
       WHERE 
         reservations.passenger_id = ? ${statusFilter}
+      ORDER BY
+       rides.date_time ASC
     `;
     const [reservations] = await dbCon.query(getReservationsQuery, [
       passengerId,

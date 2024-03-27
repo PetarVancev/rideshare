@@ -13,6 +13,10 @@ h6 {
   font-weight: bold !important;
 }
 
+a {
+  text-decoration: none !important;
+}
+
 button.dark-button {
   border: none;
   background-color: #022c66;
@@ -475,6 +479,7 @@ button.reserve-button {
 .card.my-ride-card .additional-actions {
   border-bottom: 1px solid #bfbfbf;
   color: #022c66;
+  padding: 1rem 1rem;
 }
 
 .card.my-ride-card .arrived-button {

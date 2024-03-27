@@ -79,10 +79,13 @@ const MyRideCard = ({ rideData }) => {
             <h4 className="body-bold-xs">{reservation.num_seats} Место</h4>
           </Col>
         </div>
-        <div className="d-flex justify-content-between additional-actions">
+        <a
+          href={`sms:${driver.phone_num}`}
+          className="d-flex justify-content-between additional-actions"
+        >
           <span className="body-bold-s">Пиши му на димитар</span>
           <img src="images/message-icon.svg" />
-        </div>
+        </a>
         <div className="d-flex flex-column align-items-center confirmation-actions">
           <Button className="dark-button col-12 mt-4 arrived-button body-bold-medium">
             Стигнав
