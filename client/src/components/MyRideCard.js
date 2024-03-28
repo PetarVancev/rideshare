@@ -90,9 +90,7 @@ const MyRideCard = ({ rideData }) => {
           <Button className="dark-button col-12 mt-4 arrived-button body-bold-medium">
             Стигнав
           </Button>
-          <a href="#" className="body-bold-s">
-            Превозот не се реализира
-          </a>
+          <a className="body-bold-s">Превозот не се реализира</a>
         </div>
       </Card.Body>
 

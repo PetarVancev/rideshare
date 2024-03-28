@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, Button } from "react-bootstrap";
 
-const RideCard = ({ ride }) => {
+const RideCard = ({ ride, reserveRide, userType }) => {
   const departureDateTime = new Date(ride.date_time);
   const departureHours = departureDateTime
     .getHours()
@@ -81,9 +81,14 @@ const RideCard = ({ ride }) => {
         </div>
       </Card.Body>
       {/* <Button>Зачувај</Button> */}
-      <Button className="dark-button col-12 mt-4 reserve-button">
-        Резервирај
-      </Button>
+      {userType !== "driver" && (
+        <Button
+          className="dark-button col-12 mt-4 reserve-button"
+          onClick={reserveRide}
+        >
+          Резервирај
+        </Button>
+      )}
     </Card>
   );
 };

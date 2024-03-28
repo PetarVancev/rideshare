@@ -18,7 +18,7 @@ const NavBar = ({ type }) => {
           <img src={"/images/logo" + logoColor + ".png"} alt="Logo" />
         </Navbar.Brand>
         <Nav className="ml-auto">
-          <Nav.Link href="#home">
+          <Nav.Link>
             <svg
               width="20"
               height="23"

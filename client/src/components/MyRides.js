@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 
+import { useAuth } from "./AuthContext";
 import NavBar from "./NavBar";
 import BottomBar from "./BottomBar";
 import MyRideCard from "./MyRideCard";
@@ -9,32 +10,17 @@ import axios from "axios";
 const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 const MyRides = () => {
-  console.log(localStorage.getItem("userType"));
-  console.log(localStorage.getItem("token"));
+  const { isLoggedIn, token, userType } = useAuth();
   const [category, setCategory] = useState("active");
   const [rideData, setRideData] = useState(null);
-  const [userType, setUserType] = useState(null);
 
   useEffect(() => {
-    setUserType(localStorage.getItem("userType"));
-  }, []); // useEffect to set userType once on component mount
-
-  useEffect(() => {
-    if (userType) {
-      // Only fetch data if userType is truthy
+    if (isLoggedIn()) {
       fetchRideData();
     }
-  }, [userType]); // useEffect to fetch data when userType changes
+  }, [location.search]);
 
   const fetchRideData = async () => {
-    const token = localStorage.getItem("token");
-
-    if (!token) {
-      // Handle case where token is not available
-      console.error("Token not found in localStorage");
-      return;
-    }
-
     try {
       const response = await axios.get(
         `${backendUrl}/reservations/${userType}/get-my`, // Using userType directly here
@@ -62,7 +48,6 @@ const MyRides = () => {
         <Row className="category-select justify-content-center mt-3 body-bold-medium">
           <Col className="text-center" xs={4}>
             <a
-              href="#"
               className={` ${
                 category === "active" ? "selected" : ""
               } d-flex justify-content-center`}
@@ -75,7 +60,6 @@ const MyRides = () => {
           </Col>
           <Col className="text-center" xs={4}>
             <a
-              href="#"
               className={` ${
                 category === "proposed" ? "selected" : ""
               } d-flex justify-content-center`}
@@ -88,7 +72,6 @@ const MyRides = () => {
           </Col>
           <Col className="text-center" xs={4}>
             <a
-              href="#"
               className={` ${
                 category === "completed" ? "selected" : ""
               } d-flex justify-content-center`}

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 
+import { useAuth } from "./AuthContext";
 import NavBar from "./NavBar";
 import BottomBar from "./BottomBar";
 import RideCard from "./RideCard";
@@ -10,7 +11,10 @@ import RideCard from "./RideCard";
 const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 const SearchResults = () => {
+  const navigate = useNavigate();
   const location = useLocation();
+  const { isLoggedIn, userType } = useAuth();
+
   const [rides, setRides] = useState([]);
 
   useEffect(() => {
@@ -35,6 +39,13 @@ const SearchResults = () => {
     fetchData();
   }, [location.search]);
 
+  const reserveRide = async (ride) => {
+    if (isLoggedIn) {
+    } else {
+      navigate("/login");
+    }
+  };
+
   return (
     <div>
       <NavBar />
@@ -46,7 +57,12 @@ const SearchResults = () => {
             : "Нема превозници за избраните критериуми"}
         </p>
         {rides.map((ride) => (
-          <RideCard key={ride.id} ride={ride} />
+          <RideCard
+            key={ride.id}
+            ride={ride}
+            reserveRide={reserveRide}
+            userType={userType}
+          />
         ))}
       </Container>
     </div>

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { Container, Row, Col, Form, Button, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
+import { useAuth } from "./AuthContext";
 import NavBar from "./NavBar";
 import BackButton from "./BackButton";
 import BottomBar from "./BottomBar";
@@ -21,40 +21,21 @@ const Registration = () => {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
+  const { registerUser } = useAuth();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const passwordRegex = /^(?=.*[A-ZА-Ш]).{8,}$/i;
-    if (!passwordRegex.test(password)) {
-      setError(
-        "Лозинката мора да има најмалку 8 карактери и една голема буква"
-      );
-      return;
-    }
-    try {
-      const response = await axios.post(
-        `${backendUrl}/auth/register/${userType}`,
-        {
-          email,
-          password,
-          name,
-          phone_num: phone,
-        }
-      );
+    const user = { email, password, name, phone };
+    const res = await registerUser(user, userType);
+    if (res.error) {
+      setMessage("");
+      setError(res.error);
+    } else if (res.success) {
       setError("");
-      setMessage(
-        "Успешно е креиран вашиот профил, ќе бидете пренасочени на страната за најава"
-      );
+      setMessage(res.success);
       setTimeout(() => {
         navigate("/login");
       }, 3000);
-    } catch (error) {
-      if (error.response && error.response.data) {
-        setMessage("");
-        setError(error.response.data.message);
-      } else {
-        setMessage("");
-        setError("An unexpected error occurred. Please try again.");
-      }
     }
   };
 

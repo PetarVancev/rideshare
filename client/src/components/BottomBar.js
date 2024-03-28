@@ -1,8 +1,12 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+
+import { useAuth } from "./AuthContext";
 
 const BottomBar = () => {
+  const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const navigateTo = (path) => {
     navigate(path);
@@ -10,7 +14,10 @@ const BottomBar = () => {
 
   return (
     <div className="bottom-bar">
-      <div className="icon selected" onClick={() => navigateTo("/")}>
+      <div
+        className={`icon ${location.pathname === "/" ? "selected" : ""}`}
+        onClick={() => navigateTo("/")}
+      >
         <svg
           width="24"
           height="24"
@@ -26,7 +33,10 @@ const BottomBar = () => {
         </svg>
         <span>Пребарај</span>
       </div>
-      <div className="icon" onClick={() => navigateTo("/")}>
+      <div
+        className={`icon ${location.pathname === "/saved" ? "selected" : ""}`}
+        onClick={() => navigateTo("/")}
+      >
         <svg
           width="24"
           height="24"
@@ -42,7 +52,12 @@ const BottomBar = () => {
         </svg>
         <span>Допаднати</span>
       </div>
-      <div className="icon" onClick={() => navigateTo("/my-rides")}>
+      <div
+        className={`icon ${
+          location.pathname === "/my-rides" ? "selected" : ""
+        }`}
+        onClick={() => navigateTo("/my-rides")}
+      >
         <svg
           width="24"
           height="24"
@@ -74,7 +89,17 @@ const BottomBar = () => {
         </svg>
         <span>Паричник</span>
       </div>
-      <div className="icon" onClick={() => navigateTo("/")}>
+      <div
+        className={`icon ${
+          location.pathname === "/profile" ||
+          location.pathname === "/login" ||
+          location.pathname === "/register" ||
+          location.pathname === "/request-password-reset"
+            ? "selected"
+            : ""
+        }`}
+        onClick={() => (isLoggedIn() ? navigateTo("/") : navigateTo("/login"))}
+      >
         <svg
           width="24"
           height="24"

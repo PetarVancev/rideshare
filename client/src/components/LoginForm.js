@@ -1,9 +1,8 @@
-import React, { useState, useContext } from "react";
-import axios from "axios";
-import { AuthContext } from "./AuthContext";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Container, Row, Col, Form, Button, Alert } from "react-bootstrap";
 
+import { useAuth } from "./AuthContext";
 import NavBar from "./NavBar";
 import BackButton from "./BackButton";
 import BottomBar from "./BottomBar";
@@ -15,35 +14,16 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [userType, setUserType] = useState("passenger");
 
-  const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
-  const { setToken } = useContext(AuthContext);
+  const { loginUser } = useAuth();
 
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post(
-        backendUrl + `/auth/login/${userType}`,
-        {
-          email,
-          password,
-        }
-      );
-      setToken(response.data.token);
-      localStorage.setItem("token", response.data.token);
-      localStorage.setItem("userType", userType); // Store the user type in local storage
-      navigate("/");
-    } catch (error) {
-      setToken(null);
-      localStorage.removeItem("token");
-      localStorage.removeItem("userType"); // Remove user type from local storage in case of error
-      if (error.response && error.response.data) {
-        setError(error.response.data.message);
-      } else {
-        setError("An unexpected error occurred. Please try again.");
-      }
+    const res = await loginUser(email, password, userType);
+    if (res.error) {
+      setError(res.error);
     }
   };
 
@@ -123,7 +103,6 @@ const Login = () => {
               Најави се
             </Button>
           </Form>
-          {message && <Alert variant="success">{message}</Alert>}
           {error && <Alert variant="danger">{error}</Alert>}
         </div>
       </Container>
