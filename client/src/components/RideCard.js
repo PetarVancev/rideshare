@@ -1,7 +1,10 @@
 import React from "react";
 import { Card, Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
-const RideCard = ({ ride, reserveRide, userType }) => {
+const RideCard = ({ ride }) => {
+  const navigate = useNavigate();
+
   const departureDateTime = new Date(ride.date_time);
   const departureHours = departureDateTime
     .getHours()
@@ -81,14 +84,14 @@ const RideCard = ({ ride, reserveRide, userType }) => {
         </div>
       </Card.Body>
       {/* <Button>Зачувај</Button> */}
-      {userType !== "driver" && (
-        <Button
-          className="dark-button col-12 mt-4 reserve-button"
-          onClick={reserveRide}
-        >
-          Резервирај
-        </Button>
-      )}
+      <Button
+        className="dark-button col-12 mt-4 reserve-button"
+        onClick={() => {
+          navigate(`/ride-info?rideId=${ride.id}`);
+        }}
+      >
+        Повеќе
+      </Button>
     </Card>
   );
 };

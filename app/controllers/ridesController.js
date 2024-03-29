@@ -212,4 +212,71 @@ async function searchForRides(req, res) {
   }
 }
 
-module.exports = { postRide, getMyRides, deleteRide, searchForRides };
+async function getRideInfo(req, res) {
+  const rideId = req.query.rideId;
+
+  try {
+    const sql = `
+    SELECT 
+    r.id, 
+    r.driver_id, 
+    r.date_time, 
+    r.ride_duration,
+    r.total_seats, 
+    r.free_seats, 
+    r.price, 
+    r.car_model, 
+    r.car_color,
+    r.additional_info,
+    d.name AS driver_name, 
+    from_loc.name AS from_location_name, 
+    to_loc.name AS to_location_name
+FROM 
+    rides AS r
+JOIN 
+    driver_accounts AS d ON r.driver_id = d.id
+JOIN 
+    locations AS from_loc ON r.from_loc_id = from_loc.id
+JOIN 
+    locations AS to_loc ON r.to_loc_id = to_loc.id
+WHERE 
+    r.id = ?
+LIMIT 1;
+    `;
+
+    const [ride] = await dbCon.query(sql, [rideId]);
+
+    if (ride.length === 0) {
+      return res.status(404).json({ error: "Ride not found" });
+    }
+
+    const rideInfo = {
+      id: ride[0].id,
+      driver_id: ride[0].driver_id,
+      date_time: ride[0].date_time,
+      ride_duration: ride[0].ride_duration,
+      total_seats: ride[0].total_seats,
+      free_seats: ride[0].free_seats,
+      price: ride[0].price,
+      car_model: ride[0].car_model,
+      car_color: ride[0].car_color,
+      additional_info: ride[0].additional_info,
+      driver_name: ride[0].driver_name,
+      from_location_name: ride[0].from_location_name,
+      to_location_name: ride[0].to_location_name,
+    };
+
+    return res.status(200).json(rideInfo);
+  } catch (error) {
+    console.error("Error when retrieving ride info:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+
+module.exports = {
+  postRide,
+  getMyRides,
+  deleteRide,
+  searchForRides,
+  getRideInfo,
+};

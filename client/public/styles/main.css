@@ -1,6 +1,8 @@
 /* General */
 body {
   color: #022c66;
+  font-family: "Inter", sans-serif !important;
+  font-optical-sizing: auto !important;
 }
 
 h1,
@@ -61,7 +63,7 @@ button.transparent-button {
 }
 
 .body-bold-xs {
-  font-size: 0.875rem;
+  font-size: 0.875rem !important;
   font-weight: 700 !important;
   line-height: 150%;
 }
@@ -70,8 +72,12 @@ button.transparent-button {
   margin-top: 10px;
 }
 
+.heading-xss {
+  font-size: 16px;
+}
+
 .heading-xs {
-  font-size: 20px;
+  font-size: 20px !important;
 }
 
 /* Navbar */
@@ -501,4 +507,42 @@ button.reserve-button {
   margin-top: 8px;
   color: #022c66;
   text-decoration: none;
+}
+
+/* Ride info */
+
+.ride-info h4 {
+  font-size: 16px;
+}
+
+.ride-info > div {
+  border-bottom: 1px solid #022c66;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.ride-info p {
+  font-size: 14px;
+  line-height: 150%;
+  color: #022c66;
+  margin-bottom: 0;
+}
+
+.ride-info .journey-indicator {
+  padding: 0;
+}
+
+.ride-info .info-box2 img {
+  width: 20px;
+  height: 20px;
+}
+
+.ride-info .info-box2 h4 {
+  margin-left: 5px;
+  display: inline;
+}
+
+.ride-info .info-box2 span {
+  display: block;
+  margin-bottom: 15px;
 }

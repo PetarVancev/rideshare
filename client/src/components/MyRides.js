@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
+import { useLocation } from "react-router-dom";
 
 import { useAuth } from "./AuthContext";
 import NavBar from "./NavBar";
@@ -10,12 +11,14 @@ import axios from "axios";
 const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 const MyRides = () => {
+  const location = useLocation();
   const { isLoggedIn, token, userType } = useAuth();
   const [category, setCategory] = useState("active");
   const [rideData, setRideData] = useState(null);
 
   useEffect(() => {
     if (isLoggedIn()) {
+      console.log("inside");
       fetchRideData();
     }
   }, [location.search]);

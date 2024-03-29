@@ -9,6 +9,8 @@ router.get("/get-my", ridesController.getMyRides);
 
 router.get("/search", ridesController.searchForRides);
 
+router.get("/get-ride", ridesController.getRideInfo);
+
 router.delete("/delete/:rideId", ridesController.deleteRide);
 
 module.exports = router;

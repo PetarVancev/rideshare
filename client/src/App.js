@@ -12,6 +12,7 @@ import PasswordResetRequest from "./components/PasswordResetRequestForm";
 import Home from "./components/Home";
 import SearchResults from "./components/SearchResults";
 import MyRides from "./components/MyRides";
+import RideInfo from "./components/RideInfo";
 import { AuthProvider } from "./components/AuthContext";
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
           />
           <Route path="/reset-password" element={<PasswordResetForm />} />
           <Route path="/results" element={<SearchResults />} />
+          <Route path="/ride-info" element={<RideInfo />} />
           <Route path="/my-rides" element={<MyRides />} />
         </Routes>
       </AuthProvider>
