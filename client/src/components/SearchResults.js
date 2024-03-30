@@ -37,7 +37,7 @@ const SearchResults = () => {
   }, [location.search]);
 
   return (
-    <div>
+    <div className="has-bottom-bar">
       <NavBar />
       <BottomBar />
       <Container>

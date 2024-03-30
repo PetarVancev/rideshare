@@ -1,8 +1,10 @@
 const jwt = require("jsonwebtoken");
 const dbCon = require("../db");
 
+const ridesController = require("./ridesController");
 const transactionsController = require("./transactionsController");
 const locationsController = require("./geoLocationController");
+const reviewsController = require("./reviewsController");
 
 async function checkReservationOwnership(
   connection,
@@ -36,12 +38,6 @@ async function getRideAndDriverDetails(connection, reservationId) {
     reservationId,
   ]);
   return rideAndDriver.length > 0 ? rideAndDriver[0] : null;
-}
-
-async function checkRideExistence(connection, rideId) {
-  const checkRideQuery = "SELECT free_seats FROM rides WHERE id = ?";
-  const [rideRows] = await connection.query(checkRideQuery, [rideId]);
-  return rideRows.length > 0 ? rideRows[0] : null;
 }
 
 async function getPassengerBalance(connection, passengerId) {
@@ -176,7 +172,7 @@ async function instantReserve(req, res) {
     const passengerId = decoded.userId;
 
     const rideId = req.query.rideId;
-    const seatsNeeded = req.query.seats;
+    const seatsNeeded = parseInt(req.query.seats);
 
     if (seatsNeeded < 1) {
       return res
@@ -193,7 +189,7 @@ async function instantReserve(req, res) {
     connection = await dbCon.getConnection();
     await connection.beginTransaction();
 
-    const ride = await checkRideExistence(connection, rideId);
+    const ride = await ridesController.getRide(connection, rideId);
 
     if (!ride) {
       await connection.rollback();
@@ -219,7 +215,7 @@ async function instantReserve(req, res) {
 
     if (newBalance < 0) {
       return res.status(402).json({
-        message: `Insufficient balance, you need ${-newBalance} more funds`,
+        error: `Insufficient balance, you need ${-newBalance} more funds`,
       });
     }
 
@@ -368,8 +364,10 @@ async function getMyReservations(req, res) {
     }
 
     const getReservationsQuery = `
-      SELECT 
-        reservations.*, 
+      SELECT
+        reservations.id as reservation_id,
+        reservations.status,
+        reservations.num_seats,
         rides.*, 
         driver_accounts.name AS driver_name,
         CASE
@@ -394,16 +392,20 @@ async function getMyReservations(req, res) {
     // Separate reservations, rides, and drivers into individual objects
     const formattedReservations = await Promise.all(
       reservations.map(async (reservation) => {
+        console.log(reservation.id);
         const [fromLocation] = await locationsController.getLocation(
           reservation.from_loc_id
         );
         const [toLocation] = await locationsController.getLocation(
           reservation.to_loc_id
         );
+        const reviewsAverage = await reviewsController.getDriverReviewsAverage(
+          reservation.driver_id
+        );
 
         return {
           reservation: {
-            id: reservation.id,
+            id: reservation.reservation_id,
             status: reservation.status,
             num_seats: reservation.num_seats,
             price: reservation.num_seats * reservation.price,
@@ -424,6 +426,7 @@ async function getMyReservations(req, res) {
             name: reservation.driver_name,
             phone_num:
               reservation.status === "C" ? reservation.driver_phone : null,
+            reviews_average: reviewsAverage,
             // Add other driver properties as needed
           },
         };

@@ -1,7 +1,15 @@
 import React from "react";
 import { Card, Button, Col } from "react-bootstrap";
+import { toast } from "react-toastify";
+import axios from "axios";
 
-const MyRideCard = ({ rideData }) => {
+import { useAuth } from "./AuthContext";
+
+const backendUrl = process.env.REACT_APP_BACKEND_URL;
+
+const MyRideCard = ({ rideData, fetchRideData, category }) => {
+  const { token } = useAuth();
+
   const ride = rideData.ride;
   const reservation = rideData.reservation;
   const driver = rideData.driver;
@@ -38,12 +46,43 @@ const MyRideCard = ({ rideData }) => {
       .toString()
       .padStart(2, "0")}:${rideDurationMinutes.toString().padStart(2, "0")}`;
   }
+
+  const confirmArrival = async () => {
+    try {
+      console.log(token);
+      const url =
+        backendUrl +
+        `/reservations/passenger/confirm-arrival?reservationId=${reservation.id}`;
+      const response = await axios.post(url, null, {
+        headers: {
+          Authorization: token,
+        },
+      });
+      toast.dismiss();
+      toast.success(response.data.message, {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeButton: true,
+        onClose: async () => await fetchRideData(),
+      });
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.error, {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeButton: true,
+      });
+    }
+  };
+
   return (
     <Card className="my-ride-card">
       <Card.Header className="d-flex justify-content-between">
         <div className="driver-info">
           <h3 className="body-bold-medium">{driver.name}</h3>
-          <a className="body-xs">4.8/5</a>
+          <a className="body-xs">{driver.reviews_average}/5</a>
         </div>
         <div className="ride-price-box body-bold-medium">
           {reservation.price + "мкд"}
@@ -87,10 +126,19 @@ const MyRideCard = ({ rideData }) => {
           <img src="images/message-icon.svg" />
         </a>
         <div className="d-flex flex-column align-items-center confirmation-actions">
-          <Button className="dark-button col-12 mt-4 arrived-button body-bold-medium">
-            Стигнав
-          </Button>
-          <a className="body-bold-s">Превозот не се реализира</a>
+          {category === "R" ? (
+            <>
+              <Button
+                className="dark-button col-12 mt-4 arrived-button body-bold-medium"
+                onClick={confirmArrival}
+              >
+                Стигнав
+              </Button>
+              <a className="body-bold-s">Превозот не се реализира</a>{" "}
+            </>
+          ) : (
+            <></>
+          )}
         </div>
       </Card.Body>
 

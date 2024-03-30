@@ -1,32 +1,31 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
+import axios from "axios";
 
 import { useAuth } from "./AuthContext";
 import NavBar from "./NavBar";
 import BottomBar from "./BottomBar";
 import MyRideCard from "./MyRideCard";
-import axios from "axios";
 
 const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 const MyRides = () => {
   const location = useLocation();
   const { isLoggedIn, token, userType } = useAuth();
-  const [category, setCategory] = useState("active");
+  const [category, setCategory] = useState("R");
   const [rideData, setRideData] = useState(null);
 
   useEffect(() => {
     if (isLoggedIn()) {
-      console.log("inside");
       fetchRideData();
     }
-  }, [location.search]);
+  }, [location.search, category]);
 
   const fetchRideData = async () => {
     try {
       const response = await axios.get(
-        `${backendUrl}/reservations/${userType}/get-my`, // Using userType directly here
+        `${backendUrl}/reservations/${userType}/get-my?status=${category}`, // Using userType directly here
         {
           headers: {
             Authorization: `${token}`,
@@ -44,7 +43,7 @@ const MyRides = () => {
   }
 
   return (
-    <div>
+    <div className="has-bottom-bar">
       <NavBar />
       <BottomBar />
       <Container>
@@ -52,10 +51,10 @@ const MyRides = () => {
           <Col className="text-center" xs={4}>
             <a
               className={` ${
-                category === "active" ? "selected" : ""
+                category === "R" ? "selected" : ""
               } d-flex justify-content-center`}
               onClick={() => {
-                handleCategoryChange("active");
+                handleCategoryChange("R");
               }}
             >
               <span>Активни</span>
@@ -64,10 +63,10 @@ const MyRides = () => {
           <Col className="text-center" xs={4}>
             <a
               className={` ${
-                category === "proposed" ? "selected" : ""
+                category === "P" ? "selected" : ""
               } d-flex justify-content-center`}
               onClick={() => {
-                handleCategoryChange("proposed");
+                handleCategoryChange("P");
               }}
             >
               <span>Предложени</span>
@@ -76,10 +75,10 @@ const MyRides = () => {
           <Col className="text-center" xs={4}>
             <a
               className={` ${
-                category === "completed" ? "selected" : ""
+                category === "C" ? "selected" : ""
               } d-flex justify-content-center`}
               onClick={() => {
-                handleCategoryChange("completed");
+                handleCategoryChange("C");
               }}
             >
               <span>Завршени</span>
@@ -90,7 +89,12 @@ const MyRides = () => {
         <div className="my-rides-container">
           {rideData &&
             rideData.map((ride, index) => (
-              <MyRideCard key={index} rideData={ride} />
+              <MyRideCard
+                key={index}
+                rideData={ride}
+                fetchRideData={fetchRideData}
+                category={category}
+              />
             ))}
         </div>
       </Container>

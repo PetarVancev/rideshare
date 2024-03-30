@@ -9,8 +9,10 @@ Also after every new reservation that is/becomes 'R' we need to check if there a
 
 Can't post a ride if no driver license info provided???
 
-Reservations based on user type
-
-Naredno - sredi my reservations fetching based on selected category and style and handle buttons!, handle login redirects
+Naredno - sredi my reservations handle buttons! i reservations based on user type , handle login redirects
 
 invalid token errors i mozi da se napraj koga na request ce dobijame invalid token, logout and redirect to login
+
+Driver post a ride
+
+Sredi search spored mesta i reservation spored mesta

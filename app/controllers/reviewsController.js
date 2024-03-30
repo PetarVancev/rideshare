@@ -2,6 +2,27 @@ const jwt = require("jsonwebtoken");
 
 const dbCon = require("../db");
 
+async function getDriverReviewsAverage(driverId) {
+  try {
+    const sql = `
+      SELECT 
+        ROUND(AVG((time_correctness_score + safety_score + comfort_score) / 3),2) AS average_score
+      FROM 
+        ride_reviews
+      WHERE 
+        driver_id = ?
+    `;
+    const [result] = await dbCon.query(sql, [driverId]);
+
+    const averageScore = result[0].average_score;
+
+    return averageScore;
+  } catch (error) {
+    console.error("Error when getting driver's reviews:", error);
+    throw new Error("Internal Server Error");
+  }
+}
+
 async function getReviews(req, res) {
   const driverId = req.query.driverId;
 
@@ -95,4 +116,4 @@ async function insertReview(userId, rideId, review, rating, dateTime) {
   }
 }
 
-module.exports = { postReview, getReviews };
+module.exports = { postReview, getReviews, getDriverReviewsAverage };

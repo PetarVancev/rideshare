@@ -1,16 +1,25 @@
 import React, { useState, useEffect } from "react";
-import { Card, Button, Container } from "react-bootstrap";
-import { useLocation } from "react-router-dom";
+import { Row, Button, Container, Col } from "react-bootstrap";
+import { useLocation, useNavigate } from "react-router-dom";
+import { Swiper, SwiperSlide } from "swiper/react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
+import { useAuth } from "./AuthContext";
 import NavBar from "./NavBar";
 import BottomBar from "./BottomBar";
 import BackButton from "./BackButton";
+import ReviewCard from "./ReviewCard";
+
+import "swiper/css";
 
 const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 const RideInfo = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { isLoggedIn, userType, token } = useAuth();
+
   const [ride, setRide] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -84,6 +93,39 @@ const RideInfo = () => {
       .padStart(2, "0")}:${rideDurationMinutes.toString().padStart(2, "0")}`;
   }
 
+  const handleReserve = async () => {
+    if (isLoggedIn && userType == "passenger") {
+      try {
+        const url =
+          backendUrl +
+          `/reservations/${userType}/instant-reserve?rideId=${ride.id}&seats=1`;
+        const response = await axios.post(url, null, {
+          headers: {
+            Authorization: `${token}`,
+          },
+        });
+        toast.dismiss();
+        toast.success(response.data.message, {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeButton: true,
+          onClose: () => navigate("/my-rides"),
+        });
+      } catch (error) {
+        toast.dismiss();
+        toast.error(error.response.data.error, {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeButton: true,
+        });
+      }
+    } else {
+      navigate("/login");
+    }
+  };
+
   return (
     <>
       <NavBar />
@@ -91,7 +133,7 @@ const RideInfo = () => {
         <BackButton />
         <div className="driver-info text-center">
           <h3 className="body-bold-medium heading-xs">{ride.driver_name}</h3>
-          <a className="body-xs mx-auto">4.8/5</a>
+          <a className="body-xs mx-auto">{ride.average_rating}/5</a>
         </div>
         <div className="d-flex destination-info justify-content-between px">
           <div className="d-flex flex-column">
@@ -110,15 +152,36 @@ const RideInfo = () => {
             <span className="body-bold-xs">{arrivalTime}</span>
           </div>
         </div>
-        <div>
-          <h4>Порака за патниците</h4>
-          <p>
-            {!!ride.additional_info
-              ? ride.additional_info
-              : "Превозникот нема наведено информации кои би ви биле потребни."}
-          </p>
+        <div className="d-flex">
+          <div className="icon-div">
+            <img src="images/danger-icon.svg" />
+          </div>
+          <span>
+            <h4>Порака за патниците</h4>
+            <p>
+              {!!ride.additional_info
+                ? ride.additional_info
+                : "Превозникот нема наведено информации кои би ви биле потребни."}
+            </p>
+          </span>
         </div>
         <div className="info-box2">
+          {ride.type == "C" ? (
+            <div className="d-flex reservation-info">
+              <div className="icon-div">
+                <img src="images/group-icon.svg" />
+              </div>
+              <div>
+                <h4>{`Резервацијата е инстантна. Доколку предложите локација, резервацијаат треба да биде потврдена од превозникот`}</h4>
+                <p>
+                  Ќе добиете известување кога вашата резервација ќе биде
+                  потврдена
+                </p>
+              </div>
+            </div>
+          ) : (
+            <></>
+          )}
           <span>
             <img src="images/group-icon.svg" />
             <h4>{`Најмногу ${ride.total_seats - 2} на задните седишта`}</h4>
@@ -128,10 +191,51 @@ const RideInfo = () => {
             <h4>{`${ride.car_model} - ${ride.car_color}`}</h4>
           </span>
         </div>
-        {/* <Button>Зачувај</Button> */}
-        <Button className="dark-button col-12 mt-4 reserve-button">
-          Повеќе
-        </Button>
+        <Row className="reviews-preview d-flex justify-content-between">
+          <Col xs={6}>
+            <h4>Искуства</h4>
+            <p className="heading-xxs mx-auto review-average">
+              {ride.average_rating}/5
+            </p>
+          </Col>
+          <Col xs={6} className="text-end">
+            <span>{ride.driver_reviews.length} Рецензии</span>
+          </Col>
+          <Col xs={12} className="reviews-preview-container">
+            <Swiper
+              spaceBetween={25}
+              slidesPerView={"auto"}
+              navigation
+              scrollbar={{ draggable: true }}
+              centeredSlides={ride.driver_reviews.length === 1}
+            >
+              {ride.driver_reviews.map((review) => (
+                <SwiperSlide>
+                  <ReviewCard key={review.id} review={review} />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </Col>
+          <Col xs={12}>
+            <Button className="col-12 mt-4 white-button body-bold-xs">
+              Повеќе
+            </Button>
+          </Col>
+        </Row>
+        <Row className="reserve-bottom-bar">
+          <Col>
+            <strong className="body-bold-l">{ride.price} мкд</strong>
+            <p className="body-xs">Вкупно за плаќање</p>
+            <p className="body-bold-xs">
+              {departureDateTime.toLocaleDateString("en-GB")}
+            </p>
+          </Col>
+          <Col>
+            <button className="buy-button body-bold-xs" onClick={handleReserve}>
+              Резервирај
+            </button>
+          </Col>
+        </Row>
       </Container>
     </>
   );

@@ -4,6 +4,27 @@ const dbCon = require("../db");
 
 const locationsController = require("./geoLocationController");
 
+async function getRide(connection, rideId) {
+  try {
+    const rideSql = `
+      SELECT *
+      FROM rides
+      WHERE id = ?
+      LIMIT 1;
+    `;
+    const [ride] = await connection.query(rideSql, [rideId]);
+
+    if (ride.length === 0) {
+      return null; // Ride not found
+    }
+
+    return ride[0];
+  } catch (error) {
+    console.error("Error when retrieving ride info:", error);
+    return null; // Return null indicating failure
+  }
+}
+
 // Driver functions
 async function postRide(req, res) {
   const token = req.headers.authorization;
@@ -216,43 +237,60 @@ async function getRideInfo(req, res) {
   const rideId = req.query.rideId;
 
   try {
-    const sql = `
+    const rideSql = `
     SELECT 
-    r.id, 
-    r.driver_id, 
-    r.date_time, 
-    r.ride_duration,
-    r.total_seats, 
-    r.free_seats, 
-    r.price, 
-    r.car_model, 
-    r.car_color,
-    r.additional_info,
-    d.name AS driver_name, 
-    from_loc.name AS from_location_name, 
-    to_loc.name AS to_location_name
-FROM 
-    rides AS r
-JOIN 
-    driver_accounts AS d ON r.driver_id = d.id
-JOIN 
-    locations AS from_loc ON r.from_loc_id = from_loc.id
-JOIN 
-    locations AS to_loc ON r.to_loc_id = to_loc.id
-WHERE 
-    r.id = ?
-LIMIT 1;
-    `;
-
-    const [ride] = await dbCon.query(sql, [rideId]);
+        r.id, 
+        r.driver_id, 
+        r.date_time,
+        r.type,  
+        r.ride_duration,
+        r.total_seats, 
+        r.free_seats, 
+        r.price, 
+        r.car_model, 
+        r.car_color,
+        r.additional_info,
+        d.name AS driver_name, 
+        from_loc.name AS from_location_name, 
+        to_loc.name AS to_location_name,
+        ROUND((
+            (SELECT AVG(dr.time_correctness_score) FROM ride_reviews AS dr WHERE dr.driver_id = r.driver_id) +
+            (SELECT AVG(dr.safety_score) FROM ride_reviews AS dr WHERE dr.driver_id = r.driver_id) +
+            (SELECT AVG(dr.comfort_score) FROM ride_reviews AS dr WHERE dr.driver_id = r.driver_id)
+        ) / 3, 1) AS average_rating
+    FROM 
+        rides AS r
+    JOIN 
+        driver_accounts AS d ON r.driver_id = d.id
+    JOIN 
+        locations AS from_loc ON r.from_loc_id = from_loc.id
+    JOIN 
+        locations AS to_loc ON r.to_loc_id = to_loc.id
+    WHERE 
+        r.id = ?
+    LIMIT 1;
+`;
+    const [ride] = await dbCon.query(rideSql, [rideId]);
 
     if (ride.length === 0) {
       return res.status(404).json({ error: "Ride not found" });
     }
 
+    const driverReviewsSql = `
+    SELECT time_correctness_score, safety_score, comfort_score
+    FROM ride_reviews
+    WHERE driver_id = ?
+    ORDER BY date_time DESC
+    LIMIT 3;
+`;
+    const [driverReviews] = await dbCon.query(driverReviewsSql, [
+      ride[0].driver_id,
+    ]);
+
     const rideInfo = {
       id: ride[0].id,
       driver_id: ride[0].driver_id,
+      type: ride[0].type,
       date_time: ride[0].date_time,
       ride_duration: ride[0].ride_duration,
       total_seats: ride[0].total_seats,
@@ -264,6 +302,8 @@ LIMIT 1;
       driver_name: ride[0].driver_name,
       from_location_name: ride[0].from_location_name,
       to_location_name: ride[0].to_location_name,
+      average_rating: ride[0].average_rating,
+      driver_reviews: driverReviews,
     };
 
     return res.status(200).json(rideInfo);
@@ -279,4 +319,5 @@ module.exports = {
   deleteRide,
   searchForRides,
   getRideInfo,
+  getRide,
 };

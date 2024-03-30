@@ -45,6 +45,13 @@ button.transparent-button {
   padding-left: 0 !important;
 }
 
+.body-bold-l {
+  font-size: 1.25rem;
+  font-weight: bold !important;
+  line-height: 150%;
+  color: #022c66;
+}
+
 .body-bold-medium {
   font-size: 1rem;
   font-weight: 700 !important;
@@ -57,14 +64,14 @@ button.transparent-button {
   line-height: 150%;
 }
 
-.body-xs {
-  font-size: 0.875rem;
-  line-height: 150%;
-}
-
 .body-bold-xs {
   font-size: 0.875rem !important;
   font-weight: 700 !important;
+  line-height: 150%;
+}
+
+.body-xs {
+  font-size: 0.875rem;
   line-height: 150%;
 }
 
@@ -72,12 +79,16 @@ button.transparent-button {
   margin-top: 10px;
 }
 
-.heading-xss {
+.heading-xxs {
   font-size: 16px;
 }
 
 .heading-xs {
   font-size: 20px !important;
+}
+
+.has-bottom-bar {
+  margin-bottom: 80px !important;
 }
 
 /* Navbar */
@@ -117,6 +128,7 @@ button.transparent-button {
   bottom: 0;
   left: 0;
   width: 100%;
+  height: 68px;
   background-color: white;
   display: flex;
   justify-content: space-around;
@@ -124,6 +136,7 @@ button.transparent-button {
   padding: 10px 0;
   border-top: 1px solid #022c66;
   box-shadow: 0px -5px 10px rgba(0, 0, 0, 0.1);
+  z-index: 100;
 }
 
 .bottom-bar > div:hover {
@@ -511,6 +524,10 @@ button.reserve-button {
 
 /* Ride info */
 
+.ride-info {
+  margin-bottom: 113px;
+}
+
 .ride-info h4 {
   font-size: 16px;
 }
@@ -532,6 +549,14 @@ button.reserve-button {
   padding: 0;
 }
 
+.ride-info .icon-div {
+  margin-right: 8px;
+}
+
+.ride-info .reservation-info {
+  margin-bottom: 15px;
+}
+
 .ride-info .info-box2 img {
   width: 20px;
   height: 20px;
@@ -545,4 +570,86 @@ button.reserve-button {
 .ride-info .info-box2 span {
   display: block;
   margin-bottom: 15px;
+}
+
+.ride-info .review-average {
+  color: #4ac777;
+}
+
+.reviews-preview-container {
+  margin-top: 24px !important;
+  padding-right: 0 !important;
+}
+
+.reviews-preview h4 {
+  margin-bottom: 2px;
+}
+
+.reviews-preview span {
+  font-size: 14px;
+  color: #022c66;
+  font-weight: bold;
+}
+
+.review-card .card-header {
+  border-bottom: 0;
+}
+
+.swiper-slide {
+  width: 80% !important;
+}
+
+.review-card i {
+  vertical-align: middle;
+  color: #4ac777;
+  font-size: 12px;
+}
+
+.review-card span {
+  color: #022c66;
+}
+
+.reserve-bottom-bar {
+  height: 113px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  z-index: 99;
+  background-color: white;
+  margin: 0 !important;
+  box-shadow: 0px -4px 6px rgba(0, 0, 0, 0.1); /* Shadow effect with negative y-axis offset */
+}
+
+/* Buttons */
+
+button.buy-button {
+  border-radius: 0.375rem;
+  color: white;
+  background-color: #4ac777;
+  border: none;
+  height: 100%;
+  width: 100%;
+  letter-spacing: 1px;
+}
+
+.btn.white-button {
+  background-color: white;
+  color: #022c66;
+  border: 1px solid #022c66;
+  border-color: #022c66;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.btn.white-button:hover {
+  background-color: white !important;
+  color: #022c66 !important;
+  border-color: #022c66 !important;
+}
+
+.btn.white-button:active {
+  background-color: white !important;
+  color: #022c66 !important;
+  border-color: #022c66 !important;
 }
