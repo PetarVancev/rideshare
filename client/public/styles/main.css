@@ -108,6 +108,39 @@ button.transparent-button {
   height: 24px;
 }
 
+/* Buttons */
+
+button.buy-button {
+  border-radius: 0.375rem;
+  color: white;
+  background-color: #4ac777;
+  border: none;
+  height: 100%;
+  width: 100%;
+  letter-spacing: 1px;
+}
+
+.btn.white-button {
+  background-color: white;
+  color: #022c66;
+  border: 1px solid #022c66;
+  border-color: #022c66;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.btn.white-button:hover {
+  background-color: white !important;
+  color: #022c66 !important;
+  border-color: #022c66 !important;
+}
+
+.btn.white-button:active {
+  background-color: white !important;
+  color: #022c66 !important;
+  border-color: #022c66 !important;
+}
+
 /* Navbar */
 
 .navbar {
@@ -190,6 +223,10 @@ button.transparent-button {
 .icon span {
   font-size: 12px;
   margin-top: 5px;
+}
+
+.bottom-bar-margin {
+  margin-bottom: 68px;
 }
 
 /* Login and register */
@@ -643,39 +680,6 @@ button.reserve-button {
   box-shadow: 0px -4px 6px rgba(0, 0, 0, 0.1); /* Shadow effect with negative y-axis offset */
 }
 
-/* Buttons */
-
-button.buy-button {
-  border-radius: 0.375rem;
-  color: white;
-  background-color: #4ac777;
-  border: none;
-  height: 100%;
-  width: 100%;
-  letter-spacing: 1px;
-}
-
-.btn.white-button {
-  background-color: white;
-  color: #022c66;
-  border: 1px solid #022c66;
-  border-color: #022c66;
-  padding-top: 10px;
-  padding-bottom: 10px;
-}
-
-.btn.white-button:hover {
-  background-color: white !important;
-  color: #022c66 !important;
-  border-color: #022c66 !important;
-}
-
-.btn.white-button:active {
-  background-color: white !important;
-  color: #022c66 !important;
-  border-color: #022c66 !important;
-}
-
 /* Post a ride */
 .post-ride-cta {
   background-color: #4ac777;
@@ -747,7 +751,8 @@ button.buy-button {
 }
 .steps-inside-container .step-indicator.current .step-circle {
   border: 1px solid #022c66;
-  color: #022c66;
+  color: white;
+  background-color: #022c66;
 }
 
 .accept-location-suggestions h4 {
@@ -763,18 +768,103 @@ button.buy-button {
   border-bottom: 1px solid #022c66;
 }
 
-.time-input {
+.post-input::placeholder,
+.post-input {
+  color: #8095b2;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.post-input {
   width: 100%;
-  height: 72px;
+  height: 48px;
   text-align: center;
-  border-radius: 40px;
-  color: #022c66;
+  border-radius: 5px;
   border: 1px solid #022c66;
 }
 
-.time-input::placeholder,
-.time-input {
+.input-container {
+  position: relative;
+}
+
+.input-container img {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+}
+
+.input-container span {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  color: #8095b2;
+}
+
+.post-ride-container .dark-button {
+  height: 60px;
+  padding: 0;
+}
+
+.post-ride-fillable .p-autocomplete {
+  width: 100%;
+}
+
+.post-ride-fillable .p-autocomplete .post-input {
+  width: 100%;
   color: #022c66;
-  font-size: 24px;
-  font-weight: bold;
+}
+
+.seats-change-button {
+  height: 64px;
+  width: 64px;
+  border-radius: 50%;
+  border: 1px solid #022c66;
+  color: #022c66;
+  background-color: white;
+  box-shadow: 0 0 10px rgba(2, 44, 102, 0.25);
+}
+
+.seats-choose-indicator {
+  background-color: #022c66;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 176px;
+  height: 64px;
+  border-radius: 30px;
+  margin: 0 15px;
+}
+
+.post-input.currency-box {
+  text-align: end;
+  color: #022c66;
+  padding-right: 12px;
+}
+
+.price-info {
+  width: 100%;
+}
+
+.post-ride-container textarea {
+  overflow: hidden;
+  height: 300px;
+  border: 1px solid #022c66;
+  color: #022c66;
+}
+
+.post-ride-container textarea:focus-visible {
+  border: 1px solid #022c66;
+  outline: none;
+}
+
+.form-check-input {
+  height: 20px !important;
+  width: 20px !important;
+  margin-right: 12px;
+}
+
+.post-ride-container .back-button {
 }

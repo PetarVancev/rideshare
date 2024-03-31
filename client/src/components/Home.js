@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 import NavBar from "./NavBar";
 import BottomBar from "./BottomBar";
+import LocationAutocomplete from "./LocationAutocomplete";
 
 const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
@@ -14,9 +15,7 @@ const Home = () => {
   const navigate = useNavigate();
   const currentDate = new Date().toISOString().split("T")[0];
 
-  const [from, setFrom] = useState("");
   const [fromId, setFromId] = useState("");
-  const [to, setTo] = useState();
   const [toId, setToId] = useState();
   const [seatsNumber, setSeatsNumber] = useState(1);
   const [date, setDate] = useState("");
@@ -44,20 +43,6 @@ const Home = () => {
     }
   };
 
-  const suggestionTemplate = (suggestion) => {
-    return <div>{suggestion.name}</div>;
-  };
-
-  const handleFromSuggestionClick = (e) => {
-    setFrom(e.value.name);
-    setFromId(e.value.id);
-  };
-
-  const handleToSuggestionClick = (e) => {
-    setTo(e.value.name);
-    setToId(e.value.id);
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const url = `/results?from=${fromId}&to=${toId}&date=${date}`;
@@ -76,32 +61,18 @@ const Home = () => {
                 <Form.Group controlId="fromLocation">
                   <div className="search-inputs mt-1">
                     <img src="images/location-icon.svg" />
-                    <AutoComplete
-                      value={from}
-                      suggestions={locationSuggestions}
-                      completeMethod={searchLocations}
-                      onChange={(e) => setFrom(e.value)}
-                      onSelect={handleFromSuggestionClick}
+                    <LocationAutocomplete
                       placeholder="Од каде патувате"
-                      itemTemplate={suggestionTemplate}
-                      panelClassName="autocomplete-dropdown"
-                      maxResults={10}
+                      onSelect={setFromId}
                     />
                   </div>
                 </Form.Group>
                 <Form.Group controlId="toLocation">
                   <div className="search-inputs">
                     <img src="images/location-icon2.svg" />
-                    <AutoComplete
-                      value={to}
-                      suggestions={locationSuggestions}
-                      completeMethod={searchLocations}
-                      onChange={(e) => setTo(e.value)}
-                      onSelect={handleToSuggestionClick}
+                    <LocationAutocomplete
                       placeholder="До каде патувате"
-                      itemTemplate={suggestionTemplate}
-                      panelClassName="autocomplete-dropdown"
-                      maxResults={10}
+                      onSelect={setFromId}
                     />
                   </div>
                 </Form.Group>

@@ -186,10 +186,12 @@ const RideInfo = () => {
             <img src="images/group-icon.svg" />
             <h4>{`Најмногу ${ride.total_seats - 2} на задните седишта`}</h4>
           </span>
-          <span className="mb-0">
-            <img src="images/car-icon.svg" />
-            <h4>{`${ride.car_model} - ${ride.car_color}`}</h4>
-          </span>
+          {ride.car_color && (
+            <span className="mb-0">
+              <img src="images/car-icon.svg" />
+              <h4>{`${ride.car_model} - ${ride.car_color}`}</h4>
+            </span>
+          )}
         </div>
         <Row className="reviews-preview d-flex justify-content-between">
           <Col xs={6}>
