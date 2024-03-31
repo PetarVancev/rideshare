@@ -10,6 +10,11 @@ const NavBar = ({ type }) => {
     iconsColor = "#FFFFFF";
     logoColor = "-white";
   }
+  if (type == "green") {
+    colorClass = "green";
+    iconsColor = "#FFFFFF";
+    logoColor = "-white";
+  }
   return (
     <Navbar bg="white" variant="light" expand="lg" className={colorClass}>
       <Container>

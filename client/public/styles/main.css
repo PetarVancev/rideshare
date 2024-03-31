@@ -54,29 +54,41 @@ button.transparent-button {
 
 .body-bold-medium {
   font-size: 1rem;
-  font-weight: 700 !important;
+  font-weight: 600 !important;
   line-height: 150%;
 }
 
 .body-bold-s {
   font-size: 0.9rem;
-  font-weight: 700 !important;
+  font-weight: 600 !important;
   line-height: 150%;
 }
 
 .body-bold-xs {
   font-size: 0.875rem !important;
-  font-weight: 700 !important;
+  font-weight: 600 !important;
+  line-height: 150%;
+}
+
+.body-bold-xxs {
+  font-size: 12px;
+  font-weight: 600 !important;
   line-height: 150%;
 }
 
 .body-xs {
-  font-size: 0.875rem;
+  font-size: 12px;
   line-height: 150%;
 }
 
 .alert {
   margin-top: 10px;
+}
+
+.heading-s {
+  font-size: 24px;
+  line-height: 140%;
+  font-weight: bold;
 }
 
 .heading-xxs {
@@ -91,11 +103,16 @@ button.transparent-button {
   margin-bottom: 80px !important;
 }
 
+.switch input {
+  width: 40px !important;
+  height: 24px;
+}
+
 /* Navbar */
 
 .navbar {
   height: 58px;
-  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.05); /* Adjust values as needed */
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1); /* Adjust values as needed */
 }
 
 .container .navbar-toggler {
@@ -117,8 +134,13 @@ button.transparent-button {
   box-shadow: none;
 }
 
-.navbar.blue .container .navbar-toggler .navbar-toggler-icon {
+.navbar.blue .container .navbar-toggler .navbar-toggler-icon,
+.navbar.green .container .navbar-toggler .navbar-toggler-icon {
   background-image: url(../images/hamburger-icon-white.svg);
+}
+
+.navbar.green {
+  background-color: #4ac777 !important;
 }
 
 /* Bottom bar */
@@ -652,4 +674,107 @@ button.buy-button {
   background-color: white !important;
   color: #022c66 !important;
   border-color: #022c66 !important;
+}
+
+/* Post a ride */
+.post-ride-cta {
+  background-color: #4ac777;
+  padding-top: 38px;
+  padding-bottom: 34px;
+  color: white;
+}
+
+.post-ride-cta h2 {
+  color: white !important;
+}
+
+.post-ride-cta p {
+  margin-bottom: 2px;
+}
+
+.post-ride-cta img {
+  width: 100%;
+}
+
+.steps-container {
+  padding-top: 28px;
+  width: 100vw;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #022c66;
+}
+
+.step-circle {
+  width: 27px;
+  height: 27px;
+  border-radius: 50%; /* Makes the div circular */
+  border: 1px solid #8095b2;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #8095b2;
+}
+
+.steps-inside-container {
+  justify-content: center;
+  width: 80%;
+  margin: auto;
+  flex-wrap: nowrap;
+}
+
+.steps-inside-container svg {
+  width: 40%;
+}
+
+.steps-inside-container .step-indicator {
+  width: 25%;
+}
+
+.steps-inside-container .step-indicator .d-flex {
+  justify-content: space-around;
+}
+
+.steps-inside-container .step-indicator.last-step {
+  width: 10%;
+}
+
+.steps-inside-container .step-indicator span {
+  color: #8095b2;
+}
+
+.steps-inside-container .step-indicator.current span {
+  color: #022c66;
+}
+.steps-inside-container .step-indicator.current .step-circle {
+  border: 1px solid #022c66;
+  color: #022c66;
+}
+
+.accept-location-suggestions h4 {
+  margin-bottom: 0;
+  line-height: 1.5;
+}
+
+.post-ride-fillable {
+  color: #022c66;
+}
+
+.post-ride-fillable section.bottom-border {
+  border-bottom: 1px solid #022c66;
+}
+
+.time-input {
+  width: 100%;
+  height: 72px;
+  text-align: center;
+  border-radius: 40px;
+  color: #022c66;
+  border: 1px solid #022c66;
+}
+
+.time-input::placeholder,
+.time-input {
+  color: #022c66;
+  font-size: 24px;
+  font-weight: bold;
 }

@@ -13,6 +13,7 @@ import Home from "./components/Home";
 import SearchResults from "./components/SearchResults";
 import MyRides from "./components/MyRides";
 import RideInfo from "./components/RideInfo";
+import PostRide from "./components/PostRide";
 import { AuthProvider } from "./components/AuthContext";
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
           <Route path="/results" element={<SearchResults />} />
           <Route path="/ride-info" element={<RideInfo />} />
           <Route path="/my-rides" element={<MyRides />} />
+          <Route path="/post-ride" element={<PostRide />} />
         </Routes>
       </AuthProvider>
     </Router>
