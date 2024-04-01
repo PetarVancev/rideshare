@@ -118,16 +118,17 @@ const MyRideCard = ({ rideData, fetchRideData, category }) => {
             <h4 className="body-bold-xs">{reservation.num_seats} Место</h4>
           </Col>
         </div>
-        <a
-          href={`sms:${driver.phone_num}`}
-          className="d-flex justify-content-between additional-actions"
-        >
-          <span className="body-bold-s">Пиши му на димитар</span>
-          <img src="images/message-icon.svg" />
-        </a>
-        <div className="d-flex flex-column align-items-center confirmation-actions">
-          {category === "R" ? (
-            <>
+
+        {category === "R" ? (
+          <>
+            <a
+              href={`sms:${driver.phone_num}`}
+              className="d-flex justify-content-between additional-actions"
+            >
+              <span className="body-bold-s">Пиши му на димитар</span>
+              <img src="images/message-icon.svg" />
+            </a>
+            <div className="d-flex flex-column align-items-center confirmation-actions">
               <Button
                 className="dark-button col-12 mt-4 arrived-button body-bold-medium"
                 onClick={confirmArrival}
@@ -135,11 +136,11 @@ const MyRideCard = ({ rideData, fetchRideData, category }) => {
                 Стигнав
               </Button>
               <a className="body-bold-s">Превозот не се реализира</a>{" "}
-            </>
-          ) : (
-            <></>
-          )}
-        </div>
+            </div>
+          </>
+        ) : (
+          <></>
+        )}
       </Card.Body>
 
       {/* <Button>Зачувај</Button> */}

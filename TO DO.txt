@@ -15,7 +15,4 @@ invalid token errors i mozi da se napraj koga na request ce dobijame invalid tok
 
 Sredi search spored mesta i reservation spored mesta
 
-Ride info what if no car info specified?
-
-Post a ride only for driver, handle api call i state for saving departure locations
 

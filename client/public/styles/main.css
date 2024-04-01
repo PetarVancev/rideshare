@@ -141,6 +141,10 @@ button.buy-button {
   border-color: #022c66 !important;
 }
 
+.no-border {
+  border: 0 !important;
+}
+
 /* Navbar */
 
 .navbar {
@@ -211,10 +215,18 @@ button.buy-button {
   fill: #555;
 }
 
+.bottom-bar .icon svg rect {
+  stroke: #555;
+}
+
 .bottom-bar .icon.selected span,
 .bottom-bar .icon.selected svg path {
   color: #022c66;
   fill: #022c66;
+}
+
+.bottom-bar .icon.selected svg rect {
+  stroke: #022c66;
 }
 
 .icon i {

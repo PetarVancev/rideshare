@@ -102,6 +102,12 @@ const Login = () => {
             <Button className="dark-button col-12 mt-4" type="submit">
               Најави се
             </Button>
+            <Button
+              className="dark-button col-12 mt-2"
+              onClick={() => navigate("/register")}
+            >
+              Регистрирај се
+            </Button>
           </Form>
           {error && <Alert variant="danger">{error}</Alert>}
         </div>

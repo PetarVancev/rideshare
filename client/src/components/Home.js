@@ -72,7 +72,7 @@ const Home = () => {
                     <img src="images/location-icon2.svg" />
                     <LocationAutocomplete
                       placeholder="До каде патувате"
-                      onSelect={setFromId}
+                      onSelect={setToId}
                     />
                   </div>
                 </Form.Group>

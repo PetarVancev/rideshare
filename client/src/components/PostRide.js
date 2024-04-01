@@ -1,12 +1,24 @@
 import React, { useState, useRef } from "react";
 import { Form, Button, Container, Alert, Row, Col } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+
+import { useAuth } from "./AuthContext";
 import NavBar from "./NavBar";
 import BottomBar from "./BottomBar";
 import FormProgressIndicator from "./FormProgressIndicator";
 import LocationAutocomplete from "./LocationAutocomplete";
 import BackButton from "./BackButton";
 
+const backendUrl = process.env.REACT_APP_BACKEND_URL;
+
 const PostRide = () => {
+  const navigate = useNavigate();
+  const { token } = useAuth();
+
+  const [carModel, setCarModel] = useState(null);
+  const [carColor, setCarColor] = useState(null);
+
   const [step, setStep] = useState(1);
   const [fromId, setFromId] = useState("");
   const [flexibleDeparture, setFlexibleDeparture] = useState(false);
@@ -41,6 +53,26 @@ const PostRide = () => {
     if (step != 1) {
       setStep(step - 1);
     }
+  };
+
+  const calculateRideDuration = (departureTime, arrivalTime) => {
+    const departureDateTime = new Date(`2000-01-01T${departureTime}`);
+    const arrivalDateTime = new Date(`2000-01-01T${arrivalTime}`);
+
+    if (isNaN(departureDateTime) || isNaN(arrivalDateTime)) {
+      return "00:00:00";
+    }
+
+    const durationMs = arrivalDateTime.getTime() - departureDateTime.getTime();
+
+    const hours = Math.floor(durationMs / (1000 * 60 * 60));
+    const minutes = Math.floor((durationMs % (1000 * 60 * 60)) / (1000 * 60));
+
+    const formattedDuration = `${hours.toString().padStart(2, "0")}:${minutes
+      .toString()
+      .padStart(2, "0")}:00`;
+
+    return formattedDuration;
   };
 
   const handleSubmit1 = (e) => {
@@ -104,6 +136,41 @@ const PostRide = () => {
     setStep(5);
   };
 
+  const postRide = async () => {
+    try {
+      const departureDateTime = `${departureDate} ${departureTime}`;
+      const rideDuration = calculateRideDuration(departureTime, arrivalTime);
+      const response = await axios.post(
+        `${backendUrl}/rides/create`,
+        {
+          from_loc_id: fromId,
+          to_loc_id: toId,
+          date_time: departureDateTime,
+          ride_duration: rideDuration,
+          flexible_departure: flexibleDeparture,
+          flexible_arrival: flexibleArrival,
+          total_seats: seats,
+          price: parseInt(ridePrice),
+          additional_info: rideNotice,
+          car_model: carModel,
+          car_color: carColor,
+        },
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+        }
+      );
+      navigate("/");
+    } catch (error) {
+      if (error.response && error.response.data) {
+        setErrorMessage(error.response.data.error);
+      } else {
+        setErrorMessage("An unexpected error occurred. Please try again.");
+      }
+    }
+  };
+
   const handleSubmit5 = (e) => {
     e.preventDefault();
     if (!policyCheck) {
@@ -114,9 +181,8 @@ const PostRide = () => {
         errorMessageRef.current.scrollIntoView({ behavior: "smooth" });
       }, 0);
     } else {
-      setErrorMessage("");
+      postRide();
     }
-    // Post to API endpoint
   };
 
   return (

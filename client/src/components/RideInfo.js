@@ -129,7 +129,9 @@ const RideInfo = () => {
   return (
     <>
       <NavBar />
-      <Container className="ride-info">
+      <Container
+        className={"ride-info" + (userType === "driver" ? " mb-0" : "")}
+      >
         <BackButton />
         <div className="driver-info text-center">
           <h3 className="body-bold-medium heading-xs">{ride.driver_name}</h3>
@@ -193,7 +195,7 @@ const RideInfo = () => {
             </span>
           )}
         </div>
-        <Row className="reviews-preview d-flex justify-content-between">
+        <Row className="reviews-preview d-flex justify-content-between no-border">
           <Col xs={6}>
             <h4>Искуства</h4>
             <p className="heading-xxs mx-auto review-average">
@@ -224,20 +226,25 @@ const RideInfo = () => {
             </Button>
           </Col>
         </Row>
-        <Row className="reserve-bottom-bar">
-          <Col>
-            <strong className="body-bold-l">{ride.price} мкд</strong>
-            <p className="body-xs">Вкупно за плаќање</p>
-            <p className="body-bold-xs">
-              {departureDateTime.toLocaleDateString("en-GB")}
-            </p>
-          </Col>
-          <Col>
-            <button className="buy-button body-bold-xs" onClick={handleReserve}>
-              Резервирај
-            </button>
-          </Col>
-        </Row>
+        {userType != "driver" && (
+          <Row className="reserve-bottom-bar">
+            <Col>
+              <strong className="body-bold-l">{ride.price} мкд</strong>
+              <p className="body-xs">Вкупно за плаќање</p>
+              <p className="body-bold-xs">
+                {departureDateTime.toLocaleDateString("en-GB")}
+              </p>
+            </Col>
+            <Col>
+              <button
+                className="buy-button body-bold-xs"
+                onClick={handleReserve}
+              >
+                Резервирај
+              </button>
+            </Col>
+          </Row>
+        )}
       </Container>
     </>
   );

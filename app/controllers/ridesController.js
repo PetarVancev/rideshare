@@ -52,19 +52,36 @@ async function postRide(req, res) {
       });
     }
 
-    // Your SQL query to insert into rides table
-    const sql = `INSERT INTO rides (driver_id, from_loc_id, to_loc_id, date_time, type, total_seats, price, car_model, car_color) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+    let flexibleDeparture = req.body.flexible_departure;
+    if (flexibleDeparture === undefined) {
+      flexibleDeparture = false;
+    }
+    let flexibleArrival = req.body.flexible_arrival;
+    if (flexibleArrival === undefined) {
+      flexibleArrival = false;
+    }
 
+    let type = "I";
+    if (flexibleDeparture || flexibleArrival) {
+      type = "C";
+    }
+
+    // Your SQL query to insert into rides table
+    const sql = `INSERT INTO rides (driver_id, from_loc_id, to_loc_id, date_time,ride_duration, type,flexible_departure, flexible_arrival, total_seats, price, additional_info, car_model, car_color) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
     // Execute the SQL query
     await dbCon.query(sql, [
       driverId,
       req.body.from_loc_id,
       req.body.to_loc_id,
       req.body.date_time,
-      req.body.type,
+      req.body.ride_duration,
+      type,
+      flexibleDeparture,
+      flexibleArrival,
       req.body.total_seats,
       req.body.price,
+      req.body.additional_info,
       req.body.car_model,
       req.body.car_color,
     ]);
@@ -302,7 +319,7 @@ async function getRideInfo(req, res) {
       driver_name: ride[0].driver_name,
       from_location_name: ride[0].from_location_name,
       to_location_name: ride[0].to_location_name,
-      average_rating: ride[0].average_rating,
+      average_rating: ride[0].average_rating ? ride[0].average_rating : 0.0,
       driver_reviews: driverReviews,
     };
 
