@@ -76,6 +76,18 @@ button.transparent-button {
   line-height: 150%;
 }
 
+.body-l {
+  font-weight: normal;
+  line-height: 150%;
+  font-size: 18px;
+}
+
+.body-m {
+  font-weight: normal;
+  line-height: 150%;
+  font-size: 16px;
+}
+
 .body-xs {
   font-size: 12px;
   line-height: 150%;
@@ -878,5 +890,47 @@ button.reserve-button {
   margin-right: 12px;
 }
 
-.post-ride-container .back-button {
+/* Submission success */
+
+.submission-status-container {
+  width: 100vw;
+  color: #022c66;
+}
+
+.submission-message {
+  position: absolute;
+  top: 30%;
+  left: 0;
+  width: 100vw;
+}
+
+.submission-message h2 {
+  margin-top: 20px;
+  margin-bottom: 24px;
+  color: #4ac777 !important;
+}
+
+.submission-message hr {
+  margin: 0 auto 24px auto;
+  width: 90%;
+  border-color: #022c66 !important;
+  opacity: 1;
+}
+
+.submission-bottom-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+}
+
+.submission-bottom-bar button {
+  font-size: 14px;
+  width: 90%;
+  height: 61px;
+  margin-bottom: 27px;
+}
+
+.submission-bottom-bar div {
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.5);
 }

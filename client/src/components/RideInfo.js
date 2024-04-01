@@ -10,6 +10,7 @@ import NavBar from "./NavBar";
 import BottomBar from "./BottomBar";
 import BackButton from "./BackButton";
 import ReviewCard from "./ReviewCard";
+import SubmissionSuccess from "./SubmissionSuccess";
 
 import "swiper/css";
 
@@ -22,6 +23,11 @@ const RideInfo = () => {
 
   const [ride, setRide] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const [reserved, setReserved] = useState(false);
+  const successMessage = "Успешно направивте резервација";
+  const nextStepsMessage =
+    "*Вашата резервација можете да ја погледнете во делот активни патувања";
 
   useEffect(() => {
     const fetchRide = async () => {
@@ -105,13 +111,7 @@ const RideInfo = () => {
           },
         });
         toast.dismiss();
-        toast.success(response.data.message, {
-          position: "top-center",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeButton: true,
-          onClose: () => navigate("/my-rides"),
-        });
+        setReserved(true);
       } catch (error) {
         toast.dismiss();
         toast.error(error.response.data.error, {
@@ -129,123 +129,131 @@ const RideInfo = () => {
   return (
     <>
       <NavBar />
-      <Container
-        className={"ride-info" + (userType === "driver" ? " mb-0" : "")}
-      >
-        <BackButton />
-        <div className="driver-info text-center">
-          <h3 className="body-bold-medium heading-xs">{ride.driver_name}</h3>
-          <a className="body-xs mx-auto">{ride.average_rating}/5</a>
-        </div>
-        <div className="d-flex destination-info justify-content-between px">
-          <div className="d-flex flex-column">
-            <h4 className="heading-xs">{ride.from_location_name}</h4>
-            <span className="body-bold-xs">{departureTime}</span>
+      {reserved ? (
+        <SubmissionSuccess
+          statusMessage={successMessage}
+          nextStepsMessage={nextStepsMessage}
+          goTo={"/my-rides"}
+        />
+      ) : (
+        <Container
+          className={"ride-info" + (userType === "driver" ? " mb-0" : "")}
+        >
+          <BackButton />
+          <div className="driver-info text-center">
+            <h3 className="body-bold-medium heading-xs">{ride.driver_name}</h3>
+            <a className="body-xs mx-auto">{ride.average_rating}/5</a>
           </div>
-          <div className="d-flex flex-column">
-            <span className="text-center body-bold-xs">{rideDuration}</span>
-            <img
-              src="/images/journey-indicator-horizontal.svg"
-              className="journey-indicator"
-            />
-          </div>
-          <div className="d-flex flex-column">
-            <h4 className="heading-xs">{ride.to_location_name}</h4>
-            <span className="body-bold-xs">{arrivalTime}</span>
-          </div>
-        </div>
-        <div className="d-flex">
-          <div className="icon-div">
-            <img src="images/danger-icon.svg" />
-          </div>
-          <span>
-            <h4>Порака за патниците</h4>
-            <p>
-              {!!ride.additional_info
-                ? ride.additional_info
-                : "Превозникот нема наведено информации кои би ви биле потребни."}
-            </p>
-          </span>
-        </div>
-        <div className="info-box2">
-          {ride.type == "C" ? (
-            <div className="d-flex reservation-info">
-              <div className="icon-div">
-                <img src="images/group-icon.svg" />
-              </div>
-              <div>
-                <h4>{`Резервацијата е инстантна. Доколку предложите локација, резервацијаат треба да биде потврдена од превозникот`}</h4>
-                <p>
-                  Ќе добиете известување кога вашата резервација ќе биде
-                  потврдена
-                </p>
-              </div>
+          <div className="d-flex destination-info justify-content-between px">
+            <div className="d-flex flex-column">
+              <h4 className="heading-xs">{ride.from_location_name}</h4>
+              <span className="body-bold-xs">{departureTime}</span>
             </div>
-          ) : (
-            <></>
-          )}
-          <span>
-            <img src="images/group-icon.svg" />
-            <h4>{`Најмногу ${ride.total_seats - 2} на задните седишта`}</h4>
-          </span>
-          {ride.car_color && (
-            <span className="mb-0">
-              <img src="images/car-icon.svg" />
-              <h4>{`${ride.car_model} - ${ride.car_color}`}</h4>
+            <div className="d-flex flex-column">
+              <span className="text-center body-bold-xs">{rideDuration}</span>
+              <img
+                src="/images/journey-indicator-horizontal.svg"
+                className="journey-indicator"
+              />
+            </div>
+            <div className="d-flex flex-column">
+              <h4 className="heading-xs">{ride.to_location_name}</h4>
+              <span className="body-bold-xs">{arrivalTime}</span>
+            </div>
+          </div>
+          <div className="d-flex">
+            <div className="icon-div">
+              <img src="images/danger-icon.svg" />
+            </div>
+            <span>
+              <h4>Порака за патниците</h4>
+              <p>
+                {!!ride.additional_info
+                  ? ride.additional_info
+                  : "Превозникот нема наведено информации кои би ви биле потребни."}
+              </p>
             </span>
-          )}
-        </div>
-        <Row className="reviews-preview d-flex justify-content-between no-border">
-          <Col xs={6}>
-            <h4>Искуства</h4>
-            <p className="heading-xxs mx-auto review-average">
-              {ride.average_rating}/5
-            </p>
-          </Col>
-          <Col xs={6} className="text-end">
-            <span>{ride.driver_reviews.length} Рецензии</span>
-          </Col>
-          <Col xs={12} className="reviews-preview-container">
-            <Swiper
-              spaceBetween={25}
-              slidesPerView={"auto"}
-              navigation
-              scrollbar={{ draggable: true }}
-              centeredSlides={ride.driver_reviews.length === 1}
-            >
-              {ride.driver_reviews.map((review) => (
-                <SwiperSlide>
-                  <ReviewCard key={review.id} review={review} />
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          </Col>
-          <Col xs={12}>
-            <Button className="col-12 mt-4 white-button body-bold-xs">
-              Повеќе
-            </Button>
-          </Col>
-        </Row>
-        {userType != "driver" && (
-          <Row className="reserve-bottom-bar">
-            <Col>
-              <strong className="body-bold-l">{ride.price} мкд</strong>
-              <p className="body-xs">Вкупно за плаќање</p>
-              <p className="body-bold-xs">
-                {departureDateTime.toLocaleDateString("en-GB")}
+          </div>
+          <div className="info-box2">
+            {ride.type == "C" ? (
+              <div className="d-flex reservation-info">
+                <div className="icon-div">
+                  <img src="images/group-icon.svg" />
+                </div>
+                <div>
+                  <h4>{`Резервацијата е инстантна. Доколку предложите локација, резервацијаат треба да биде потврдена од превозникот`}</h4>
+                  <p>
+                    Ќе добиете известување кога вашата резервација ќе биде
+                    потврдена
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <></>
+            )}
+            <span>
+              <img src="images/group-icon.svg" />
+              <h4>{`Најмногу ${ride.total_seats - 2} на задните седишта`}</h4>
+            </span>
+            {ride.car_color && (
+              <span className="mb-0">
+                <img src="images/car-icon.svg" />
+                <h4>{`${ride.car_model} - ${ride.car_color}`}</h4>
+              </span>
+            )}
+          </div>
+          <Row className="reviews-preview d-flex justify-content-between no-border">
+            <Col xs={6}>
+              <h4>Искуства</h4>
+              <p className="heading-xxs mx-auto review-average">
+                {ride.average_rating}/5
               </p>
             </Col>
-            <Col>
-              <button
-                className="buy-button body-bold-xs"
-                onClick={handleReserve}
+            <Col xs={6} className="text-end">
+              <span>{ride.driver_reviews.length} Рецензии</span>
+            </Col>
+            <Col xs={12} className="reviews-preview-container">
+              <Swiper
+                spaceBetween={25}
+                slidesPerView={"auto"}
+                navigation
+                scrollbar={{ draggable: true }}
+                centeredSlides={ride.driver_reviews.length === 1}
               >
-                Резервирај
-              </button>
+                {ride.driver_reviews.map((review) => (
+                  <SwiperSlide>
+                    <ReviewCard key={review.id} review={review} />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </Col>
+            <Col xs={12}>
+              <Button className="col-12 mt-4 white-button body-bold-xs">
+                Повеќе
+              </Button>
             </Col>
           </Row>
-        )}
-      </Container>
+          {userType != "driver" && (
+            <Row className="reserve-bottom-bar">
+              <Col>
+                <strong className="body-bold-l">{ride.price} мкд</strong>
+                <p className="body-xs">Вкупно за плаќање</p>
+                <p className="body-bold-xs">
+                  {departureDateTime.toLocaleDateString("en-GB")}
+                </p>
+              </Col>
+              <Col>
+                <button
+                  className="buy-button body-bold-xs"
+                  onClick={handleReserve}
+                >
+                  Резервирај
+                </button>
+              </Col>
+            </Row>
+          )}
+        </Container>
+      )}
     </>
   );
 };

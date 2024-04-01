@@ -60,7 +60,6 @@ const NavBar = ({ type }) => {
                 fill={iconsColor}
               />
             </svg>
-            ;
           </Nav.Link>
         </Nav>
       </Container>
