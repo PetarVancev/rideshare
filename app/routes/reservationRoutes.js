@@ -11,6 +11,11 @@ router.post(
 );
 
 router.post(
+  "/passenger/propose-reservation",
+  reservationsController.proposeReservation
+);
+
+router.post(
   "/passenger/confirm-arrival",
   reservationsController.confirmArrival
 );
@@ -18,6 +23,16 @@ router.post(
 router.post(
   "/driver/confirm-pickup",
   reservationsController.confirmDriverAtPickup
+);
+
+router.post(
+  "/driver/accept-proposal",
+  reservationsController.acceptReservationProposal
+);
+
+router.post(
+  "/driver/decline-proposal",
+  reservationsController.declineReservationProposal
 );
 
 module.exports = router;

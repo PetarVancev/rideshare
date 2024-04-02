@@ -55,6 +55,16 @@ async function updateBalance(connection, passengerId, newBalance) {
   await connection.query(updateBalanceQuery, [newBalance, passengerId]);
 }
 
+async function addToBalance(connection, passengerId, refundAmount) {
+  const updateBalanceQuery = `
+    UPDATE passenger_accounts
+    SET balance = balance + ?
+    WHERE id = ?
+  `;
+
+  await connection.query(updateBalanceQuery, [refundAmount, passengerId]);
+}
+
 async function updateFreeSeats(connection, rideId, newFreeSeats) {
   const updateFreeSeatsQuery = "UPDATE rides SET free_seats = ? WHERE id = ?";
   await connection.query(updateFreeSeatsQuery, [newFreeSeats, rideId]);
@@ -74,17 +84,23 @@ async function insertReservation(
   rideId,
   passengerId,
   seatsNeeded,
-  locationLat,
-  locationLon
+  pickUpLocationLat,
+  pickUpLocationLon,
+  dropOffLocationLat,
+  dropOffLocationLon,
+  status
 ) {
   const insertReservationQuery =
-    "INSERT INTO reservations (ride_id, passenger_id, num_seats, status, pick_up_lat, pick_up_lon) VALUES (?, ?, ?, 'R', ?, ?)";
+    "INSERT INTO reservations (ride_id, passenger_id, num_seats, status, pick_up_lat, pick_up_lon, drop_off_lat, drop_off_lon) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
   await connection.query(insertReservationQuery, [
     rideId,
     passengerId,
     seatsNeeded,
-    locationLat,
-    locationLon,
+    status,
+    pickUpLocationLat,
+    pickUpLocationLon,
+    dropOffLocationLat,
+    dropOffLocationLon,
   ]);
 }
 
@@ -123,8 +139,6 @@ function isValidCoordinates(lat, lon) {
 
   const latitude = parseFloat(lat);
   const longitude = parseFloat(lon);
-  console.log(latitude);
-  console.log(longitude);
 
   if (isNaN(latitude) || isNaN(longitude)) {
     return false;
@@ -154,6 +168,65 @@ function hasMinimumDecimalPlaces(str, minDecimals) {
 
   const decimalPartLength = str.length - 1 - decimalIndex;
   return decimalPartLength >= minDecimals;
+}
+
+async function deleteReservationProposal(connection, reservation) {
+  const { id, passenger_id, num_seats, ride_price } = reservation;
+  const refundAmount = num_seats * ride_price;
+
+  // Refund to passenger
+  await addToBalance(connection, passenger_id, refundAmount);
+
+  // Delete reservation
+  const deleteQuery = `
+    DELETE FROM reservations
+    WHERE id = ?
+  `;
+  await connection.query(deleteQuery, [id]);
+}
+
+async function removeExcessReservations(
+  connection,
+  rideId,
+  availableSeats,
+  ridePrice
+) {
+  const excessReservationsQuery = `
+    SELECT id, passenger_id, num_seats
+    FROM reservations
+    WHERE ride_id = ? AND num_seats > ?
+  `;
+
+  const [excessReservations] = await connection.query(excessReservationsQuery, [
+    rideId,
+    availableSeats,
+  ]);
+  console.log(excessReservations);
+  for (const reservation of excessReservations) {
+    await deleteReservationProposal(connection, {
+      ...reservation,
+      ridePrice: ridePrice,
+    });
+  }
+}
+
+async function getProposal(proposalId) {
+  const query = `
+  SELECT p.*, r.driver_id, r.price AS ride_price
+  FROM reservations p
+  JOIN rides r ON p.ride_id = r.id
+  WHERE p.id = ?
+  `;
+
+  const [proposalRows] = await dbCon.query(query, [proposalId]);
+
+  // If proposal exists, return the first row
+  if (proposalRows.length > 0) {
+    return proposalRows[0];
+  }
+
+  // If proposal does not exist, return null
+  return null;
 }
 
 async function instantReserve(req, res) {
@@ -222,9 +295,10 @@ async function instantReserve(req, res) {
     await updateBalance(connection, passengerId, newBalance);
     await updateFreeSeats(connection, rideId, ride.free_seats - seatsNeeded);
 
-    const location = await getLocationInfo(connection, ride.from_loc_id);
+    const pickUpLocation = await getLocationInfo(connection, ride.from_loc_id);
+    const dropOffLocation = await getLocationInfo(connection, ride.to_loc_id);
 
-    if (!location) {
+    if (!pickUpLocation || !dropOffLocation) {
       await connection.rollback();
       return res.status(404).json({ error: "Location not found" });
     }
@@ -234,13 +308,180 @@ async function instantReserve(req, res) {
       rideId,
       passengerId,
       seatsNeeded,
-      location.location_lat,
-      location.location_lon
+      pickUpLocation.location_lat,
+      pickUpLocation.location_lon,
+      dropOffLocation.location_lat,
+      dropOffLocation.location_on,
+      "R"
     );
 
     await connection.commit();
 
     return res.status(201).json({ message: "Reservation successful" });
+  } catch (error) {
+    if (connection) {
+      await connection.rollback();
+    }
+
+    if (error.name === "JsonWebTokenError") {
+      return res.status(401).json({ error: "Unauthorized: Invalid token" });
+    } else {
+      console.error("Error when reserving ride:", error);
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
+  } finally {
+    if (connection) {
+      connection.release();
+    }
+  }
+}
+
+async function proposeReservation(req, res) {
+  const token = req.headers.authorization;
+
+  if (!token) {
+    return res.status(401).json({ error: "Unauthorized: Token missing" });
+  }
+
+  let connection;
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    const userType = decoded.userType;
+    const passengerId = decoded.userId;
+
+    const rideId = req.query.rideId;
+    const seatsNeeded = parseInt(req.query.seats);
+
+    const customPickUp = req.body.custom_pick_up;
+    console.log(customPickUp);
+    const customDropOff = req.body.custom_drop_off;
+    console.log(customDropOff);
+
+    if (seatsNeeded < 1) {
+      return res
+        .status(403)
+        .json({ error: "You can't reserve less than 1 seat" });
+    }
+
+    if (userType !== "passenger") {
+      return res
+        .status(403)
+        .json({ error: "Only passengers can reserve seats" });
+    }
+
+    connection = await dbCon.getConnection();
+    await connection.beginTransaction();
+
+    const ride = await ridesController.getRide(connection, rideId);
+
+    if (!ride) {
+      await connection.rollback();
+      return res.status(404).json({ error: "Ride not found" });
+    }
+
+    if (ride.free_seats < seatsNeeded) {
+      await connection.rollback();
+      return res
+        .status(403)
+        .json({ error: "Not enough seats", freeSeats: ride.free_seats });
+    }
+
+    let pickUpLocation;
+    let dropOffLocation;
+    if (customPickUp) {
+      console.log("inside");
+      if (!ride.flexible_departure) {
+        await connection.rollback();
+        return res
+          .status(400)
+          .json({ error: "Flexible pick up not allowed for ride" });
+      }
+      if (
+        !isValidCoordinates(
+          req.body.custom_pick_up.location_lat,
+          req.body.custom_pick_up.location_lon
+        )
+      ) {
+        await connection.rollback();
+        return res
+          .status(400)
+          .json({ error: "pick up coordinates are not valid" });
+      }
+      pickUpLocation = customPickUp;
+    } else {
+      pickUpLocation = await getLocationInfo(connection, ride.from_loc_id);
+      if (!pickUpLocation) {
+        await connection.rollback();
+        return res.status(404).json({ error: "Pick up location not found" });
+      }
+    }
+
+    if (customDropOff) {
+      if (!ride.flexible_arrival) {
+        await connection.rollback();
+        return res
+          .status(400)
+          .json({ error: "Flexible drop off not allowed for ride" });
+      }
+      if (
+        !isValidCoordinates(
+          req.body.custom_drop_off.location_lat,
+          req.body.custom_drop_off.location_lon
+        )
+      ) {
+        await connection.rollback();
+        return res
+          .status(400)
+          .json({ error: "drop off coordinates are not valid" });
+      }
+      dropOffLocation = customDropOff;
+    } else {
+      dropOffLocation = await getLocationInfo(connection, ride.to_loc_id);
+      if (!dropOffLocation) {
+        await connection.rollback();
+        return res.status(404).json({ error: "Drop off location not found" });
+      }
+    }
+
+    const passenger = await getPassengerBalance(connection, passengerId);
+
+    if (!passenger) {
+      await connection.rollback();
+      return res.status(404).json({ error: "Passenger not found" });
+    }
+
+    const currentBalance = passenger.balance;
+    const newBalance = currentBalance - ride.price * seatsNeeded;
+
+    if (newBalance < 0) {
+      connection.rollback();
+      return res.status(402).json({
+        error: `Insufficient balance, you need ${-newBalance} more funds`,
+      });
+    }
+
+    await updateBalance(connection, passengerId, newBalance);
+    await updateFreeSeats(connection, rideId, ride.free_seats - seatsNeeded);
+
+    await insertReservation(
+      connection,
+      rideId,
+      passengerId,
+      seatsNeeded,
+      pickUpLocation.location_lat,
+      pickUpLocation.location_lon,
+      dropOffLocation.location_lat,
+      dropOffLocation.location_lon,
+      "P"
+    );
+
+    await connection.commit();
+
+    return res
+      .status(201)
+      .json({ message: "Reservation proposed successfully" });
   } catch (error) {
     if (connection) {
       await connection.rollback();
@@ -392,7 +633,6 @@ async function getMyReservations(req, res) {
     // Separate reservations, rides, and drivers into individual objects
     const formattedReservations = await Promise.all(
       reservations.map(async (reservation) => {
-        console.log(reservation.id);
         const [fromLocation] = await locationsController.getLocation(
           reservation.from_loc_id
         );
@@ -436,6 +676,101 @@ async function getMyReservations(req, res) {
     return res.status(200).json(formattedReservations);
   } catch (error) {
     console.error("Error when fetching passenger reservations:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+
+async function declineReservationProposal(req, res) {
+  const token = req.headers.authorization;
+
+  if (!token) {
+    return res.status(401).json({ error: "Unauthorized: Token missing" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    const userType = decoded.userType;
+    const driverId = decoded.userId;
+
+    if (userType !== "driver") {
+      return res
+        .status(403)
+        .json({ error: "Only drivers can decline reservations" });
+    }
+
+    const proposalId = req.query.reservationId;
+
+    const proposal = await getProposal(proposalId);
+
+    if (!proposal) {
+      return res.status(404).json({ error: "Proposal not found" });
+    }
+
+    if (proposal.driver_id !== driverId) {
+      return res
+        .status(403)
+        .json({ error: "You are not authorized to decline this proposal" });
+    }
+
+    await deleteReservationProposal(dbCon, proposal);
+
+    return res
+      .status(200)
+      .json({ message: "Reservation proposal declined successfully" });
+  } catch (error) {
+    console.error("Error when declining reservation proposal:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+
+async function acceptReservationProposal(req, res) {
+  const token = req.headers.authorization;
+
+  if (!token) {
+    return res.status(401).json({ error: "Unauthorized: Token missing" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    const userType = decoded.userType;
+    const driverId = decoded.userId;
+
+    if (userType !== "driver") {
+      return res
+        .status(403)
+        .json({ error: "Only drivers can accept reservations" });
+    }
+
+    const proposalId = req.query.reservationId;
+
+    const proposal = await getProposal(proposalId);
+
+    if (!proposal) {
+      return res.status(404).json({ error: "Proposal not found" });
+    }
+
+    if (proposal.driver_id !== driverId) {
+      return res
+        .status(403)
+        .json({ error: "You are not authorized to accept this proposal" });
+    }
+
+    await updateReservationStatus(dbCon, proposalId, "C");
+
+    await removeExcessReservations(
+      dbCon,
+      proposal.ride_id,
+      proposal.num_seats,
+      proposal.ride_price
+    );
+
+    return res
+      .status(200)
+      .json({ message: "Reservation proposal accepted successfully" });
+  } catch (error) {
+    console.error("Error when accepting reservation proposal:", error);
     return res.status(500).json({ error: "Internal Server Error" });
   }
 }
@@ -499,6 +834,9 @@ async function confirmDriverAtPickup(req, res) {
 
 module.exports = {
   instantReserve,
+  proposeReservation,
+  acceptReservationProposal,
+  declineReservationProposal,
   confirmArrival,
   getMyReservations,
   confirmDriverAtPickup,
