@@ -29,15 +29,17 @@ const RideInfo = () => {
   const nextStepsMessage =
     "*Вашата резервација можете да ја погледнете во делот активни патувања";
 
+  const queryParams = new URLSearchParams(location.search);
+  const rideId = queryParams.get("rideId");
+  const seats = queryParams.get("seats");
+
   useEffect(() => {
     const fetchRide = async () => {
       try {
-        const queryParams = new URLSearchParams(location.search);
-        const rideId = queryParams.get("rideId");
-
         const searchApi = backendUrl + `/rides/get-ride?rideId=${rideId}`;
         const response = await axios.get(searchApi);
         setRide(response.data);
+        console.log(ride);
       } catch (error) {
       } finally {
         setLoading(false); // Set loading to false regardless of success or failure
@@ -59,6 +61,20 @@ const RideInfo = () => {
         <Container>
           <p className="text-center rides-count body-bold-xs mt-2">
             Бараниот превоз не постои
+          </p>
+        </Container>
+      </>
+    ); // or any other loading indicator
+  }
+
+  if (!seats || seats == 0 || seats > ride.free_seats) {
+    return (
+      <>
+        <NavBar />
+        <BottomBar />
+        <Container>
+          <p className="text-center rides-count body-bold-xs mt-2">
+            Имате грешка во бројот на седишта
           </p>
         </Container>
       </>
@@ -104,7 +120,7 @@ const RideInfo = () => {
       try {
         const url =
           backendUrl +
-          `/reservations/${userType}/instant-reserve?rideId=${ride.id}&seats=1`;
+          `/reservations/${userType}/reserve?rideId=${ride.id}&seats=${seats}`;
         const response = await axios.post(url, null, {
           headers: {
             Authorization: `${token}`,
@@ -236,8 +252,10 @@ const RideInfo = () => {
           {userType != "driver" && (
             <Row className="reserve-bottom-bar">
               <Col>
-                <strong className="body-bold-l">{ride.price} мкд</strong>
-                <p className="body-xs">Вкупно за плаќање</p>
+                <strong className="body-bold-l">
+                  {ride.price * seats} мкд
+                </strong>
+                <p className="body-xs">Вкупно за {seats} места</p>
                 <p className="body-bold-xs">
                   {departureDateTime.toLocaleDateString("en-GB")}
                 </p>

@@ -1,15 +1,11 @@
 import React, { useState } from "react";
 import { Card, Form, Button, Container } from "react-bootstrap";
-import { AutoComplete } from "primereact/autocomplete";
 import { Dropdown } from "primereact/dropdown";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 import NavBar from "./NavBar";
 import BottomBar from "./BottomBar";
 import LocationAutocomplete from "./LocationAutocomplete";
-
-const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 const Home = () => {
   const navigate = useNavigate();
@@ -19,7 +15,6 @@ const Home = () => {
   const [toId, setToId] = useState();
   const [seatsNumber, setSeatsNumber] = useState(1);
   const [date, setDate] = useState("");
-  const [locationSuggestions, setLocationSuggestions] = useState([]);
 
   const seats = [
     { text: "1 Место", value: 1 },
@@ -27,25 +22,14 @@ const Home = () => {
     { text: "3 Места", value: 3 },
     { text: "4 Места", value: 4 },
     { text: "5 Места", value: 5 },
+    { text: "6 Места", value: 6 },
+    { text: "7 Места", value: 7 },
+    { text: "8 Места", value: 8 },
   ];
-
-  const searchLocations = async (event) => {
-    const value = event.query; // The value entered by the user
-    try {
-      const autoCompleteApi =
-        backendUrl + "/locations/autocomplete" + `?name=${value}`;
-      const response = await axios.get(autoCompleteApi);
-      const data = response.data; // Assuming API response is an array of suggestions
-      setLocationSuggestions(data);
-    } catch (error) {
-      console.error("Error fetching suggestions:", error);
-      setLocationSuggestions([]); // Clear suggestions on error
-    }
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const url = `/results?from=${fromId}&to=${toId}&date=${date}`;
+    const url = `/results?from=${fromId}&to=${toId}&date=${date}&seats=${seatsNumber}`;
     navigate(url);
   };
 

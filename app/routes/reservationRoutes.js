@@ -5,15 +5,7 @@ const router = express.Router();
 
 router.get("/passenger/get-my", reservationsController.getMyReservations);
 
-router.post(
-  "/passenger/instant-reserve",
-  reservationsController.instantReserve
-);
-
-router.post(
-  "/passenger/propose-reservation",
-  reservationsController.proposeReservation
-);
+router.post("/passenger/reserve", reservationsController.handleReservation);
 
 router.post(
   "/passenger/confirm-arrival",

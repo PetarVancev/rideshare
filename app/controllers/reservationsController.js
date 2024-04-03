@@ -201,7 +201,6 @@ async function removeExcessReservations(
     rideId,
     availableSeats,
   ]);
-  console.log(excessReservations);
   for (const reservation of excessReservations) {
     await deleteReservationProposal(connection, {
       ...reservation,
@@ -229,114 +228,7 @@ async function getProposal(proposalId) {
   return null;
 }
 
-async function instantReserve(req, res) {
-  const token = req.headers.authorization;
-
-  if (!token) {
-    return res.status(401).json({ error: "Unauthorized: Token missing" });
-  }
-
-  let connection;
-
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-    const userType = decoded.userType;
-    const passengerId = decoded.userId;
-
-    const rideId = req.query.rideId;
-    const seatsNeeded = parseInt(req.query.seats);
-
-    if (seatsNeeded < 1) {
-      return res
-        .status(403)
-        .json({ error: "You can't reserve less than 1 seat" });
-    }
-
-    if (userType !== "passenger") {
-      return res
-        .status(403)
-        .json({ error: "Only passengers can reserve seats" });
-    }
-
-    connection = await dbCon.getConnection();
-    await connection.beginTransaction();
-
-    const ride = await ridesController.getRide(connection, rideId);
-
-    if (!ride) {
-      await connection.rollback();
-      return res.status(404).json({ error: "Ride not found" });
-    }
-
-    if (ride.free_seats < seatsNeeded) {
-      await connection.rollback();
-      return res
-        .status(403)
-        .json({ error: "Not enough seats", freeSeats: ride.free_seats });
-    }
-
-    const passenger = await getPassengerBalance(connection, passengerId);
-
-    if (!passenger) {
-      await connection.rollback();
-      return res.status(404).json({ error: "Passenger not found" });
-    }
-
-    const currentBalance = passenger.balance;
-    const newBalance = currentBalance - ride.price * seatsNeeded;
-
-    if (newBalance < 0) {
-      return res.status(402).json({
-        error: `Insufficient balance, you need ${-newBalance} more funds`,
-      });
-    }
-
-    await updateBalance(connection, passengerId, newBalance);
-    await updateFreeSeats(connection, rideId, ride.free_seats - seatsNeeded);
-
-    const pickUpLocation = await getLocationInfo(connection, ride.from_loc_id);
-    const dropOffLocation = await getLocationInfo(connection, ride.to_loc_id);
-
-    if (!pickUpLocation || !dropOffLocation) {
-      await connection.rollback();
-      return res.status(404).json({ error: "Location not found" });
-    }
-
-    await insertReservation(
-      connection,
-      rideId,
-      passengerId,
-      seatsNeeded,
-      pickUpLocation.location_lat,
-      pickUpLocation.location_lon,
-      dropOffLocation.location_lat,
-      dropOffLocation.location_on,
-      "R"
-    );
-
-    await connection.commit();
-
-    return res.status(201).json({ message: "Reservation successful" });
-  } catch (error) {
-    if (connection) {
-      await connection.rollback();
-    }
-
-    if (error.name === "JsonWebTokenError") {
-      return res.status(401).json({ error: "Unauthorized: Invalid token" });
-    } else {
-      console.error("Error when reserving ride:", error);
-      return res.status(500).json({ error: "Internal Server Error" });
-    }
-  } finally {
-    if (connection) {
-      connection.release();
-    }
-  }
-}
-
-async function proposeReservation(req, res) {
+async function handleReservation(req, res) {
   const token = req.headers.authorization;
 
   if (!token) {
@@ -355,9 +247,7 @@ async function proposeReservation(req, res) {
     const seatsNeeded = parseInt(req.query.seats);
 
     const customPickUp = req.body.custom_pick_up;
-    console.log(customPickUp);
     const customDropOff = req.body.custom_drop_off;
-    console.log(customDropOff);
 
     if (seatsNeeded < 1) {
       return res
@@ -388,60 +278,56 @@ async function proposeReservation(req, res) {
         .json({ error: "Not enough seats", freeSeats: ride.free_seats });
     }
 
-    let pickUpLocation;
-    let dropOffLocation;
-    if (customPickUp) {
-      console.log("inside");
-      if (!ride.flexible_departure) {
-        await connection.rollback();
-        return res
-          .status(400)
-          .json({ error: "Flexible pick up not allowed for ride" });
-      }
-      if (
-        !isValidCoordinates(
-          req.body.custom_pick_up.location_lat,
-          req.body.custom_pick_up.location_lon
-        )
-      ) {
-        await connection.rollback();
-        return res
-          .status(400)
-          .json({ error: "pick up coordinates are not valid" });
-      }
-      pickUpLocation = customPickUp;
-    } else {
-      pickUpLocation = await getLocationInfo(connection, ride.from_loc_id);
-      if (!pickUpLocation) {
-        await connection.rollback();
-        return res.status(404).json({ error: "Pick up location not found" });
-      }
-    }
+    let pickUpLocation, dropOffLocation;
 
-    if (customDropOff) {
-      if (!ride.flexible_arrival) {
-        await connection.rollback();
-        return res
-          .status(400)
-          .json({ error: "Flexible drop off not allowed for ride" });
-      }
-      if (
-        !isValidCoordinates(
-          req.body.custom_drop_off.location_lat,
-          req.body.custom_drop_off.location_lon
-        )
-      ) {
-        await connection.rollback();
-        return res
-          .status(400)
-          .json({ error: "drop off coordinates are not valid" });
-      }
-      dropOffLocation = customDropOff;
-    } else {
+    if (!customPickUp && !customDropOff) {
+      pickUpLocation = await getLocationInfo(connection, ride.from_loc_id);
       dropOffLocation = await getLocationInfo(connection, ride.to_loc_id);
-      if (!dropOffLocation) {
-        await connection.rollback();
-        return res.status(404).json({ error: "Drop off location not found" });
+    } else {
+      if (customPickUp) {
+        if (!ride.flexible_departure) {
+          await connection.rollback();
+          return res
+            .status(400)
+            .json({ error: "Flexible pick up not allowed for ride" });
+        }
+        if (
+          !isValidCoordinates(
+            customPickUp.location_lat,
+            customPickUp.location_lon
+          )
+        ) {
+          await connection.rollback();
+          return res
+            .status(400)
+            .json({ error: "pick up coordinates are not valid" });
+        }
+        pickUpLocation = customPickUp;
+      } else {
+        pickUpLocation = await getLocationInfo(connection, ride.from_loc_id);
+      }
+
+      if (customDropOff) {
+        if (!ride.flexible_arrival) {
+          await connection.rollback();
+          return res
+            .status(400)
+            .json({ error: "Flexible drop off not allowed for ride" });
+        }
+        if (
+          !isValidCoordinates(
+            customDropOff.location_lat,
+            customDropOff.location_lon
+          )
+        ) {
+          await connection.rollback();
+          return res
+            .status(400)
+            .json({ error: "drop off coordinates are not valid" });
+        }
+        dropOffLocation = customDropOff;
+      } else {
+        dropOffLocation = await getLocationInfo(connection, ride.to_loc_id);
       }
     }
 
@@ -456,7 +342,7 @@ async function proposeReservation(req, res) {
     const newBalance = currentBalance - ride.price * seatsNeeded;
 
     if (newBalance < 0) {
-      connection.rollback();
+      await connection.rollback();
       return res.status(402).json({
         error: `Insufficient balance, you need ${-newBalance} more funds`,
       });
@@ -464,6 +350,17 @@ async function proposeReservation(req, res) {
 
     await updateBalance(connection, passengerId, newBalance);
     await updateFreeSeats(connection, rideId, ride.free_seats - seatsNeeded);
+
+    const reservationType = customPickUp || customDropOff ? "P" : "R";
+
+    if (reservationType == "R") {
+      await removeExcessReservations(
+        connection,
+        ride.id,
+        seatsNeeded,
+        ride.price
+      );
+    }
 
     await insertReservation(
       connection,
@@ -474,14 +371,17 @@ async function proposeReservation(req, res) {
       pickUpLocation.location_lon,
       dropOffLocation.location_lat,
       dropOffLocation.location_lon,
-      "P"
+      reservationType
     );
 
     await connection.commit();
 
-    return res
-      .status(201)
-      .json({ message: "Reservation proposed successfully" });
+    const message =
+      reservationType === "R"
+        ? "Reservation successful"
+        : "Reservation proposed successfully";
+
+    return res.status(201).json({ message });
   } catch (error) {
     if (connection) {
       await connection.rollback();
@@ -833,8 +733,7 @@ async function confirmDriverAtPickup(req, res) {
 }
 
 module.exports = {
-  instantReserve,
-  proposeReservation,
+  handleReservation,
   acceptReservationProposal,
   declineReservationProposal,
   confirmArrival,

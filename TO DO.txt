@@ -9,18 +9,16 @@ Also after every new reservation that is/becomes 'R' we need to check if there a
 
 Can't post a ride if no driver license info provided???
 
-Naredno - sredi my reservations handle buttons! i reservations based on user type , handle login redirects
-
-invalid token errors i mozi da se napraj koga na request ce dobijame invalid token, logout and redirect to login
-
-Sredi search spored mesta i reservation spored mesta
-
-
-
 Backend
 
-Remove reservation propositions with more seats when instant booking is made
 Send emails for proposal acceptance and decline
+Cron jobs for proposals
+
+Client
+
+If loggedIn redirect when going to login,register routes
+invalid token errors i mozi da se napraj koga na request ce dobijame invalid token, logout and redirect to login
+Naredno - Reservations based on user type , handle login redirects
 
 
 

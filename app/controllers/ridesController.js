@@ -188,7 +188,7 @@ async function deleteRide(req, res) {
 // General functions
 
 async function searchForRides(req, res) {
-  const { from_loc_id, to_loc_id, date_time } = req.query;
+  const { from_loc_id, to_loc_id, date_time, seats } = req.query;
 
   try {
     // Get locations for from and to
@@ -226,6 +226,8 @@ async function searchForRides(req, res) {
         (r.to_loc_id = ? OR r.to_loc_id IN (SELECT id FROM locations WHERE parent_location_id = ?))
         AND 
         DATE(r.date_time) = ?
+        AND 
+        r.free_seats >= ?
         ORDER BY 
         r.date_time ASC;
     `;
@@ -236,6 +238,7 @@ async function searchForRides(req, res) {
       to_loc_id,
       to_loc_id,
       date_time,
+      seats,
     ]);
 
     rides.forEach((ride) => {

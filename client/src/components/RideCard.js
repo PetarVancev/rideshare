@@ -2,7 +2,7 @@ import React from "react";
 import { Card, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
-const RideCard = ({ ride }) => {
+const RideCard = ({ ride, seats }) => {
   const navigate = useNavigate();
 
   const departureDateTime = new Date(ride.date_time);
@@ -46,7 +46,7 @@ const RideCard = ({ ride }) => {
           <a className="body-xs">4.8/5</a>
         </div>
         <div className="ride-price-box body-bold-medium">
-          {ride.price + "мкд"}
+          {ride.price * seats + "мкд"}
         </div>
       </Card.Header>
       <Card.Body className="d-flex justify-content-between">
@@ -87,7 +87,7 @@ const RideCard = ({ ride }) => {
       <Button
         className="dark-button col-12 mt-4 reserve-button"
         onClick={() => {
-          navigate(`/ride-info?rideId=${ride.id}`);
+          navigate(`/ride-info?rideId=${ride.id}&seats=${seats}`);
         }}
       >
         Повеќе
