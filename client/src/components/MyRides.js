@@ -24,8 +24,12 @@ const MyRides = () => {
 
   const fetchRideData = async () => {
     try {
+      let url = `${backendUrl}/reservations/${userType}/get-my?status=${category}`;
+      if (userType == "driver") {
+        url = `${backendUrl}/rides/get-my?status=${category}`;
+      }
       const response = await axios.get(
-        `${backendUrl}/reservations/${userType}/get-my?status=${category}`, // Using userType directly here
+        url, // Using userType directly here
         {
           headers: {
             Authorization: `${token}`,
@@ -60,18 +64,20 @@ const MyRides = () => {
               <span>Активни</span>
             </a>
           </Col>
-          <Col className="text-center" xs={4}>
-            <a
-              className={` ${
-                category === "P" ? "selected" : ""
-              } d-flex justify-content-center`}
-              onClick={() => {
-                handleCategoryChange("P");
-              }}
-            >
-              <span>Предложени</span>
-            </a>
-          </Col>
+          {userType == "passenger" && (
+            <Col className="text-center" xs={4}>
+              <a
+                className={` ${
+                  category === "P" ? "selected" : ""
+                } d-flex justify-content-center`}
+                onClick={() => {
+                  handleCategoryChange("P");
+                }}
+              >
+                <span>Предложени</span>
+              </a>
+            </Col>
+          )}
           <Col className="text-center" xs={4}>
             <a
               className={` ${
@@ -91,6 +97,7 @@ const MyRides = () => {
             rideData.map((ride, index) => (
               <MyRideCard
                 key={index}
+                userType={userType}
                 rideData={ride}
                 fetchRideData={fetchRideData}
                 category={category}

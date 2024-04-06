@@ -16,9 +16,6 @@ const backendUrl = process.env.REACT_APP_BACKEND_URL;
 const PostRide = () => {
   const { token } = useAuth();
 
-  const [carModel, setCarModel] = useState(null);
-  const [carColor, setCarColor] = useState(null);
-
   const [step, setStep] = useState(1);
   const [fromId, setFromId] = useState("");
   const [flexibleDeparture, setFlexibleDeparture] = useState(false);
@@ -30,6 +27,8 @@ const PostRide = () => {
   const [arrivalTime, setArrivalTime] = useState("");
 
   const [seats, setSeats] = useState(1);
+  const [carModel, setCarModel] = useState("");
+  const [carColor, setCarColor] = useState("");
 
   const [ridePrice, setRidePrice] = useState(300);
 
@@ -83,9 +82,10 @@ const PostRide = () => {
   const handleSubmit1 = (e) => {
     e.preventDefault();
     const [hours, minutes] = departureTime.split(":");
-    const selectedTime = new Date();
-    selectedTime.setHours(hours);
-    selectedTime.setMinutes(minutes);
+    const selectedDateTime = new Date(departureDate);
+    selectedDateTime.setHours(hours);
+    selectedDateTime.setMinutes(minutes);
+    console.log(selectedDateTime);
 
     const currentDateTime = new Date();
 
@@ -94,7 +94,7 @@ const PostRide = () => {
       setTimeout(() => {
         errorMessageRef.current.scrollIntoView({ behavior: "smooth" });
       }, 0);
-    } else if (selectedTime <= currentDateTime) {
+    } else if (selectedDateTime <= currentDateTime) {
       setErrorMessage(
         "Времето мора да биде покасно од моменталното време " +
           currentDateTime.toLocaleTimeString([], {
@@ -130,7 +130,8 @@ const PostRide = () => {
     }
   };
 
-  const handleSubmit3 = () => {
+  const handleSubmit3 = (e) => {
+    e.preventDefault();
     setErrorMessage("");
     setStep(4);
   };
@@ -145,6 +146,12 @@ const PostRide = () => {
     try {
       const departureDateTime = `${departureDate} ${departureTime}`;
       const rideDuration = calculateRideDuration(departureTime, arrivalTime);
+      if (carModel == "") {
+        setCarModel(null);
+      }
+      if (carColor == "") {
+        setCarColor(null);
+      }
       const response = await axios.post(
         `${backendUrl}/rides/create`,
         {
@@ -358,7 +365,7 @@ const PostRide = () => {
             )}
             {step == 3 && (
               <>
-                <section className="bottom-border">
+                <section className="bottom-border mb-4">
                   <h4 className="heading-xxs mb-0">
                     Колку слободни места имате
                   </h4>
@@ -380,12 +387,32 @@ const PostRide = () => {
                     </button>
                   </div>
                 </section>
-                <Button
-                  className="col-12 mt-4 dark-button body-bold-medium"
-                  onClick={handleSubmit3}
-                >
-                  Продолжи
-                </Button>
+                <form onSubmit={handleSubmit3}>
+                  <section>
+                    <h4 className="heading-xxs">Марка и модел на автомобил</h4>
+                    <input
+                      className="post-input mb-4"
+                      type="text"
+                      value={carColor}
+                      onChange={(e) => setCarColor(e.target.value)}
+                      placeholder="Пр. Бела"
+                    />
+                    <h4 className="heading-xxs">Боја на автомобил</h4>
+                    <input
+                      className="post-input"
+                      type="text"
+                      value={carModel}
+                      onChange={(e) => setCarModel(e.target.value)}
+                      placeholder="Пр. Шкода Фабиа"
+                    />
+                  </section>
+                  <Button
+                    className="col-12 mt-4 dark-button body-bold-medium"
+                    type="submit"
+                  >
+                    Продолжи
+                  </Button>
+                </form>
               </>
             )}
             {step == 4 && (
@@ -435,7 +462,7 @@ const PostRide = () => {
                           className="post-input currency-box d-flex justify-content-end
                     align-items-center"
                         >
-                          {ridePrice * 0.25}
+                          {ridePrice * 1.25}
                         </div>
                       </div>
                     </Col>

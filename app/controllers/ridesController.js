@@ -25,6 +25,20 @@ async function getRide(connection, rideId) {
   }
 }
 
+async function getReservationsForRide(rideId) {
+  const sql = `
+      SELECT r.*, p.name, p.phone_num
+      FROM reservations r
+      INNER JOIN passenger_accounts p ON r.passenger_id = p.id
+      WHERE r.ride_id = ?
+    `;
+
+  // Execute the SQL query
+  const [reservations] = await dbCon.query(sql, [rideId]);
+
+  return reservations;
+}
+
 // Driver functions
 async function postRide(req, res) {
   const token = req.headers.authorization;
@@ -117,10 +131,24 @@ async function getMyRides(req, res) {
     }
 
     // Your SQL query to fetch rides for the user
-    const sql = `SELECT * FROM rides WHERE driver_id = ?`;
+    let sql = `SELECT * FROM rides WHERE driver_id = ?`;
 
-    // Execute the SQL query
-    const [rides] = await dbCon.query(sql, [userId]);
+    // Check if query parameter is set to 'C', and if so, filter rides after current date time
+    const status = req.query.status;
+    const currentTime = new Date().toISOString();
+    if (status && status === "C") {
+      sql += ` AND date_time < ?`;
+    } else {
+      sql += ` AND date_time > ?`;
+    }
+
+    // Execute the SQL query without filtering by date
+    const [rides] = await dbCon.query(sql, [userId, currentTime]);
+
+    // Fetch reservations for each ride
+    for (const ride of rides) {
+      ride.reservations = await getReservationsForRide(ride.id);
+    }
 
     return res.status(200).json(rides);
   } catch (error) {

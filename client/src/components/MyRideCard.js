@@ -7,12 +7,21 @@ import { useAuth } from "./AuthContext";
 
 const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
-const MyRideCard = ({ rideData, fetchRideData, category }) => {
+const MyRideCard = ({ userType, rideData, fetchRideData, category }) => {
   const { token } = useAuth();
 
-  const ride = rideData.ride;
-  const reservation = rideData.reservation;
-  const driver = rideData.driver;
+  let ride = null;
+  let reservation = null;
+  let driver = null;
+  let reservations = null;
+  if (userType === "passenger") {
+    ride = rideData.ride;
+    reservation = rideData.reservation;
+    driver = rideData.driver;
+  } else {
+    ride = rideData;
+    reservations = rideData.reservations;
+  }
 
   const departureDateTime = new Date(ride.date_time);
   const departureDate = departureDateTime.toLocaleDateString("en-GB");
@@ -77,7 +86,7 @@ const MyRideCard = ({ rideData, fetchRideData, category }) => {
     }
   };
 
-  return (
+  return userType === "passenger" ? (
     <Card className="my-ride-card">
       <Card.Header className="d-flex justify-content-between">
         <div className="driver-info">
@@ -85,7 +94,7 @@ const MyRideCard = ({ rideData, fetchRideData, category }) => {
           <a className="body-xs">{driver.reviews_average}/5</a>
         </div>
         <div className="ride-price-box body-bold-medium">
-          {reservation.price + "мкд"}
+          {reservation.price}мкд
         </div>
       </Card.Header>
       <Card.Body>
@@ -119,7 +128,7 @@ const MyRideCard = ({ rideData, fetchRideData, category }) => {
           </Col>
         </div>
 
-        {category === "R" ? (
+        {category === "R" && (
           <>
             <a
               href={`sms:${driver.phone_num}`}
@@ -138,13 +147,11 @@ const MyRideCard = ({ rideData, fetchRideData, category }) => {
               <a className="body-bold-s">Превозот не се реализира</a>{" "}
             </div>
           </>
-        ) : (
-          <></>
         )}
       </Card.Body>
-
-      {/* <Button>Зачувај</Button> */}
     </Card>
+  ) : (
+    <p>Driver</p>
   );
 };
 
