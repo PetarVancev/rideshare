@@ -148,6 +148,12 @@ async function getMyRides(req, res) {
     // Fetch reservations for each ride
     for (const ride of rides) {
       ride.reservations = await getReservationsForRide(ride.id);
+      const from_location = await locationsController.getLocation(
+        ride.from_loc_id
+      );
+      ride.from_location_name = from_location[0].name;
+      const to_location = await locationsController.getLocation(ride.to_loc_id);
+      ride.to_location_name = to_location[0].name;
     }
 
     return res.status(200).json(rides);

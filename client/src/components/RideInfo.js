@@ -235,6 +235,7 @@ const RideInfo = () => {
                 navigation
                 scrollbar={{ draggable: true }}
                 centeredSlides={ride.driver_reviews.length === 1}
+                className="reviews-swiper"
               >
                 {ride.driver_reviews.map((review) => (
                   <SwiperSlide>
