@@ -101,6 +101,7 @@ const MyRides = () => {
                 rideData={ride}
                 fetchRideData={fetchRideData}
                 category={category}
+                token={token}
               />
             ))}
         </div>

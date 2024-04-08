@@ -90,8 +90,12 @@ async function insertReservation(
   dropOffLocationLon,
   status
 ) {
+  let customLocation = false;
+  if (status == "P") {
+    customLocation = true;
+  }
   const insertReservationQuery =
-    "INSERT INTO reservations (ride_id, passenger_id, num_seats, status, pick_up_lat, pick_up_lon, drop_off_lat, drop_off_lon) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    "INSERT INTO reservations (ride_id, passenger_id, num_seats, status, pick_up_lat, pick_up_lon, drop_off_lat, drop_off_lon, custom_locations) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
   await connection.query(insertReservationQuery, [
     rideId,
     passengerId,
@@ -101,6 +105,7 @@ async function insertReservation(
     pickUpLocationLon,
     dropOffLocationLat,
     dropOffLocationLon,
+    customLocation,
   ]);
 }
 

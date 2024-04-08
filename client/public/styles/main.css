@@ -88,6 +88,11 @@ button.transparent-button {
   font-size: 16px;
 }
 
+.body-s {
+  font-size: 14px;
+  line-height: 150%;
+}
+
 .body-xs {
   font-size: 12px;
   line-height: 150%;
@@ -155,6 +160,10 @@ button.buy-button {
 
 .no-border {
   border: 0 !important;
+}
+
+.blue-text {
+  color: #022c66;
 }
 
 /* Navbar */
@@ -950,4 +959,40 @@ button.reserve-button {
   background-color: #4ac777 !important;
   border: none !important;
   margin-left: 20px;
+}
+
+.drivers-ride-wrapper {
+  border-radius: 0.375rem;
+  border: 1px solid #4ac777;
+}
+
+.drivers-ride-wrapper .card {
+  border: 1px solid #4ac777;
+}
+
+.drivers-ride-wrapper .date-info {
+  border-bottom-left-radius: 0.375rem;
+  border-bottom-right-radius: 0.375rem;
+}
+
+.passengers-list {
+  padding: 0 !important;
+}
+
+.passengers-list .heading {
+  background-color: #022c66;
+  color: #4ac777;
+  padding: 8px 1rem;
+}
+
+.passengers-list .heading span {
+  color: white;
+  font-weight: 300;
+}
+
+.card.my-ride-card .passengers-list .arrived-button {
+  background-color: #4ac777;
+  width: 237px;
+  height: 50px;
+  margin: auto;
 }
