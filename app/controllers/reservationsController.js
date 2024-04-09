@@ -123,6 +123,16 @@ async function isDriverAssociatedWithReservation(driverId, reservationId) {
   return result[0].count > 0;
 }
 
+async function isDriverAssociatedWithRide(driverId, rideId) {
+  const checkDriverQuery = `
+    SELECT COUNT(*) AS count
+    FROM rides r
+    WHERE r.driver_id = ? AND r.id = ?;
+  `;
+  const [result] = await dbCon.query(checkDriverQuery, [driverId, rideId]);
+  return result[0].count > 0;
+}
+
 async function updateDriverLocationAndStatus(
   latitude,
   longitude,
@@ -136,6 +146,22 @@ async function updateDriverLocationAndStatus(
 
   await dbCon.query(updateQuery, [latitude, longitude, reservationId]);
 }
+
+const confirmDriverAtPickupForRide = async (
+  driverLatitude,
+  driverLongitude,
+  rideId
+) => {
+  const updateQuery = `
+      UPDATE rides
+      SET driver_lat = ?,
+          driver_lon = ?,
+          driver_arrived = 1
+      WHERE id = ?
+    `;
+
+  await dbCon.query(updateQuery, [driverLatitude, driverLongitude, rideId]);
+};
 
 function isValidCoordinates(lat, lon) {
   if (!lat || !lon) {
@@ -694,8 +720,15 @@ async function confirmDriverAtPickup(req, res) {
     const driverId = decoded.userId;
 
     const reservationId = req.query.reservationId;
+    const rideId = req.query.rideId;
     const driverLatitude = req.body.latitude;
     const driverLongitude = req.body.longitude;
+
+    if (reservationId && rideId) {
+      return res
+        .status(400)
+        .json({ error: "Provide either reservationId or rideId, not both" });
+    }
 
     if (userType !== "driver") {
       return res
@@ -710,32 +743,91 @@ async function confirmDriverAtPickup(req, res) {
           "You must provide valid location to confirm that you are at pick-up",
       });
     }
-    // Check if the driver is associated with the reservation
-    const isAssociated = await isDriverAssociatedWithReservation(
-      driverId,
-      reservationId
-    );
-    if (!isAssociated) {
+
+    if (reservationId) {
+      const isAssociated = await isDriverAssociatedWithReservation(
+        driverId,
+        reservationId
+      );
+      if (!isAssociated) {
+        return res.status(403).json({
+          error: "This reservation is not associated with the driver",
+        });
+      }
+
+      await updateDriverLocationAndStatus(
+        driverLatitude,
+        driverLongitude,
+        reservationId
+      );
+
+      return res.status(200).json({
+        message: "Driver successfully confirmed that they are at pick-up",
+      });
+    } else if (rideId) {
+      const isAssociated = await isDriverAssociatedWithRide(driverId, rideId);
+      if (!isAssociated) {
+        return res.status(403).json({
+          error: "This ride is not associated with the driver",
+        });
+      }
+
+      await confirmDriverAtPickupForRide(
+        driverLatitude,
+        driverLongitude,
+        rideId
+      );
+
+      return res.status(200).json({
+        message: "Driver successfully confirmed arrival at pick-up for ride",
+      });
+    } else {
       return res
-        .status(403)
-        .json({ error: "This reservation is not associated with the driver" });
+        .status(400)
+        .json({ error: "Provide either reservationId or rideId" });
     }
-
-    // Update driver location and status in the reservations table
-    await updateDriverLocationAndStatus(
-      driverLatitude,
-      driverLongitude,
-      reservationId
-    );
-
-    return res
-      .status(200)
-      .json({ message: "Driver succesfuly confirmed that the is at pick-up" });
   } catch (error) {
     console.error("Error when updating driver location and status:", error);
     return res.status(500).json({ error: "Internal Server Error" });
   }
 }
+
+// async function confirmDriverAtPickup(req, res) {
+//   try {
+//     const token = req.headers.authorization;
+
+//     if (!token) {
+//       return res.status(401).json({ error: "Unauthorized: Token missing" });
+//     }
+
+//     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+//     const userType = decoded.userType;
+//     const driverId = decoded.userId;
+
+//     const reservationId = req.query.reservationId;
+//     const driverLatitude = req.body.latitude;
+//     const driverLongitude = req.body.longitude;
+
+//     if (userType !== "driver") {
+//       return res
+//         .status(403)
+//         .json({ error: "Only drivers can confirm arrival at pick-up" });
+//     }
+
+//     const isValidLocation = isValidCoordinates(driverLatitude, driverLongitude);
+//     if (!isValidLocation) {
+//       return res.status(403).json({
+//         error:
+//           "You must provide valid location to confirm that you are at pick-up",
+//       });
+//     }
+//     // Check if the driver is associated with the reservation
+//   } catch (error) {
+//     console.error("Error when updating driver location and status:", error);
+//     return res.status(500).json({ error: "Internal Server Error" });
+//   }
+// }
 
 module.exports = {
   handleReservation,

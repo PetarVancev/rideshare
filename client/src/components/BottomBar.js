@@ -103,7 +103,10 @@ const BottomBar = () => {
         </svg>
         <span>Патувања</span>
       </div>
-      <div className="icon" onClick={() => navigateTo("/")}>
+      <div
+        className={`icon ${location.pathname === "/wallet" ? "selected" : ""}`}
+        onClick={() => navigateTo("/wallet")}
+      >
         <svg
           width="24"
           height="24"

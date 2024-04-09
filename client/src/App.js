@@ -14,6 +14,8 @@ import SearchResults from "./components/SearchResults";
 import MyRides from "./components/MyRides";
 import RideInfo from "./components/RideInfo";
 import PostRide from "./components/PostRide";
+import Wallet from "./components/Wallet";
+
 import DriverRoute from "./components/DriverRoute";
 import { AuthProvider } from "./components/AuthContext";
 
@@ -37,6 +39,7 @@ function App() {
             path="/post-ride"
             element={<DriverRoute element={<PostRide />} />}
           />
+          <Route path="/wallet" element={<Wallet />} />
         </Routes>
       </AuthProvider>
     </Router>
