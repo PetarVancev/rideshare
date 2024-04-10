@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const dbCon = require("../db");
+const { get } = require("../routes/walletRoutes");
 
 async function confirmWithdrawal(withdrawalId) {
   try {
@@ -106,23 +107,46 @@ async function requestWithdraw(req, res) {
   }
 }
 
-// async function confirmWithdrawal(req, res) {
-//   try {
-//     const withdrawalId = req.query.id;
-//     const sql = `UPDATE withdrawals SET status = 'C' WHERE id = ?`;
-//     const [result] = await dbCon.query(sql, [withdrawalId]);
+async function getWithdrawals(req, res) {
+  const token = req.headers.authorization;
 
-//     if (result.affectedRows === 0) {
-//       return res.status(404).json({ error: "Withdrawal not found" });
-//     }
+  if (!token) {
+    return res.status(401).json({ error: "Unauthorized: Token missing" });
+  }
 
-//     return res.status(201).json({
-//       message: "Withdrawal confirmed successfully",
-//     });
-//   } catch (error) {
-//     console.error("Error when withdrawing:", error);
-//     return res.status(500).json({ error: "Internal Server Error" });
-//   }
-// }
+  let connection; // Declare the connection variable
 
-module.exports = { requestWithdraw, confirmWithdrawal };
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    const userType = decoded.userType;
+    const driverId = decoded.userId;
+
+    if (userType != "driver") {
+      return res.status(403).json({ error: "Only drivers can withdraw" });
+    }
+
+    const query = "SELECT * FROM withdrawals WHERE driver_id = ?";
+    const [withdrawals] = await dbCon.query(query, [driverId]);
+
+    if (withdrawals.length === 0) {
+      return res.status(404).json({ error: "No withdrawals found" });
+    }
+
+    return res.status(200).json(withdrawals);
+  } catch (error) {
+    // Rollback the transaction if an error occurs
+    if (connection) {
+      await connection.rollback();
+    }
+
+    if (error.name === "JsonWebTokenError") {
+      return res.status(401).json({ error: "Unauthorized: Invalid token" });
+    } else {
+      console.error("Error when withdrawing:", error);
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
+  }
+}
+
+module.exports = { requestWithdraw, confirmWithdrawal, getWithdrawals };

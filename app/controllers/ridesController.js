@@ -4,6 +4,16 @@ const dbCon = require("../db");
 
 const locationsController = require("./geoLocationController");
 
+async function isDriverAssociatedWithRide(driverId, rideId) {
+  const checkDriverQuery = `
+    SELECT COUNT(*) AS count
+    FROM rides r
+    WHERE r.driver_id = ? AND r.id = ?;
+  `;
+  const [result] = await dbCon.query(checkDriverQuery, [driverId, rideId]);
+  return result[0].count > 0;
+}
+
 async function getRide(connection, rideId) {
   try {
     const rideSql = `
@@ -374,4 +384,5 @@ module.exports = {
   searchForRides,
   getRideInfo,
   getRide,
+  isDriverAssociatedWithRide,
 };

@@ -13,6 +13,7 @@ Backend
 
 Send emails for proposal acceptance and decline
 Cron jobs for proposals
+In getMyRides make the reservations field to be optional
 
 Client
 
@@ -21,6 +22,11 @@ If loggedIn redirect when going to login,register routes
 invalid token errors i mozi da se napraj koga na request ce dobijame invalid token, logout and redirect to login
 Naredno - handle login redirects
 My rides driver add loc suggestion text
+Set rideId even on correctly typed not only on dropdown click
+Driver can click arrived only if time<departuretime-10 min ??
+
+
+Journey indicator set width
 
 
 Check if already has a proposal for the ride ??

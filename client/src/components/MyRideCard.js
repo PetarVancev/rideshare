@@ -40,6 +40,8 @@ const MyRideCard = ({ token, userType, rideData, fetchRideData, category }) => {
     };
   }
 
+  const currentDateTime = new Date();
+
   const departureDateTime = new Date(ride.date_time);
   const departureDate = departureDateTime.toLocaleDateString("en-GB");
   const departureHours = departureDateTime
@@ -216,15 +218,17 @@ const MyRideCard = ({ token, userType, rideData, fetchRideData, category }) => {
               <span className="body-bold-s">Пиши му на димитар</span>
               <img src="images/message-icon.svg" />
             </a>
-            <div className="d-flex flex-column align-items-center confirmation-actions">
-              <Button
-                className="dark-button col-12 mt-4 arrived-button body-bold-medium"
-                onClick={confirmArrival}
-              >
-                Стигнав
-              </Button>
-              <a className="body-bold-s">Превозот не се реализира</a>{" "}
-            </div>
+            {departureDateTime < currentDateTime && (
+              <div className="d-flex flex-column align-items-center confirmation-actions">
+                <Button
+                  className="dark-button col-12 mt-4 arrived-button body-bold-medium"
+                  onClick={confirmArrival}
+                >
+                  Стигнав
+                </Button>
+                <a className="body-bold-s">Превозот не се реализира</a>{" "}
+              </div>
+            )}
           </>
         )}
       </Card.Body>

@@ -122,6 +122,11 @@ button.transparent-button {
   font-size: 20px !important;
 }
 
+.btn-text-m {
+  font-size: 14px;
+  font-weight: bold;
+}
+
 .has-bottom-bar {
   margin-bottom: 80px !important;
 }
@@ -1051,4 +1056,75 @@ button.reserve-button {
 
 .row.wallet-actions-row .right-border {
   border-right: 1px solid #022c66;
+}
+
+button.choose-transaction-type {
+  background-color: white;
+  border: 0;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+  height: 44px;
+  font-size: 14px;
+  width: 100%;
+  border-radius: 0.375rem;
+  color: #022c66;
+  font-weight: bold;
+}
+
+button.choose-transaction-type.selected {
+  border: 1px solid #4ac777;
+  color: #4ac777;
+}
+
+.transactions-container {
+  margin-top: 24px;
+}
+
+.card.income-card {
+  background-color: rgba(2, 44, 102, 0.1);
+}
+
+.card.income-card h4 {
+  margin-bottom: 0;
+}
+
+.card.income-card .journey-indicator {
+  padding: 0;
+  width: 95%;
+  margin: auto;
+}
+
+.card.income-card .destination-info {
+  margin-bottom: 12px;
+}
+
+.total-ride-income {
+  background-color: #022c66;
+  color: white;
+  height: 48px;
+  border-radius: 0.375rem;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+.income-breakdown {
+  padding-left: 24px;
+  padding-right: 24px;
+  color: #4e6c94;
+}
+
+.income-breakdown div {
+  padding: 12px 0;
+}
+
+.income-breakdown div:not(:last-child) {
+  border-bottom: 1px solid #022c66;
+}
+
+.withdrawal-amount {
+  text-align: center;
+  height: 43px;
+  color: white;
+  background-color: #022c66;
+  width: 118px;
+  border-radius: 0.375rem;
 }

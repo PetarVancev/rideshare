@@ -17,6 +17,7 @@ import PostRide from "./components/PostRide";
 import Wallet from "./components/Wallet";
 
 import DriverRoute from "./components/DriverRoute";
+import PrivateRoute from "./components/PrivateRoute";
 import { AuthProvider } from "./components/AuthContext";
 
 function App() {
@@ -39,7 +40,10 @@ function App() {
             path="/post-ride"
             element={<DriverRoute element={<PostRide />} />}
           />
-          <Route path="/wallet" element={<Wallet />} />
+          <Route
+            path="/wallet"
+            element={<PrivateRoute element={<Wallet />} />}
+          />
         </Routes>
       </AuthProvider>
     </Router>

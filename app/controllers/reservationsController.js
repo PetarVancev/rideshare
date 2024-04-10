@@ -6,6 +6,8 @@ const transactionsController = require("./transactionsController");
 const locationsController = require("./geoLocationController");
 const reviewsController = require("./reviewsController");
 
+const isDriverAssociatedWithRide = ridesController.isDriverAssociatedWithRide;
+
 async function checkReservationOwnership(
   connection,
   reservationId,
@@ -120,16 +122,6 @@ async function isDriverAssociatedWithReservation(driverId, reservationId) {
     driverId,
     reservationId,
   ]);
-  return result[0].count > 0;
-}
-
-async function isDriverAssociatedWithRide(driverId, rideId) {
-  const checkDriverQuery = `
-    SELECT COUNT(*) AS count
-    FROM rides r
-    WHERE r.driver_id = ? AND r.id = ?;
-  `;
-  const [result] = await dbCon.query(checkDriverQuery, [driverId, rideId]);
   return result[0].count > 0;
 }
 

@@ -1,3 +1,49 @@
+const dbCon = require("../db");
+const jwt = require("jsonwebtoken");
+
+const ridesController = require("./ridesController");
+
+async function getTransactionsForRide(req, res) {
+  const token = req.headers.authorization;
+
+  if (!token) {
+    return res.status(401).json({ error: "Unauthorized: Token missing" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decoded.userId;
+    const userType = decoded.userType;
+
+    const rideId = req.query.rideId;
+
+    let query = `
+    SELECT *
+    FROM transactions
+    WHERE ride_id = ? AND to_driver_id = ?
+  `;
+    if (userType == "driver" && !ridesController.isDriverAssociatedWithRide) {
+      return res.status(403).json({
+        error: "This ride does not belong to the current driver",
+      });
+    } else if (userType == "passenger") {
+      query = `
+    SELECT *
+    FROM transactions
+    WHERE ride_id = ? AND from_passenger_id = ?
+  `;
+    }
+
+    const [transactions] = await dbCon.query(query, [rideId, userId]);
+    if (transactions.length === 0) {
+      return res
+        .status(404)
+        .json({ error: "No transactions for provided ride" });
+    }
+    return res.status(200).json(transactions);
+  } catch (error) {}
+}
+
 async function payToDriver(
   connection,
   fromPassenger,
@@ -43,4 +89,4 @@ async function payToDriver(
   }
 }
 
-module.exports = { payToDriver };
+module.exports = { payToDriver, getTransactionsForRide };
