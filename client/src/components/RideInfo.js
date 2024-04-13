@@ -150,6 +150,7 @@ const RideInfo = () => {
           statusMessage={successMessage}
           nextStepsMessage={nextStepsMessage}
           goTo={"/my-rides"}
+          buttonText={"Патувања"}
         />
       ) : (
         <Container

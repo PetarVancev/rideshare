@@ -14,6 +14,7 @@ Backend
 Send emails for proposal acceptance and decline
 Cron jobs for proposals
 In getMyRides make the reservations field to be optional
+Store bank_acc_num in withdrawal table also???
 
 Client
 

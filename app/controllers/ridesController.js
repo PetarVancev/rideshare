@@ -235,10 +235,6 @@ async function searchForRides(req, res) {
   const { from_loc_id, to_loc_id, date_time, seats } = req.query;
 
   try {
-    // Get locations for from and to
-    const fromLocation = await locationsController.getLocation(from_loc_id);
-    const toLocation = await locationsController.getLocation(to_loc_id);
-
     // Your existing code for fetching rides remains unchanged
     const sql = `
       SELECT 

@@ -18,11 +18,9 @@ async function deposit(req, res) {
     const amount = req.body.amount;
 
     if (amount % denomination != 0) {
-      return res
-        .status(403)
-        .json({
-          error: "You can only deposit in denominations of " + denomination,
-        });
+      return res.status(403).json({
+        error: "You can only deposit in denominations of " + denomination,
+      });
     }
 
     const userType = decoded.userType;
@@ -95,4 +93,39 @@ async function deposit(req, res) {
   }
 }
 
-module.exports = { deposit };
+async function getDeposits(req, res) {
+  const token = req.headers.authorization;
+
+  if (!token) {
+    return res.status(401).json({ error: "Unauthorized: Token missing" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    const userType = decoded.userType;
+    const userId = decoded.userId;
+
+    if (userType != "passenger") {
+      return res.status(403).json({ error: "Only passengers have deposits" });
+    }
+
+    const query = "SELECT * FROM deposits WHERE passenger_id = ?";
+    const [deposits] = await dbCon.query(query, [userId]);
+
+    if (deposits.length === 0) {
+      return res.status(404).json({ error: "No withdrawals found" });
+    }
+
+    return res.status(200).json(deposits);
+  } catch (error) {
+    if (error.name === "JsonWebTokenError") {
+      return res.status(401).json({ error: "Unauthorized: Invalid token" });
+    } else {
+      console.error("Error when withdrawing:", error);
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
+  }
+}
+
+module.exports = { deposit, getDeposits };

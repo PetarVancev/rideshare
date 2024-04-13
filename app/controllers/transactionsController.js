@@ -27,11 +27,7 @@ async function getTransactionsForRide(req, res) {
         error: "This ride does not belong to the current driver",
       });
     } else if (userType == "passenger") {
-      query = `
-    SELECT *
-    FROM transactions
-    WHERE ride_id = ? AND from_passenger_id = ?
-  `;
+      return res.status(403).json({ error: "This is an endpoint for drivers" });
     }
 
     const [transactions] = await dbCon.query(query, [rideId, userId]);
@@ -41,7 +37,56 @@ async function getTransactionsForRide(req, res) {
         .json({ error: "No transactions for provided ride" });
     }
     return res.status(200).json(transactions);
-  } catch (error) {}
+  } catch (error) {
+    if (error.name === "JsonWebTokenError") {
+      return res.status(401).json({ error: "Unauthorized: Invalid token" });
+    } else {
+      console.error("Error when getting transactions for ride:", error);
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
+  }
+}
+
+async function getPassengerTransactions(req, res) {
+  const token = req.headers.authorization;
+
+  if (!token) {
+    return res.status(401).json({ error: "Unauthorized: Token missing" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decoded.userId;
+    const userType = decoded.userType;
+
+    let query = `
+    SELECT transactions.*,fromLocation.name AS from_location_name, toLocation.name AS to_location_name,rides.date_time,rides.ride_duration
+    FROM transactions
+    INNER JOIN rides ON transactions.ride_id = rides.id
+    INNER JOIN locations AS fromLocation ON rides.from_loc_id = fromLocation.id
+    INNER JOIN locations AS toLocation ON rides.to_loc_id = toLocation.id
+    WHERE transactions.from_passenger_id = ?
+  `;
+    if (userType == "driver") {
+      return res.status(403).json({
+        error: "This endpoint is only for passengers",
+      });
+    }
+
+    const [transactions] = await dbCon.query(query, [userId]);
+    if (transactions.length === 0) {
+      return res.status(404).json({ error: "No transactions found" });
+    }
+
+    return res.status(200).json(transactions);
+  } catch (error) {
+    if (error.name === "JsonWebTokenError") {
+      return res.status(401).json({ error: "Unauthorized: Invalid token" });
+    } else {
+      console.error("Error when getting passenger transactions:", error);
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
+  }
 }
 
 async function payToDriver(
@@ -89,4 +134,8 @@ async function payToDriver(
   }
 }
 
-module.exports = { payToDriver, getTransactionsForRide };
+module.exports = {
+  payToDriver,
+  getTransactionsForRide,
+  getPassengerTransactions,
+};

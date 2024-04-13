@@ -120,10 +120,16 @@ button.transparent-button {
 
 .heading-xs {
   font-size: 20px !important;
+  font-weight: bold;
 }
 
 .btn-text-m {
   font-size: 14px;
+  font-weight: bold;
+}
+
+.btn-text-l {
+  font-size: 16px;
   font-weight: bold;
 }
 
@@ -134,6 +140,10 @@ button.transparent-button {
 .switch input {
   width: 40px !important;
   height: 24px;
+}
+
+.bottom-border-gray {
+  border-bottom: 1px solid #e6eaf0;
 }
 
 /* Buttons */
@@ -184,6 +194,7 @@ button.buy-button {
 /* Navbar */
 
 .navbar {
+  z-index: 999;
   height: 58px;
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1); /* Adjust values as needed */
 }
@@ -917,8 +928,15 @@ button.reserve-button {
 /* Submission success */
 
 .submission-status-container {
+  position: absolute;
+  bottom: 0;
   width: 100vw;
+  height: calc(100vh - 58px);
   color: #022c66;
+  z-index: 200;
+  background-color: white;
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
 }
 
 .submission-message {
@@ -1127,4 +1145,121 @@ button.choose-transaction-type.selected {
   background-color: #022c66;
   width: 118px;
   border-radius: 0.375rem;
+}
+
+.withdraw-container {
+  position: fixed;
+  width: 100vw !important;
+  max-width: none !important;
+  height: 90vh;
+  z-index: 10;
+  background-color: white;
+  bottom: -90vh;
+  transform: translateY(100%);
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+  transition: 0.5s ease;
+}
+
+.withdraw-container.show {
+  transform: translateY(0);
+  bottom: 0;
+}
+
+div.bank-acc-number {
+  height: 67px;
+  width: 100%;
+  padding: 0 24px;
+  background-color: rgba(2, 44, 102, 0.1);
+  border-radius: 0.375rem;
+  color: #8095b2;
+  margin-bottom: 24px;
+}
+
+.amount-container {
+  margin-top: 24px;
+}
+
+.input-container2 {
+  position: relative;
+}
+
+.left-corner-div {
+  position: absolute;
+  color: #022c66;
+  background-color: rgba(2, 44, 102, 0.2);
+  top: 50%;
+  width: 77px;
+  height: 67px;
+  left: 0px; /* Adjust as needed */
+  transform: translateY(-50%);
+  border-radius: 0.375rem;
+  pointer-events: none; /* This ensures that the div doesn't interfere with mouse events */
+}
+
+input.withdrawal-input {
+  height: 67px;
+  width: 100%;
+  border: 0;
+  background-color: rgba(2, 44, 102, 0.1);
+  border-radius: 0.375rem;
+  font-size: 32px;
+  color: #4ac777;
+  font-weight: bold;
+  text-align: right;
+  padding-left: 77px;
+  padding-right: 24px;
+}
+
+.row.withdraw-actions {
+  position: absolute;
+  width: 100vw;
+  bottom: 120px;
+}
+
+.withdraw-actions button {
+  width: 100%;
+  height: 56px;
+}
+
+.withdraw-actions button.btn-outline-primary {
+  font-weight: bold;
+  border: 1px solid #022c66;
+  color: #022c66;
+}
+
+.withdraw-actions button.btn-outline-primary:hover {
+  background-color: #022c66;
+  color: white;
+}
+
+.withdraw-actions button.btn-outline-success {
+  font-weight: bold;
+  border: 1px solid #4ac777;
+  color: #4ac777;
+}
+
+.withdraw-actions button.btn-outline-success:hover {
+  background-color: #4ac777;
+  color: white;
+}
+
+.wallet-success-message {
+  display: none;
+}
+
+.wallet-success-message.show {
+  display: block;
+}
+
+.bank-input {
+  font-size: 16px !important;
+  padding-left: 24px !important;
+  text-align: start !important;
+  color: #8095b2 !important;
+}
+
+.bank-acc-input-container {
+  padding-bottom: 24px;
+  border-bottom: 1px solid #e6eaf0;
 }

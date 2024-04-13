@@ -1,6 +1,5 @@
 const jwt = require("jsonwebtoken");
 const dbCon = require("../db");
-const { get } = require("../routes/walletRoutes");
 
 async function confirmWithdrawal(withdrawalId) {
   try {
@@ -43,6 +42,19 @@ async function requestWithdraw(req, res) {
 
     // Start a database transaction
     await connection.beginTransaction();
+
+    const selectBankAccQuery =
+      "SELECT bank_acc_num FROM driver_accounts WHERE id = ?";
+    const [bankAccRows] = await connection.query(selectBankAccQuery, [
+      driverId,
+    ]);
+
+    if (bankAccRows.length === 0 || !bankAccRows[0].bank_acc_num) {
+      await connection.rollback();
+      return res
+        .status(403)
+        .json({ error: "Driver's bank account number is missing" });
+    }
 
     const selectBalanceQuery =
       "SELECT balance FROM driver_accounts WHERE id = ? FOR UPDATE";
@@ -114,8 +126,6 @@ async function getWithdrawals(req, res) {
     return res.status(401).json({ error: "Unauthorized: Token missing" });
   }
 
-  let connection; // Declare the connection variable
-
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
@@ -123,7 +133,7 @@ async function getWithdrawals(req, res) {
     const driverId = decoded.userId;
 
     if (userType != "driver") {
-      return res.status(403).json({ error: "Only drivers can withdraw" });
+      return res.status(403).json({ error: "Only drivers have withdrawals" });
     }
 
     const query = "SELECT * FROM withdrawals WHERE driver_id = ?";
@@ -135,11 +145,6 @@ async function getWithdrawals(req, res) {
 
     return res.status(200).json(withdrawals);
   } catch (error) {
-    // Rollback the transaction if an error occurs
-    if (connection) {
-      await connection.rollback();
-    }
-
     if (error.name === "JsonWebTokenError") {
       return res.status(401).json({ error: "Unauthorized: Invalid token" });
     } else {
@@ -149,4 +154,8 @@ async function getWithdrawals(req, res) {
   }
 }
 
-module.exports = { requestWithdraw, confirmWithdrawal, getWithdrawals };
+module.exports = {
+  requestWithdraw,
+  confirmWithdrawal,
+  getWithdrawals,
+};
