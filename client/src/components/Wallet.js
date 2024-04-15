@@ -31,6 +31,25 @@ const Wallet = () => {
   const [nextStepsMessage, setNextStepsMessage] = useState("");
   const [error, setError] = useState(null);
 
+  const [depositAmount, setDepositAmount] = useState(300);
+
+  const handleDepositChange = (value) => {
+    value = parseInt(value, 10);
+    if (!isNaN(value) && value <= balance) {
+      setDepositAmount(value);
+    }
+  };
+
+  const depositValues = [];
+  let denomination = 300;
+  if (userType == "passenger") {
+    for (let i = 0; i < 8; i++) {
+      depositValues.push(denomination);
+
+      denomination += 300;
+    }
+  }
+
   useEffect(() => {
     if (selectedTransactionType === "income") {
       if (userType === "driver") {
@@ -376,6 +395,63 @@ const Wallet = () => {
         </form>
       </Container>
 
+      <Container
+        className={`withdraw-container deposit-container ${
+          currModal === "deposit" ? "show" : ""
+        }`}
+      >
+        <h2 className="heading-xs mt-5 text-center mb-5">
+          <img src="images/plus-icon.svg" /> Надополни средства
+        </h2>
+        <div className="amount-container">
+          <h4 className="heading-xxs">Сума која ќе биде надополнета</h4>
+          <div class="input-container2">
+            <div class="left-corner-div heading-xs d-flex justify-content-center align-items-center">
+              ден
+            </div>
+            <input
+              className="withdrawal-input"
+              type="text"
+              value={depositAmount}
+              onChange={(event) => handleDepositChange(event.target.value)}
+            />
+          </div>
+        </div>
+        <Row className="deposit-values-container text-center">
+          <h4 className="heading-xxs text-start">
+            Одберете износ за надополнување
+          </h4>
+          {depositValues.map((value, index) => (
+            <Col
+              key={index}
+              xs={3}
+              className={`deposit-values ${
+                depositAmount === value ? "selected" : ""
+              }`}
+              onClick={() => handleDepositChange(value)}
+            >
+              <div className="heading-xs deposit-amount">{value}</div>
+              ден
+            </Col>
+          ))}
+        </Row>
+        <Row className="withdraw-actions">
+          <Col xs={6}>
+            <Button
+              variant="outline-primary"
+              onClick={() => setCurrModal(null)}
+            >
+              Откажи
+            </Button>
+          </Col>
+          <Col xs={6} className="text-end">
+            <Button variant="outline-success" onClick={requestWithdraw}>
+              Префрли
+            </Button>
+          </Col>
+        </Row>
+      </Container>
+
       {/* Main */}
       <div className="wallet-background"></div>
       <NavBar type="blue" />
@@ -390,22 +466,34 @@ const Wallet = () => {
           </Col>
         </Row>
         <Row className="wallet-actions-row text-center">
-          <Col
-            xs={6}
-            className="right-border"
-            onClick={() => setCurrModal("withdraw")}
-          >
-            <div>
-              <img src="images/bank-icon.svg" />
-            </div>
-            Префрли во банка
-          </Col>
-          <Col xs={6} onClick={() => setCurrModal("bank")}>
-            <div>
-              <img src="images/card-icon.svg" />
-            </div>
-            Трансакциска
-          </Col>
+          {userType === "driver" ? (
+            <>
+              <Col
+                xs={6}
+                className="right-border"
+                onClick={() => setCurrModal("withdraw")}
+              >
+                <div>
+                  <img src="images/bank-icon.svg" />
+                </div>
+                Префрли во банка
+              </Col>
+              <Col xs={6} onClick={() => setCurrModal("bank")}>
+                <div>
+                  <img src="images/card-icon.svg" />
+                </div>
+                Трансакциска
+              </Col>
+            </>
+          ) : (
+            <Col
+              className="deposit-open"
+              xs={12}
+              onClick={() => setCurrModal("deposit")}
+            >
+              <img src="images/plus-icon.svg" /> Надополни средства
+            </Col>
+          )}
         </Row>
         <Row className="mt-4">
           <Col xs={12}>

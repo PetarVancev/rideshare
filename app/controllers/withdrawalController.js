@@ -136,7 +136,8 @@ async function getWithdrawals(req, res) {
       return res.status(403).json({ error: "Only drivers have withdrawals" });
     }
 
-    const query = "SELECT * FROM withdrawals WHERE driver_id = ?";
+    const query =
+      "SELECT * FROM withdrawals WHERE driver_id = ? ORDER BY date_time DESC";
     const [withdrawals] = await dbCon.query(query, [driverId]);
 
     if (withdrawals.length === 0) {

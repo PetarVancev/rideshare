@@ -147,9 +147,9 @@ async function getMyRides(req, res) {
     const status = req.query.status;
     const currentTime = new Date().toISOString();
     if (status && status === "C") {
-      sql += ` AND date_time < ?`;
+      sql += ` AND date_time < ? ORDER BY date_time DESC`;
     } else {
-      sql += ` AND date_time > ?`;
+      sql += ` AND date_time > ? ORDER BY date_time DESC`;
     }
 
     // Execute the SQL query without filtering by date

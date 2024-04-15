@@ -110,7 +110,8 @@ async function getDeposits(req, res) {
       return res.status(403).json({ error: "Only passengers have deposits" });
     }
 
-    const query = "SELECT * FROM deposits WHERE passenger_id = ?";
+    const query =
+      "SELECT * FROM deposits WHERE passenger_id = ? ORDER BY date_time DESC";
     const [deposits] = await dbCon.query(query, [userId]);
 
     if (deposits.length === 0) {
