@@ -35,7 +35,7 @@ const Wallet = () => {
 
   const handleDepositChange = (value) => {
     value = parseInt(value, 10);
-    if (!isNaN(value) && value <= balance) {
+    if (!isNaN(value)) {
       setDepositAmount(value);
     }
   };
@@ -64,7 +64,7 @@ const Wallet = () => {
         getAndSetDeposits();
       }
     }
-  }, [location.search, selectedTransactionType]);
+  }, [location.search, selectedTransactionType, currModal]);
 
   useEffect(() => {
     const fetchWallet = async () => {
@@ -78,7 +78,7 @@ const Wallet = () => {
     };
 
     fetchWallet();
-  }, [successMessage, location.search]);
+  }, [showSuccess, location.search]);
 
   useEffect(() => {
     if (showSuccess || currModal) {
@@ -239,6 +239,32 @@ const Wallet = () => {
     }
   };
 
+  const handleDeposit = async () => {
+    try {
+      let url = `${backendUrl}/wallet/deposit`;
+      const response = await axios.post(
+        url,
+        { amount: depositAmount },
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+        }
+      );
+      setSuccessMessage("Успешно ја надополнивте вашата сметка");
+      setNextStepsMessage("");
+      setShowSuccess(true);
+    } catch (error) {
+      toast.dismiss();
+      toast.error(error.response.data.error, {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeButton: true,
+      });
+    }
+  };
+
   const handleWithAmountChange = (event) => {
     let inputValue = event.target.value;
 
@@ -258,8 +284,6 @@ const Wallet = () => {
   const handleBankAccountChange = async (e) => {
     e.preventDefault();
     if (bankAcc != bankAccConfirm) {
-      console.log(bankAcc);
-      console.log(bankAccConfirm);
       setError("Внесете ја истата трансакциска сметка во двете полиња");
     } else {
       try {
@@ -394,7 +418,7 @@ const Wallet = () => {
           </Row>
         </form>
       </Container>
-
+      {/* Deposit modal */}
       <Container
         className={`withdraw-container deposit-container ${
           currModal === "deposit" ? "show" : ""
@@ -445,7 +469,7 @@ const Wallet = () => {
             </Button>
           </Col>
           <Col xs={6} className="text-end">
-            <Button variant="outline-success" onClick={requestWithdraw}>
+            <Button variant="outline-success" onClick={handleDeposit}>
               Префрли
             </Button>
           </Col>

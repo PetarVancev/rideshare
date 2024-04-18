@@ -2,8 +2,6 @@ import React from "react";
 import { Card } from "react-bootstrap";
 
 const RideIncomeCard = ({ data, userType }) => {
-  console.log(data);
-  // Check if data.transactions exists and has items
   const departureDateTime = new Date(data.date_time);
   const departureDate = departureDateTime.toLocaleDateString("en-GB");
   const departureHours = departureDateTime

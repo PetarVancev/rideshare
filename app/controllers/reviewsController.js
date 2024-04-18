@@ -14,7 +14,8 @@ async function getDriverReviewsAverage(driverId) {
     `;
     const [result] = await dbCon.query(sql, [driverId]);
 
-    const averageScore = result[0].average_score;
+    const averageScore =
+      result[0].average_score !== null ? result[0].average_score : 0.0;
 
     return averageScore;
   } catch (error) {
@@ -56,10 +57,18 @@ async function postReview(req, res) {
         .status(403)
         .json({ error: "Only passengers can write reviews" });
     }
-    const { rideId, rating, review } = req.body;
+    const {
+      rideId,
+      time_correctness_score,
+      safety_score,
+      comfort_score,
+      text,
+    } = req.body;
 
     // Check if the user has a reservation for the ride with status 'C'
+    console.log(userId + " " + rideId);
     const reservation = await getReservation(userId, rideId);
+    console.log(reservation);
     if (!reservation || reservation.status !== "C") {
       return res.status(403).json({
         error: "You can't post a review for a ride that you haven't been in",
@@ -79,7 +88,15 @@ async function postReview(req, res) {
       .toISOString()
       .slice(0, 19)
       .replace("T", " ");
-    await insertReview(userId, rideId, review, rating, currentDateTime);
+    await insertReview(
+      userId,
+      rideId,
+      time_correctness_score,
+      safety_score,
+      comfort_score,
+      text,
+      currentDateTime
+    );
 
     return res.status(201).json({ message: "Review posted successfully" });
   } catch (error) {
@@ -102,7 +119,15 @@ async function getMyReview(userId, rideId) {
   return reviews[0];
 }
 
-async function insertReview(userId, rideId, review, rating, dateTime) {
+async function insertReview(
+  userId,
+  rideId,
+  time_correctness_score,
+  safety_score,
+  comfort_score,
+  text,
+  dateTime
+) {
   const findDriverQuery = "SELECT driver_id FROM rides WHERE id = ?";
   const [driverResults] = await dbCon.query(findDriverQuery, [rideId]);
   if (driverResults.length == 0) {
@@ -110,8 +135,17 @@ async function insertReview(userId, rideId, review, rating, dateTime) {
   } else {
     const driverId = driverResults[0].driver_id;
     await dbCon.query(
-      "INSERT INTO ride_reviews (driver_id, passenger_id, ride_id, date_time, rating, text) VALUES (?, ?, ?, ?, ?,?)",
-      [driverId, userId, rideId, dateTime, rating, review]
+      "INSERT INTO ride_reviews (driver_id, passenger_id, ride_id, date_time, time_correctness_score, safety_score, comfort_score, text) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+      [
+        driverId,
+        userId,
+        rideId,
+        dateTime,
+        time_correctness_score,
+        safety_score,
+        comfort_score,
+        text,
+      ]
     );
   }
 }

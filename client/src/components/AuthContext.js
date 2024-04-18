@@ -80,13 +80,29 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const logoutUser = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("userType");
+    setToken(null);
+    setUserType(null);
+    navigate("/login");
+  };
+
   const isLoggedIn = () => {
     return !!(userType && token);
   };
 
   return (
     <AuthContext.Provider
-      value={{ loginUser, userType, token, loading, registerUser, isLoggedIn }}
+      value={{
+        loginUser,
+        logoutUser,
+        userType,
+        token,
+        loading,
+        registerUser,
+        isLoggedIn,
+      }}
     >
       {loading ? <></> : children}
     </AuthContext.Provider>

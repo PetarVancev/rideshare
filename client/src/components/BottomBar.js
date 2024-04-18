@@ -131,8 +131,7 @@ const BottomBar = () => {
             ? "selected"
             : ""
         }`}
-        onClick={() => navigateTo("/login")}
-        // onClick={() => (isLoggedIn() ? navigateTo("/") : navigateTo("/login"))}
+        onClick={() => navigateTo("/my-profile")}
       >
         <svg
           width="24"

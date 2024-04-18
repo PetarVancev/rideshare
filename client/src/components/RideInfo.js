@@ -21,6 +21,7 @@ const RideInfo = () => {
   const navigate = useNavigate();
   const { isLoggedIn, userType, token } = useAuth();
 
+  const [balance, setBalance] = useState(0);
   const [ride, setRide] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -47,7 +48,23 @@ const RideInfo = () => {
     };
 
     fetchRide();
+    getWallet();
   }, [location.search]);
+
+  const getWallet = async () => {
+    try {
+      let url = `${backendUrl}/wallet/get-wallet`;
+      const response = await axios.get(url, {
+        headers: {
+          Authorization: `${token}`,
+        },
+      });
+      const fetchedWallet = response.data[0];
+      setBalance(fetchedWallet.balance);
+    } catch (error) {
+      console.error("Error fetching ride data:", error);
+    }
+  };
 
   if (loading) {
     return <>{/* Render loading indicator here */}</>;
@@ -64,7 +81,7 @@ const RideInfo = () => {
           </p>
         </Container>
       </>
-    ); // or any other loading indicator
+    );
   }
 
   if (!seats || seats == 0 || seats > ride.free_seats) {
@@ -78,7 +95,7 @@ const RideInfo = () => {
           </p>
         </Container>
       </>
-    ); // or any other loading indicator
+    );
   }
 
   const departureDateTime = new Date(ride.date_time);
@@ -258,9 +275,7 @@ const RideInfo = () => {
                   {ride.price * seats} мкд
                 </strong>
                 <p className="body-xs">Вкупно за {seats} места</p>
-                <p className="body-bold-xs">
-                  {departureDateTime.toLocaleDateString("en-GB")}
-                </p>
+                <p className="body-bold-xs">Состојба: {balance} мкд</p>
               </Col>
               <Col>
                 <button

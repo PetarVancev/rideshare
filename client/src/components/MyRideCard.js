@@ -13,7 +13,13 @@ import PassengerInfo from "./PassengerInfo";
 
 const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
-const MyRideCard = ({ token, userType, rideData, fetchRideData, category }) => {
+const MyRideCard = ({
+  token,
+  userType,
+  rideData,
+  category,
+  openReviewModal,
+}) => {
   const [passengersListOpen, setPassengersListOpen] = useState(false);
 
   let ride = null;
@@ -89,10 +95,10 @@ const MyRideCard = ({ token, userType, rideData, fetchRideData, category }) => {
       toast.dismiss();
       toast.success(response.data.message, {
         position: "top-center",
-        autoClose: 2000,
+        autoClose: 1500,
         hideProgressBar: false,
         closeButton: true,
-        onClose: async () => await fetchRideData(),
+        onClose: () => openReviewModal(),
       });
     } catch (error) {
       console.log(error);

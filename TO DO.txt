@@ -26,6 +26,8 @@ My rides driver add loc suggestion text
 Set rideId even on correctly typed not only on dropdown click
 Driver can click arrived only if time<departuretime-10 min ??
 
+Make seperate components for modals in wallet
+
 
 Journey indicator set width
 

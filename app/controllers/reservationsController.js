@@ -535,9 +535,9 @@ async function getMyReservations(req, res) {
         rides.*, 
         driver_accounts.name AS driver_name,
         CASE
-          WHEN reservations.status = 'C' THEN driver_accounts.phone_num
+          WHEN reservations.status = 'R' THEN driver_accounts.phone_num
           ELSE NULL
-        END AS driver_phone
+        END AS phone_num
       FROM 
         reservations 
       INNER JOIN 
@@ -575,7 +575,7 @@ async function getMyReservations(req, res) {
             // Add other reservation properties as needed
           },
           ride: {
-            id: reservation.ride_id,
+            id: reservation.id,
             from_loc_id: reservation.from_loc_id,
             from_location_name: fromLocation.name,
             to_loc_id: reservation.to_loc_id,
@@ -588,7 +588,7 @@ async function getMyReservations(req, res) {
             id: reservation.driver_id,
             name: reservation.driver_name,
             phone_num:
-              reservation.status === "C" ? reservation.driver_phone : null,
+              reservation.status === "R" ? reservation.phone_num : null,
             reviews_average: reviewsAverage,
             // Add other driver properties as needed
           },

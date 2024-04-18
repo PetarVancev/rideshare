@@ -5,9 +5,9 @@ const passwordResetController = require("../controllers/passwordResetController"
 
 const router = express.Router();
 
+router.get("/get-profile-info", loginController.getUserFromToken);
 //Register a new passenger
 router.post("/register/passenger", registerController.registerPassenger);
-
 //Login a new driver
 router.post("/login/passenger", loginController.loginPassenger);
 
