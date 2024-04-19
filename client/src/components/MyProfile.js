@@ -24,6 +24,9 @@ const MyProfile = () => {
         console.log(response.data);
         setUser(response.data);
       } catch (error) {
+        if (error.response.status == 401) {
+          logoutUser();
+        }
         console.error("Error fetching user information:", error);
       }
     };

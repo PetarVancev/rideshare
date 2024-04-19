@@ -21,18 +21,19 @@ const RideInfo = () => {
   const navigate = useNavigate();
   const { isLoggedIn, userType, token } = useAuth();
 
+  const queryParams = new URLSearchParams(location.search);
+  const rideId = queryParams.get("rideId");
+  const initialSeats = queryParams.get("seats");
+
   const [balance, setBalance] = useState(0);
   const [ride, setRide] = useState(null);
+  const [seats, setSeats] = useState(parseInt(initialSeats));
   const [loading, setLoading] = useState(true);
 
   const [reserved, setReserved] = useState(false);
   const successMessage = "Успешно направивте резервација";
   const nextStepsMessage =
     "*Вашата резервација можете да ја погледнете во делот активни патувања";
-
-  const queryParams = new URLSearchParams(location.search);
-  const rideId = queryParams.get("rideId");
-  const seats = queryParams.get("seats");
 
   useEffect(() => {
     const fetchRide = async () => {
@@ -159,6 +160,13 @@ const RideInfo = () => {
     }
   };
 
+  const changeSeatsNumber = (val) => {
+    const newSeats = seats + val;
+    if (newSeats >= 1 && newSeats <= ride.free_seats) {
+      setSeats(newSeats);
+    }
+  };
+
   return (
     <>
       <NavBar />
@@ -194,6 +202,21 @@ const RideInfo = () => {
               <h4 className="heading-xs">{ride.to_location_name}</h4>
               <span className="body-bold-xs">{arrivalTime}</span>
             </div>
+          </div>
+          <div className="d-flex justify-content-center mt-4 mb-4">
+            <button
+              className="seats-change-button heading-s"
+              onClick={() => changeSeatsNumber(-1)}
+            >
+              -
+            </button>
+            <div className="seats-choose-indicator heading-s">{seats}</div>
+            <button
+              className="seats-change-button heading-s"
+              onClick={() => changeSeatsNumber(+1)}
+            >
+              +
+            </button>
           </div>
           <div className="d-flex">
             <div className="icon-div">
@@ -275,7 +298,13 @@ const RideInfo = () => {
                   {ride.price * seats} мкд
                 </strong>
                 <p className="body-xs">Вкупно за {seats} места</p>
-                <p className="body-bold-xs">Состојба: {balance} мкд</p>
+                <p
+                  className={`body-bold-xs ${
+                    ride.price * seats > balance ? "red-text" : ""
+                  }`}
+                >
+                  Состојба: {balance} мкд
+                </p>
               </Col>
               <Col>
                 <button

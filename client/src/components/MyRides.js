@@ -8,6 +8,7 @@ import NavBar from "./NavBar";
 import BottomBar from "./BottomBar";
 import MyRideCard from "./MyRideCard";
 import WriteReviewModal from "./WriteReviewModal";
+import ComplaintModal from "./ComplaintModal";
 
 const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
@@ -18,13 +19,14 @@ const MyRides = () => {
   const [rideData, setRideData] = useState(null);
 
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
-  const [selectedRideId, setSelectedRideId] = useState(null);
+  const [complaintModalOpen, setComplaintModalOpen] = useState(false);
+  const [modalEntryId, setModalEntryId] = useState(null);
 
   useEffect(() => {
     if (isLoggedIn()) {
       fetchRideData();
     }
-  }, [location.search, category, setReviewModalOpen]);
+  }, [location.search, category, setReviewModalOpen, complaintModalOpen]);
 
   const fetchRideData = async () => {
     try {
@@ -51,8 +53,13 @@ const MyRides = () => {
   }
 
   const handleOpenReviewModal = (rideId) => {
-    setSelectedRideId(rideId); // Set the selected rideId when opening the modal
+    setModalEntryId(rideId); // Set the selected rideId when opening the modal
     setReviewModalOpen(true);
+  };
+
+  const handleOpenComplaintModal = (reservationId) => {
+    setModalEntryId(reservationId); // Set the selected rideId when opening the modal
+    setComplaintModalOpen(true);
   };
 
   return (
@@ -62,7 +69,12 @@ const MyRides = () => {
       <WriteReviewModal
         open={reviewModalOpen}
         handleClose={() => setReviewModalOpen(false)}
-        rideId={selectedRideId}
+        rideId={modalEntryId}
+      />
+      <ComplaintModal
+        open={complaintModalOpen}
+        handleClose={() => setComplaintModalOpen(false)}
+        reservationId={modalEntryId}
       />
       <Container>
         <Row className="category-select justify-content-center mt-3 body-bold-medium">
@@ -117,6 +129,9 @@ const MyRides = () => {
                   category={category}
                   token={token}
                   openReviewModal={() => handleOpenReviewModal(ride.ride.id)}
+                  openComplaintModal={() =>
+                    handleOpenComplaintModal(ride.reservation.id)
+                  }
                 />
               );
             })}

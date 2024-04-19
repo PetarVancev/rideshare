@@ -19,6 +19,7 @@ const MyRideCard = ({
   rideData,
   category,
   openReviewModal,
+  openComplaintModal,
 }) => {
   const [passengersListOpen, setPassengersListOpen] = useState(false);
 
@@ -83,7 +84,6 @@ const MyRideCard = ({
 
   const confirmArrival = async () => {
     try {
-      console.log(token);
       const url =
         backendUrl +
         `/reservations/passenger/confirm-arrival?reservationId=${reservation.id}`;
@@ -93,15 +93,8 @@ const MyRideCard = ({
         },
       });
       toast.dismiss();
-      toast.success(response.data.message, {
-        position: "top-center",
-        autoClose: 1500,
-        hideProgressBar: false,
-        closeButton: true,
-        onClose: () => openReviewModal(),
-      });
+      openReviewModal();
     } catch (error) {
-      console.log(error);
       toast.error(error.response.data.error, {
         position: "top-center",
         autoClose: 2000,
@@ -232,7 +225,9 @@ const MyRideCard = ({
                 >
                   Стигнав
                 </Button>
-                <a className="body-bold-s">Превозот не се реализира</a>{" "}
+                <a className="body-bold-s" onClick={openComplaintModal}>
+                  Превозот не се реализира
+                </a>
               </div>
             )}
           </>

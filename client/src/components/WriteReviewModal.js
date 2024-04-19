@@ -87,9 +87,10 @@ const WriteReviewModal = ({ handleClose, open, rideId }) => {
           value={reviewText}
           onChange={handleReviewTextChange}
         ></textarea>
-        <p className="text-end gray-text body-bold-s">
+        <div className="d-flex justify-content-between gray-text body-bold-s">
+          <span>*Полето не е задолжително</span>
           {reviewText.length}/100
-        </p>
+        </div>
         <Row className="submission-bottom-bar modal-bottom-bar">
           <Col xs={6}>
             <Button

@@ -76,8 +76,13 @@ async function getUserFromToken(req, res) {
     userInfo[0].averageReviewScore = reviewsAverage;
     return res.status(200).json(userInfo[0]);
   } catch (error) {
-    if (error.name === "JsonWebTokenError") {
-      return res.status(401).json({ error: "Unauthorized: Invalid token" });
+    if (
+      error.name === "JsonWebTokenError" ||
+      error.name === "TokenExpiredError"
+    ) {
+      return res
+        .status(401)
+        .json({ error: "Unauthorized: Invalid or expired token" });
     } else {
       console.error("Error when withdrawing:", error);
       return res.status(500).json({ error: "Internal Server Error" });

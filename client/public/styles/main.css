@@ -27,6 +27,13 @@ a:hover {
   padding-left: 0 !important;
 }
 
+.body-bold-xl {
+  font-size: 22px;
+  font-weight: bold !important;
+  line-height: 150%;
+  color: #022c66;
+}
+
 .body-bold-l {
   font-size: 1.25rem;
   font-weight: bold !important;
@@ -153,8 +160,8 @@ input:focus-visible {
   color: #8095b2 !important;
 }
 
-.hide {
-  display: none;
+.red-text {
+  color: red !important;
 }
 
 /* Buttons */
@@ -944,7 +951,7 @@ button.reserve-button {
   color: #022c66;
 }
 
-.post-ride-container textarea:focus-visible {
+textarea:focus-visible {
   border: 1px solid #022c66;
   outline: none;
 }
@@ -1397,13 +1404,18 @@ input.withdrawal-input {
 
 .write-review-modal {
   bottom: 0;
-  position: absolute;
+  position: fixed;
   background-color: white;
   z-index: 101;
   height: 90vh;
   border-top-left-radius: 1rem;
   border-top-right-radius: 1rem;
   box-shadow: 0 0 10px rgba(2, 44, 102, 0.25);
+  transition: bottom 0.3s ease;
+}
+
+.write-review-modal.hide {
+  bottom: -90vh;
 }
 
 .star-selector .fa-star {
@@ -1459,4 +1471,9 @@ input.withdrawal-input {
 
 .modal-bottom-bar div {
   box-shadow: none;
+}
+
+.complaint-success-icon {
+  width: 20%;
+  margin-top: 40%;
 }
