@@ -680,7 +680,7 @@ async function acceptReservationProposal(req, res) {
         .json({ error: "You are not authorized to accept this proposal" });
     }
 
-    await updateReservationStatus(dbCon, proposalId, "C");
+    await updateReservationStatus(dbCon, proposalId, "R");
 
     await removeExcessReservations(
       dbCon,

@@ -30,6 +30,7 @@ const port = process.env.PORT || 3000;
 // Test if db connected
 dbCon.getConnection((err) => {
   if (err) {
+    console.log("inside");
     console.error("Error connecting to database:", err);
   } else {
     console.log("Database connected successfully");

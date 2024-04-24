@@ -77,15 +77,22 @@ const RideIncomeCard = ({ data, userType }) => {
               {userType == "driver" &&
                 data.transactions &&
                 data.transactions.length > 0 &&
-                data.transactions.map((transaction) => (
-                  <div
-                    className="d-flex justify-content-between"
-                    key={transaction.id}
-                  >
-                    <span className="body-bold-s">Evgenija</span>
-                    <span className="btn-text-m">ден{transaction.amount}</span>
-                  </div>
-                ))}
+                data.transactions.map((transaction) => {
+                  console.log(transaction); // Log the transaction to the console
+                  return (
+                    <div
+                      className="d-flex justify-content-between"
+                      key={transaction.id}
+                    >
+                      <span className="body-bold-s">
+                        {transaction.from_passenger_name}
+                      </span>
+                      <span className="btn-text-m">
+                        ден{transaction.amount}
+                      </span>
+                    </div>
+                  );
+                })}
             </div>
           </div>
         </Card.Body>

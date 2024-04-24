@@ -235,6 +235,9 @@ async function searchForRides(req, res) {
   const { from_loc_id, to_loc_id, date_time, seats } = req.query;
 
   try {
+    if (!from_loc_id || !to_loc_id || !date_time || !seats) {
+      return res.status(404);
+    }
     // Your existing code for fetching rides remains unchanged
     const sql = `
       SELECT 
@@ -302,7 +305,9 @@ async function getRideInfo(req, res) {
         r.id, 
         r.driver_id, 
         r.date_time,
-        r.type,  
+        r.type,
+        r.flexible_departure,
+        r.flexible_arrival,  
         r.ride_duration,
         r.total_seats, 
         r.free_seats, 
@@ -312,7 +317,11 @@ async function getRideInfo(req, res) {
         r.additional_info,
         d.name AS driver_name, 
         from_loc.name AS from_location_name, 
+        from_loc.location_lat as from_location_lat,
+        from_loc.location_lon as from_location_lon,
         to_loc.name AS to_location_name,
+        to_loc.location_lat as to_location_lat,
+        to_loc.location_lon as to_location_lon,
         ROUND((
             (SELECT AVG(dr.time_correctness_score) FROM ride_reviews AS dr WHERE dr.driver_id = r.driver_id) +
             (SELECT AVG(dr.safety_score) FROM ride_reviews AS dr WHERE dr.driver_id = r.driver_id) +
@@ -351,6 +360,8 @@ async function getRideInfo(req, res) {
       id: ride[0].id,
       driver_id: ride[0].driver_id,
       type: ride[0].type,
+      flexibleDeparture: ride[0].flexible_departure,
+      flexibleArrival: ride[0].flexible_arrival,
       date_time: ride[0].date_time,
       ride_duration: ride[0].ride_duration,
       total_seats: ride[0].total_seats,
@@ -361,7 +372,15 @@ async function getRideInfo(req, res) {
       additional_info: ride[0].additional_info,
       driver_name: ride[0].driver_name,
       from_location_name: ride[0].from_location_name,
+      from_location_cord: {
+        lat: ride[0].from_location_lat,
+        lng: ride[0].from_location_lon,
+      },
       to_location_name: ride[0].to_location_name,
+      to_location_cord: {
+        lat: ride[0].to_location_lat,
+        lng: ride[0].to_location_lon,
+      },
       average_rating: ride[0].average_rating ? ride[0].average_rating : 0.0,
       driver_reviews: driverReviews,
     };

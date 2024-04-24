@@ -164,6 +164,9 @@ input:focus-visible {
   color: red !important;
 }
 
+.modal-open {
+  overflow: hidden !important;
+}
 /* Buttons */
 
 button.dark-button {
@@ -1408,6 +1411,7 @@ input.withdrawal-input {
   background-color: white;
   z-index: 101;
   height: 90vh;
+  width: 100vw;
   border-top-left-radius: 1rem;
   border-top-right-radius: 1rem;
   box-shadow: 0 0 10px rgba(2, 44, 102, 0.25);
@@ -1476,4 +1480,15 @@ input.withdrawal-input {
 .complaint-success-icon {
   width: 20%;
   margin-top: 40%;
+}
+
+/* Location Picker modal */
+
+.location-pick-modal {
+  height: calc(100vh - 58px);
+  border-radius: 0;
+}
+
+.location-pick-modal.hide {
+  bottom: -100vh;
 }

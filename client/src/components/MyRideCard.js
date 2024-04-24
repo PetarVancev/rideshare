@@ -38,11 +38,12 @@ const MyRideCard = ({
     reservations = {
       custom_location: rideData.reservations.filter((item) => {
         const customLocations = item.custom_locations;
-        return item.status === "C" && customLocations;
+        return item.status === "R" && customLocations;
       }),
       original_location: rideData.reservations.filter((item) => {
         const customLocations = item.custom_locations;
-        return item.status === "C" && !customLocations;
+        console.log(item.status);
+        return item.status === "R" && !customLocations;
       }),
     };
   }

@@ -7,8 +7,6 @@ import NavBar from "./NavBar";
 import BackButton from "./BackButton";
 import BottomBar from "./BottomBar";
 
-const backendUrl = process.env.REACT_APP_BACKEND_URL;
-
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

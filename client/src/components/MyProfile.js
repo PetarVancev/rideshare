@@ -80,12 +80,12 @@ const MyProfile = () => {
                 </div>
                 <span>{user.email}</span>
               </div>
-              <div className="d-flex justify-content-between profile-field-rectangle">
+              {/* <div className="d-flex justify-content-between profile-field-rectangle">
                 <div className="d-flex">
                   <img src="images/lock-icon.svg" className="me-2" /> Лозинка
                 </div>
                 <img src="images/right-arrow.svg" />
-              </div>
+              </div> */}
               <div className="d-flex justify-content-between profile-field-rectangle">
                 <div className="d-flex">
                   <svg

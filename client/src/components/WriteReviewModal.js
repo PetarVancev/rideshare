@@ -59,58 +59,60 @@ const WriteReviewModal = ({ handleClose, open, rideId }) => {
   };
 
   return (
-    <Container className={`write-review-modal ${open ? "" : "hide"}`}>
-      <h3 className="heading-xxs text-center gray-text mt-4">Благодариме</h3>
-      <h1 className="heading-xxs mt-5 mb-4">
-        Споделете го вашето искуство со возачот
-      </h1>
-      <form onSubmit={handleSubmit}>
-        <div className="text-center review-raitings-inputs pt-3 pb-3">
-          <div className="mb-2">
-            <h4 className="body-bold-s mb-1">Поаѓање на време</h4>
-            <StarSelector name={"departureTime"} />
+    <div className={`write-review-modal ${open ? "" : "hide"}`}>
+      <Container>
+        <h3 className="heading-xxs text-center gray-text mt-4">Благодариме</h3>
+        <h1 className="heading-xxs mt-5 mb-4">
+          Споделете го вашето искуство со возачот
+        </h1>
+        <form onSubmit={handleSubmit}>
+          <div className="text-center review-raitings-inputs pt-3 pb-3">
+            <div className="mb-2">
+              <h4 className="body-bold-s mb-1">Поаѓање на време</h4>
+              <StarSelector name={"departureTime"} />
+            </div>
+            <div className="mb-2">
+              <h4 className="body-bold-s mb-1">Сигурност</h4>
+              <StarSelector name={"safety"} />
+            </div>
+            <div className="mb-2">
+              <h4 className="body-bold-s mb-1">Комоција</h4>
+              <StarSelector name={"comfort"} />
+            </div>
           </div>
-          <div className="mb-2">
-            <h4 className="body-bold-s mb-1">Сигурност</h4>
-            <StarSelector name={"safety"} />
+          <h3 className="heading-xxs mt-4 mb-4">
+            Оставете краток опис за патувањето
+          </h3>
+          <textarea
+            className="review-text-input"
+            value={reviewText}
+            onChange={handleReviewTextChange}
+          ></textarea>
+          <div className="d-flex justify-content-between gray-text body-bold-s">
+            <span>*Полето не е задолжително</span>
+            {reviewText.length}/100
           </div>
-          <div className="mb-2">
-            <h4 className="body-bold-s mb-1">Комоција</h4>
-            <StarSelector name={"comfort"} />
-          </div>
-        </div>
-        <h3 className="heading-xxs mt-4 mb-4">
-          Оставете краток опис за патувањето
-        </h3>
-        <textarea
-          className="review-text-input"
-          value={reviewText}
-          onChange={handleReviewTextChange}
-        ></textarea>
-        <div className="d-flex justify-content-between gray-text body-bold-s">
-          <span>*Полето не е задолжително</span>
-          {reviewText.length}/100
-        </div>
-        <Row className="submission-bottom-bar modal-bottom-bar">
-          <Col xs={6}>
-            <Button
-              className="col-12 mt-4 dark-button body-bold-medium dark-outline-button"
-              onClick={handleClose}
-            >
-              Затвори
-            </Button>
-          </Col>
-          <Col xs={6}>
-            <Button
-              type="submit"
-              className="col-12 mt-4 dark-button body-bold-medium"
-            >
-              Испрати
-            </Button>
-          </Col>
-        </Row>
-      </form>
-    </Container>
+          <Row className="submission-bottom-bar modal-bottom-bar">
+            <Col xs={6}>
+              <Button
+                className="col-12 mt-4 dark-button body-bold-medium dark-outline-button"
+                onClick={handleClose}
+              >
+                Затвори
+              </Button>
+            </Col>
+            <Col xs={6}>
+              <Button
+                type="submit"
+                className="col-12 mt-4 dark-button body-bold-medium"
+              >
+                Испрати
+              </Button>
+            </Col>
+          </Row>
+        </form>
+      </Container>
+    </div>
   );
 };
 

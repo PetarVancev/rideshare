@@ -4,8 +4,10 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const backendUrl = process.env.REACT_APP_BACKEND_URL;
+const mapsApiKey = process.env.REACT_APP_MAPS_API_KEY;
 
 const ProposalCard = ({ proposal, token }) => {
+  console.log(proposal);
   const declineProposal = async () => {
     try {
       const url =
@@ -90,7 +92,7 @@ const ProposalCard = ({ proposal, token }) => {
           width="100%"
           height="100"
           style={{ border: 0 }}
-          src="https://www.google.com/maps/embed/v1/place?q=place_id&key=YOUR_API_KEY"
+          src={`https://www.google.com/maps/embed/v1/place?key=${mapsApiKey}&q=${proposal.pick_up_lat},${proposal.pick_up_lon}&zoom=15`}
           allowFullScreen
         ></iframe>
         <div className="d-flex justify-content-center">

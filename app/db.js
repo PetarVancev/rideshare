@@ -5,10 +5,12 @@ dotenv.config();
 
 const access = {
   host: "localhost",
-  user: "admin",
+  user: "root",
   password: process.env.DB_PASSWORD,
-  database: "ride_share",
+  database: "rideshare",
 };
+
+// Prev user admin, database ride_share
 
 const dbCon = mysql.createPool(access);
 

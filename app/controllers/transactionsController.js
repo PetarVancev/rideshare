@@ -18,9 +18,10 @@ async function getTransactionsForRide(req, res) {
     const rideId = req.query.rideId;
 
     let query = `
-    SELECT *
+    SELECT transactions.*, passenger_accounts.name AS from_passenger_name
     FROM transactions
-    WHERE ride_id = ? AND to_driver_id = ?
+    INNER JOIN passenger_accounts ON transactions.from_passenger_id = passenger_accounts.id
+    WHERE ride_id = ? AND to_driver_id = ?    
   `;
     if (userType == "driver" && !ridesController.isDriverAssociatedWithRide) {
       return res.status(403).json({
