@@ -44,7 +44,7 @@ async function loginUser(userType, req, res) {
       { userId: user.id, userType: userType, email: user.email },
       process.env.JWT_SECRET,
       {
-        expiresIn: "6h", // Token expiration
+        expiresIn: "90d", // Token expiration
       }
     );
 

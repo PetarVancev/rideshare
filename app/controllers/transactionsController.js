@@ -39,8 +39,13 @@ async function getTransactionsForRide(req, res) {
     }
     return res.status(200).json(transactions);
   } catch (error) {
-    if (error.name === "JsonWebTokenError") {
-      return res.status(401).json({ error: "Unauthorized: Invalid token" });
+    if (
+      error.name === "JsonWebTokenError" ||
+      error.name === "TokenExpiredError"
+    ) {
+      return res
+        .status(401)
+        .json({ error: "Unauthorized: Invalid or expired token" });
     } else {
       console.error("Error when getting transactions for ride:", error);
       return res.status(500).json({ error: "Internal Server Error" });
@@ -81,8 +86,13 @@ async function getPassengerTransactions(req, res) {
 
     return res.status(200).json(transactions);
   } catch (error) {
-    if (error.name === "JsonWebTokenError") {
-      return res.status(401).json({ error: "Unauthorized: Invalid token" });
+    if (
+      error.name === "JsonWebTokenError" ||
+      error.name === "TokenExpiredError"
+    ) {
+      return res
+        .status(401)
+        .json({ error: "Unauthorized: Invalid or expired token" });
     } else {
       console.error("Error when getting passenger transactions:", error);
       return res.status(500).json({ error: "Internal Server Error" });

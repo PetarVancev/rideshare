@@ -11,7 +11,9 @@ const Home = () => {
   const navigate = useNavigate();
   const currentDate = new Date().toISOString().split("T")[0];
 
+  const [fromName, setFromName] = useState("");
   const [fromId, setFromId] = useState("");
+  const [toName, setToName] = useState("");
   const [toId, setToId] = useState();
   const [seatsNumber, setSeatsNumber] = useState(1);
   const [date, setDate] = useState("");
@@ -47,7 +49,12 @@ const Home = () => {
                     <img src="images/location-icon.svg" />
                     <LocationAutocomplete
                       placeholder="Од каде патувате"
-                      onSelect={setFromId}
+                      name={fromName}
+                      onSelect={(id, name) => {
+                        setFromId(id);
+                        setFromName(name);
+                      }}
+                      onChange={(name) => setFromName(name)}
                     />
                   </div>
                 </Form.Group>
@@ -56,7 +63,12 @@ const Home = () => {
                     <img src="images/location-icon2.svg" />
                     <LocationAutocomplete
                       placeholder="До каде патувате"
-                      onSelect={setToId}
+                      name={toName}
+                      onSelect={(id, name) => {
+                        setToId(id);
+                        setToName(name);
+                      }}
+                      onChange={(name) => setToName(name)}
                     />
                   </div>
                 </Form.Group>

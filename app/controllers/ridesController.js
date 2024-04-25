@@ -68,7 +68,7 @@ async function postRide(req, res) {
     const currentDateTime = new Date();
 
     if (userType != "driver") {
-      return res.status(401).json({ error: "Only drivers can post" });
+      return res.status(403).json({ error: "Only drivers can post" });
     }
     if (requestedDateTime <= currentDateTime) {
       return res.status(400).json({
@@ -112,9 +112,13 @@ async function postRide(req, res) {
 
     return res.status(201).json({ message: "Ride posted successfully" });
   } catch (error) {
-    if (error.name === "JsonWebTokenError") {
-      // Token verification error
-      return res.status(401).json({ error: "Unauthorized: Invalid token" });
+    if (
+      error.name === "JsonWebTokenError" ||
+      error.name === "TokenExpiredError"
+    ) {
+      return res
+        .status(401)
+        .json({ error: "Unauthorized: Invalid or expired token" });
     } else {
       console.error("Error when posting a ride:", error);
       return res.status(500).json({ error: "Internal Server Error" });
@@ -136,7 +140,7 @@ async function getMyRides(req, res) {
 
     if (userType !== "driver") {
       return res
-        .status(401)
+        .status(403)
         .json({ error: "Unauthorized: Only drivers can access their rides" });
     }
 
@@ -192,7 +196,7 @@ async function deleteRide(req, res) {
 
     if (userType !== "driver") {
       return res
-        .status(401)
+        .status(403)
         .json({ error: "Unauthorized: Only drivers can delete rides" });
     }
 
@@ -210,7 +214,7 @@ async function deleteRide(req, res) {
         .json({ error: "Ride not found or does not belong to the driver" });
     } else if (ride.total_seats != ride.free_seats) {
       return res
-        .status(401)
+        .status(403)
         .json({ error: "There are already reservations for this ride" });
     }
 
@@ -219,9 +223,13 @@ async function deleteRide(req, res) {
 
     return res.status(200).json({ message: "Ride deleted successfully" });
   } catch (error) {
-    if (error.name === "JsonWebTokenError") {
-      // Token verification error
-      return res.status(401).json({ error: "Unauthorized: Invalid token" });
+    if (
+      error.name === "JsonWebTokenError" ||
+      error.name === "TokenExpiredError"
+    ) {
+      return res
+        .status(401)
+        .json({ error: "Unauthorized: Invalid or expired token" });
     } else {
       console.error("Error when deleting a ride:", error);
       return res.status(500).json({ error: "Internal Server Error" });

@@ -14,7 +14,7 @@ const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 const Wallet = () => {
   const location = useLocation();
-  const { token, userType } = useAuth();
+  const { token, userType, logoutUser } = useAuth();
 
   const [selectedTransactionType, setSelectedTransactionType] =
     useState("income");
@@ -106,7 +106,10 @@ const Wallet = () => {
       );
       return response.data[0];
     } catch (error) {
-      console.error("Error fetching ride data:", error);
+      if (error.response && error.response.status === 401) {
+        logoutUser();
+      }
+      console.error("Error fetching wallet:", error);
     }
   };
 
@@ -229,6 +232,9 @@ const Wallet = () => {
       );
       setShowSuccess(true);
     } catch (error) {
+      if (error.response && error.response.status === 401) {
+        logoutUser();
+      }
       toast.dismiss();
       toast.error(error.response.data.error, {
         position: "top-center",
@@ -255,6 +261,9 @@ const Wallet = () => {
       setNextStepsMessage("");
       setShowSuccess(true);
     } catch (error) {
+      if (error.response && error.response.status === 401) {
+        logoutUser();
+      }
       toast.dismiss();
       toast.error(error.response.data.error, {
         position: "top-center",
@@ -300,6 +309,9 @@ const Wallet = () => {
         setError(null);
         setCurrModal(null);
       } catch (error) {
+        if (error.response && error.response.status === 401) {
+          logoutUser();
+        }
         setError(error.response.data.error);
       }
     }

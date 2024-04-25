@@ -65,10 +65,7 @@ async function postReview(req, res) {
       text,
     } = req.body;
 
-    // Check if the user has a reservation for the ride with status 'C'
-    console.log(userId + " " + rideId);
     const reservation = await getReservation(userId, rideId);
-    console.log(reservation);
     if (!reservation || reservation.status !== "C") {
       return res.status(403).json({
         error: "You can't post a review for a ride that you haven't been in",
@@ -100,6 +97,14 @@ async function postReview(req, res) {
 
     return res.status(201).json({ message: "Review posted successfully" });
   } catch (error) {
+    if (
+      error.name === "JsonWebTokenError" ||
+      error.name === "TokenExpiredError"
+    ) {
+      return res
+        .status(401)
+        .json({ error: "Unauthorized: Invalid or expired token" });
+    }
     console.error("Error when posting ride review:", error);
     return res.status(500).json({ error: "Internal Server Error" });
   }

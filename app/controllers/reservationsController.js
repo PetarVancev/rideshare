@@ -22,10 +22,10 @@ async function checkReservationOwnership(
   return result[0].count > 0;
 }
 
-async function updateReservationStatus(connection, reservationId) {
+async function updateReservationStatus(connection, reservationId, status) {
   const updateReservationQuery =
-    "UPDATE reservations SET status = 'C' WHERE id = ?";
-  await connection.query(updateReservationQuery, [reservationId]);
+    "UPDATE reservations SET status = ? WHERE id = ?";
+  await connection.query(updateReservationQuery, [status, reservationId]);
 }
 
 async function getRideAndDriverDetails(connection, reservationId) {
@@ -90,14 +90,12 @@ async function insertReservation(
   pickUpLocationLon,
   dropOffLocationLat,
   dropOffLocationLon,
-  status
+  status,
+  custom_pick_up,
+  custom_drop_off
 ) {
-  let customLocation = false;
-  if (status == "P") {
-    customLocation = true;
-  }
   const insertReservationQuery =
-    "INSERT INTO reservations (ride_id, passenger_id, num_seats, status, pick_up_lat, pick_up_lon, drop_off_lat, drop_off_lon, custom_locations) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    "INSERT INTO reservations (ride_id, passenger_id, num_seats, status, pick_up_lat, pick_up_lon, drop_off_lat, drop_off_lon, custom_pick_up, custom_drop_off) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
   await connection.query(insertReservationQuery, [
     rideId,
     passengerId,
@@ -107,7 +105,8 @@ async function insertReservation(
     pickUpLocationLon,
     dropOffLocationLat,
     dropOffLocationLon,
-    customLocation,
+    custom_pick_up,
+    custom_drop_off,
   ]);
 }
 
@@ -269,8 +268,8 @@ async function handleReservation(req, res) {
     const rideId = req.query.rideId;
     const seatsNeeded = parseInt(req.query.seats);
 
-    const customPickUp = req.body.custom_pick_up;
-    const customDropOff = req.body.custom_drop_off;
+    let customPickUp = req.body.custom_pick_up;
+    let customDropOff = req.body.custom_drop_off;
 
     if (seatsNeeded < 1) {
       return res
@@ -385,6 +384,9 @@ async function handleReservation(req, res) {
       );
     }
 
+    console.log(!!customPickUp);
+    console.log(!!customDropOff);
+
     await insertReservation(
       connection,
       rideId,
@@ -394,7 +396,9 @@ async function handleReservation(req, res) {
       pickUpLocation.location_lon,
       dropOffLocation.location_lat,
       dropOffLocation.location_lon,
-      reservationType
+      reservationType,
+      !!customPickUp,
+      !!customDropOff
     );
 
     await connection.commit();

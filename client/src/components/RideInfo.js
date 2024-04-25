@@ -20,7 +20,7 @@ const backendUrl = process.env.REACT_APP_BACKEND_URL;
 const RideInfo = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { isLoggedIn, userType, token } = useAuth();
+  const { isLoggedIn, userType, token, logoutUser } = useAuth();
 
   const queryParams = new URLSearchParams(location.search);
   const rideId = queryParams.get("rideId");
@@ -184,6 +184,9 @@ const RideInfo = () => {
         }
         setReserved(true);
       } catch (error) {
+        if (error.response && error.response.status === 401) {
+          logoutUser();
+        }
         toast.dismiss();
         toast.error(error.response.data.error, {
           position: "top-center",
@@ -293,22 +296,22 @@ const RideInfo = () => {
                   className="body-bold-s text-center blue-text mb-4"
                   onClick={() => setDepartureSuggestOpen(true)}
                 >
-                  <img src="images/direction-icon.svg" />
+                  <img src="images/direction-icon.svg" className="me-2" />
                   {departureSuggestCord == null
                     ? "Предложи локација на подигање"
                     : "Прoмени локација на подигање"}
                 </div>
               )}
               {!!ride.flexibleArrival && (
-                <a
+                <div
                   className="body-bold-s text-center blue-text"
                   onClick={() => setArrivalSuggestOpen(true)}
                 >
-                  <img src="images/direction-icon.svg" />
+                  <img src="images/direction-icon.svg" className="me-2" />
                   {arrivalSuggestCord == null
                     ? "Предложи локација на оставање"
                     : "Прoмени локација на оставање"}
-                </a>
+                </div>
               )}
             </div>
             <div className="d-flex">
@@ -371,9 +374,9 @@ const RideInfo = () => {
                   centeredSlides={ride.driver_reviews.length === 1}
                   className="reviews-swiper"
                 >
-                  {ride.driver_reviews.map((review) => (
-                    <SwiperSlide>
-                      <ReviewCard key={review.id} review={review} />
+                  {ride.driver_reviews.map((review, index) => (
+                    <SwiperSlide key={index}>
+                      <ReviewCard key={index} review={review} />
                     </SwiperSlide>
                   ))}
                 </Swiper>

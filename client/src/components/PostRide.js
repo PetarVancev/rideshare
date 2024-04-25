@@ -1,6 +1,5 @@
 import React, { useState, useRef } from "react";
 import { Form, Button, Container, Alert, Row, Col } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import { useAuth } from "./AuthContext";
@@ -14,14 +13,16 @@ import SubmissionSuccess from "./SubmissionSuccess";
 const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 const PostRide = () => {
-  const { token } = useAuth();
+  const { token, logoutUser } = useAuth();
 
   const [step, setStep] = useState(1);
+  const [fromName, setFromName] = useState("");
   const [fromId, setFromId] = useState("");
   const [flexibleDeparture, setFlexibleDeparture] = useState(false);
   const [departureDate, setDepartureDate] = useState("");
   const [departureTime, setDepartureTime] = useState("");
 
+  const [toName, setToName] = useState("");
   const [toId, setToId] = useState("");
   const [flexibleArrival, setFlexibleArrival] = useState(false);
   const [arrivalTime, setArrivalTime] = useState("");
@@ -175,6 +176,9 @@ const PostRide = () => {
       );
       setSuccess(true);
     } catch (error) {
+      if (error.response && error.response.status === 401) {
+        logoutUser();
+      }
       if (error.response && error.response.data) {
         setErrorMessage(error.response.data.error);
       } else {
@@ -206,6 +210,7 @@ const PostRide = () => {
           statusMessage={successMessage}
           nextStepsMessage={nextStepsMessage}
           goTo={"/my-rides"}
+          buttonText={"Патувања"}
         />
       )}
       {step === 1 && !success && (
@@ -239,8 +244,12 @@ const PostRide = () => {
                     <h4 className="heading-xxs">Избери локација на поаѓање</h4>
                     <LocationAutocomplete
                       placeholder="Од каде патувате"
-                      onSelect={setFromId}
-                      onChange={(value) => setFromId(value.id)}
+                      name={fromName}
+                      onSelect={(id, name) => {
+                        setFromId(id);
+                        setFromName(name);
+                      }}
+                      onChange={(name) => setFromName(name)}
                       className="post-input"
                       required
                     />
@@ -313,7 +322,12 @@ const PostRide = () => {
                     </h4>
                     <LocationAutocomplete
                       placeholder="До каде патувате"
-                      onSelect={setToId}
+                      name={toName}
+                      onSelect={(id, name) => {
+                        setToId(id);
+                        setToName(name);
+                      }}
+                      onChange={(name) => setToName(name)}
                       className="post-input"
                       required
                     />
@@ -395,7 +409,7 @@ const PostRide = () => {
                       type="text"
                       value={carColor}
                       onChange={(e) => setCarColor(e.target.value)}
-                      placeholder="Пр. Бела"
+                      placeholder="Пр. Шкода Фабиа "
                     />
                     <h4 className="heading-xxs">Боја на автомобил</h4>
                     <input
@@ -403,7 +417,7 @@ const PostRide = () => {
                       type="text"
                       value={carModel}
                       onChange={(e) => setCarModel(e.target.value)}
-                      placeholder="Пр. Шкода Фабиа"
+                      placeholder="Пр. Бела"
                     />
                   </section>
                   <Button

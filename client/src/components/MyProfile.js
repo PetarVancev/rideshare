@@ -21,10 +21,9 @@ const MyProfile = () => {
             Authorization: `${token}`,
           },
         });
-        console.log(response.data);
         setUser(response.data);
       } catch (error) {
-        if (error.response.status == 401) {
+        if (error.response && error.response.status === 401) {
           logoutUser();
         }
         console.error("Error fetching user information:", error);
@@ -115,21 +114,18 @@ const MyProfile = () => {
                   <img src="images/status-icon.svg" className="me-2" />
                   Статус на профил
                 </div>
-                <span>
-                  {userType === "passenger" ? "Патник" : "Возач"}
-                  <img src="images/right-arrow.svg" className="ms-2" />
-                </span>
-              </div>
-              <div className="d-flex justify-content-between profile-actions">
-                <button
-                  className="profile-action-button log-out-button"
-                  onClick={logoutUser}
-                >
-                  <img src="images/log-out-icon.svg" className="me-2" />
-                  Одјави се
-                </button>
+                <span>{userType === "passenger" ? "Патник" : "Возач"}</span>
               </div>
             </Container>
+            <div className="d-flex justify-content-between profile-actions text-center">
+              <button
+                className="profile-action-button log-out-button mx-auto"
+                onClick={logoutUser}
+              >
+                <img src="images/log-out-icon.svg" className="me-2" />
+                Одјави се
+              </button>
+            </div>
           </div>
         </>
       )}

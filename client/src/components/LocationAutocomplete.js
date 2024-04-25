@@ -7,6 +7,7 @@ const LocationAutocomplete = ({
   onSelect,
   onChange,
   className,
+  name,
 }) => {
   const [value, setValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
@@ -30,19 +31,17 @@ const LocationAutocomplete = ({
 
   return (
     <AutoComplete
-      value={value}
+      value={name}
       suggestions={suggestions}
       completeMethod={searchLocations}
       onChange={(e) => {
-        setValue(e.target.value);
         if (onChange) {
           onChange(e.target.value);
         }
       }}
       itemTemplate={suggestionTemplate}
       onSelect={(e) => {
-        setValue(e.value.name);
-        onSelect(e.value.id);
+        onSelect(e.value.id, e.value.name);
       }}
       placeholder={placeholder}
       panelClassName="autocomplete-dropdown"

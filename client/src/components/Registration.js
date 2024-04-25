@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Form, Button, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
@@ -6,8 +6,6 @@ import { useAuth } from "./AuthContext";
 import NavBar from "./NavBar";
 import BackButton from "./BackButton";
 import BottomBar from "./BottomBar";
-
-const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 const Registration = () => {
   const navigate = useNavigate();

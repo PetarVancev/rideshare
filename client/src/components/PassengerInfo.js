@@ -5,7 +5,7 @@ import axios from "axios";
 
 const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
-const PassengerInfo = ({ key, reservation, location, token }) => {
+const PassengerInfo = ({ key, reservation, location, token, isBeforeNow }) => {
   const confirmAtPickup = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -108,7 +108,7 @@ const PassengerInfo = ({ key, reservation, location, token }) => {
           </a>
         </div>
       </div>
-      {location === "custom" && (
+      {location === "custom" && isBeforeNow && (
         <div className="text-center">
           <Button
             className="dark-button col-12 mt-4 arrived-button body-bold-medium"

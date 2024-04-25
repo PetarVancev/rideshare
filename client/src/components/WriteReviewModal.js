@@ -10,7 +10,7 @@ import StarSelector from "./StarSelector";
 const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 const WriteReviewModal = ({ handleClose, open, rideId }) => {
-  const { token } = useAuth();
+  const { token, logoutUser } = useAuth();
   const [reviewText, setReviewText] = useState("");
 
   const handleReviewTextChange = (event) => {
@@ -48,6 +48,9 @@ const WriteReviewModal = ({ handleClose, open, rideId }) => {
       });
       handleClose();
     } catch (error) {
+      if (error.response && error.response.status === 401) {
+        logoutUser();
+      }
       toast.dismiss();
       toast.error(error.response.data.error, {
         position: "top-center",

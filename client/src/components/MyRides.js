@@ -14,7 +14,7 @@ const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 const MyRides = () => {
   const location = useLocation();
-  const { isLoggedIn, token, userType } = useAuth();
+  const { isLoggedIn, token, userType, logoutUser } = useAuth();
   const [category, setCategory] = useState("R");
   const [rideData, setRideData] = useState(null);
 
@@ -44,6 +44,9 @@ const MyRides = () => {
       );
       setRideData(response.data);
     } catch (error) {
+      if (error.response && error.response.status === 401) {
+        logoutUser();
+      }
       console.error("Error fetching ride data:", error);
     }
   };

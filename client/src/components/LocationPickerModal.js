@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { GoogleMap, MarkerF } from "@react-google-maps/api";
 import { Container, Row, Col, Button } from "react-bootstrap";
-
+import { GoogleMap, MarkerF } from "@react-google-maps/api";
 import BackButton from "./BackButton";
-
-const mapsApiKey = process.env.REACT_APP_MAPS_API_KEY;
 
 const LocationPickerModal = ({
   handleClose,
@@ -22,24 +19,18 @@ const LocationPickerModal = ({
   });
 
   const mapStyles = {
-    height: "60%",
-    width: "100%",
+    height: "300px",
+    width: "100vw",
     position: "absolute",
     left: "0",
-    bottom: "112px",
+    bottom: "30%",
   };
 
-  // Adjust the number of meters for the boundary
-  const boundaryMeters = 7000; // 1 km
+  let boundaryMeters = 3000; // 7 km
+  if (defaultLat == 41.9961 && defaultLng == 21.4317) {
+    boundaryMeters = 6000;
+  }
 
-  const handleMarkerChange = (e) => {
-    const lat = e.latLng.lat();
-    const lng = e.latLng.lng();
-    const newPosition = { lat, lng };
-    setMarkerPosition(newPosition);
-  };
-
-  // Calculate latitude and longitude bounds for the square
   const latLngBounds = {
     north: defaultLat + boundaryMeters / 111000, // Approx. 1 degree latitude is approximately 111000 meters
     south: defaultLat - boundaryMeters / 111000,
@@ -55,6 +46,7 @@ const LocationPickerModal = ({
     const handleBodyScroll = () => {
       if (open) {
         document.body.classList.add("modal-open");
+        window.scrollTo(0, 0);
       } else {
         document.body.classList.remove("modal-open");
       }
@@ -67,36 +59,88 @@ const LocationPickerModal = ({
     };
   }, [open]);
 
+  const handleMarkerChange = (e) => {
+    const lat = e.latLng.lat();
+    const lng = e.latLng.lng();
+    const newPosition = { lat, lng };
+    setMarkerPosition(newPosition);
+  };
+
+  const handleUseCurrentPosition = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          const currentPosition = { lat: latitude, lng: longitude };
+
+          // Check if current position is within bounds
+          const withinBounds =
+            currentPosition.lat >= latLngBounds.south &&
+            currentPosition.lat <= latLngBounds.north &&
+            currentPosition.lng >= latLngBounds.west &&
+            currentPosition.lng <= latLngBounds.east;
+
+          if (withinBounds) {
+            setMarkerPosition(currentPosition);
+            onSet(currentPosition);
+          } else {
+            console.log("Current position is outside the bounds.");
+            // You can handle this case as per your application's requirements
+          }
+        },
+        (error) => {
+          console.error("Error getting current position:", error);
+        }
+      );
+    } else {
+      console.error("Geolocation is not supported by this browser.");
+    }
+  };
+
+  const renderMap = () => {
+    return (
+      <GoogleMap
+        options={{
+          streetViewControl: false,
+          minZoom: 1,
+          restriction: {
+            latLngBounds: latLngBounds,
+          },
+          mapTypeControl: false,
+        }}
+        mapContainerStyle={mapStyles}
+        zoom={15}
+        center={markerPosition}
+        onClick={(e) => handleMarkerChange(e)}
+      >
+        <MarkerF
+          draggable={true}
+          position={markerPosition}
+          onDragEnd={handleMarkerChange}
+        />
+      </GoogleMap>
+    );
+  };
+
   return (
     <div
       className={`write-review-modal location-pick-modal ${open ? "" : "hide"}`}
     >
       <Container>
         <BackButton customNav={handleClose} />
-        <h1 className="body-bold-s text-center blue-text mb-4">
+        <h1 className="body-bold-s text-center blue-text mb-1">
           <img src="images/direction-icon.svg" /> {title}
         </h1>
-        <GoogleMap
-          options={{
-            streetViewControl: false,
-            minZoom: 1,
-            restriction: {
-              latLngBounds: latLngBounds,
-            },
-          }}
-          mapContainerStyle={mapStyles}
-          zoom={14}
-          center={markerPosition} // Pass latitude and longitude as floats
-          onClick={(e) => handleMarkerChange(e)}
-          restriction={{ latLngBounds }}
-          apiKey={mapsApiKey}
+        <h1
+          className="body-bold-xs text-center blue-text current-position-button"
+          onClick={handleUseCurrentPosition}
         >
-          <MarkerF
-            draggable={true}
-            position={markerPosition}
-            onDragEnd={handleMarkerChange}
-          />
-        </GoogleMap>
+          <span className="mx-auto">
+            <img src="images/location-icon.svg" className="me-2" /> Користи
+            моментална локација
+          </span>
+        </h1>
+        {renderMap()}
         <Row className="submission-bottom-bar modal-bottom-bar text-center">
           <Col xs={12}>
             <Button

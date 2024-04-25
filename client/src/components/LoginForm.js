@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Container, Row, Col, Form, Button, Alert } from "react-bootstrap";
 
@@ -8,6 +8,7 @@ import BackButton from "./BackButton";
 import BottomBar from "./BottomBar";
 
 const Login = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userType, setUserType] = useState("passenger");
@@ -16,7 +17,6 @@ const Login = () => {
 
   const { loginUser } = useAuth();
 
-  const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
     const res = await loginUser(email, password, userType);

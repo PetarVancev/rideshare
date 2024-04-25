@@ -9,7 +9,7 @@ import { useAuth } from "./AuthContext";
 const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 const ComplaintModal = ({ handleClose, open, reservationId }) => {
-  const { token } = useAuth();
+  const { token, logoutUser } = useAuth();
   const [complaintText, setComplaintText] = useState("");
   const [success, setSuccess] = useState(false);
 
@@ -36,6 +36,9 @@ const ComplaintModal = ({ handleClose, open, reservationId }) => {
       });
       setSuccess(true);
     } catch (error) {
+      if (error.response && error.response.status === 401) {
+        logoutUser();
+      }
       toast.dismiss();
       toast.error(error.response.data.error, {
         position: "top-center",

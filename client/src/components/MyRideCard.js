@@ -10,6 +10,7 @@ import "swiper/css/pagination";
 
 import ProposalCard from "./ProposalCard";
 import PassengerInfo from "./PassengerInfo";
+import { useAuth } from "./AuthContext";
 
 const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
@@ -21,6 +22,7 @@ const MyRideCard = ({
   openReviewModal,
   openComplaintModal,
 }) => {
+  const { logoutUser } = useAuth();
   const [passengersListOpen, setPassengersListOpen] = useState(false);
 
   let ride = null;
@@ -37,12 +39,11 @@ const MyRideCard = ({
     proposals = rideData.reservations.filter((item) => item.status === "P");
     reservations = {
       custom_location: rideData.reservations.filter((item) => {
-        const customLocations = item.custom_locations;
+        const customLocations = !!item.custom_pick_up || !!item.custom_drop_off;
         return item.status === "R" && customLocations;
       }),
       original_location: rideData.reservations.filter((item) => {
-        const customLocations = item.custom_locations;
-        console.log(item.status);
+        const customLocations = !!item.custom_pick_up || !!item.custom_drop_off;
         return item.status === "R" && !customLocations;
       }),
     };
@@ -96,6 +97,9 @@ const MyRideCard = ({
       toast.dismiss();
       openReviewModal();
     } catch (error) {
+      if (error.response && error.response.status === 401) {
+        logoutUser();
+      }
       toast.error(error.response.data.error, {
         position: "top-center",
         autoClose: 2000,
@@ -131,6 +135,9 @@ const MyRideCard = ({
             });
             window.location.reload();
           } catch (error) {
+            if (error.response && error.response.status === 401) {
+              logoutUser();
+            }
             toast.dismiss();
             toast.error(error.response.data.error, {
               position: "top-center",
@@ -233,6 +240,16 @@ const MyRideCard = ({
             )}
           </>
         )}
+        {category === "P" && (
+          <div className="text-center">
+            <Button
+              className="dark-button col-12 mt-4 arrived-button body-bold-medium"
+              onClick={confirmArrival}
+            >
+              Избриши
+            </Button>
+          </div>
+        )}
       </Card.Body>
     </Card>
   ) : (
@@ -334,6 +351,7 @@ const MyRideCard = ({
                           location="custom"
                           token={token}
                           key={reservation.id}
+                          isBeforeNow={departureDateTime < currentDateTime}
                         />
                       );
                     })}
@@ -383,15 +401,18 @@ const MyRideCard = ({
                       }
                     )}
                     <div className="text-center">
-                      <Button
-                        className="dark-button col-12 mt-4 arrived-button body-bold-medium"
-                        onClick={confirmAtPickup}
-                        disabled={ride.driver_arrived === 1}
-                      >
-                        {ride.driver_arrived === 1
-                          ? "Стигање потврдено"
-                          : "Стигнав на локацијата"}
-                      </Button>
+                      {reservations.original_location.length > 0 &&
+                        departureDateTime < currentDateTime && (
+                          <Button
+                            className="dark-button col-12 mt-4 arrived-button body-bold-medium"
+                            onClick={confirmAtPickup}
+                            disabled={ride.driver_arrived === 1}
+                          >
+                            {ride.driver_arrived === 1
+                              ? "Стигање потврдено"
+                              : "Стигнав на локацијата"}
+                          </Button>
+                        )}
                     </div>
                   </div>
                 )}

@@ -109,8 +109,17 @@ async function sendComplaint(req, res) {
       await connection.rollback();
     }
 
-    console.error("Error when sending complaint:", error);
-    return res.status(500).json({ error: "Internal Server Error" });
+    if (
+      error.name === "JsonWebTokenError" ||
+      error.name === "TokenExpiredError"
+    ) {
+      return res
+        .status(401)
+        .json({ error: "Unauthorized: Invalid or expired token" });
+    } else {
+      console.error("Error when sending complaint:", error);
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
   } finally {
     if (connection) {
       connection.release();

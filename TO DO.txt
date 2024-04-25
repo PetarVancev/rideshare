@@ -1,30 +1,26 @@
-Reservations w pick up loc (we can leave for future)
--Steps
-1.Passenger suggests a pick up location, reservation status is P - proposed
-2.Mail is sent to Driver
-3.And everytime a driver refreshes page he gets all reservations made for his ride that are status P (need a route for this) ??
-4.Driver confirms or declines(reservation is deleted from table )
-5.Passenger gets mail if declined or confirmed. (also need route for passenger to see 'R' - reserved reservations and another route for passenger to se 'P' - proposed reservations)
-Also after every new reservation that is/becomes 'R' we need to check if there are enough spaces left in the ride, and delete the proposed reservations for which there aren't enough free spaces after the new reservation (send email if no more spaces?)
-
 Can't post a ride if no driver license info provided???
+
+Both
+
+Change phone number
+View reviews
+Saved
+Invoice system
+Complaints dashboard
 
 Backend
 
-Send emails for proposal acceptance and decline
-Cron jobs for proposals
+Send emails for proposal acceptance and decline Tommo
 
+Cron jobs for proposals ??
 In getMyRides make the reservations field to be optional ???
 Store bank_acc_num in withdrawal table also???
 
 Client
 
-Fix post ride location state not saving
-If loggedIn redirect when going to login,register routes
-invalid token errors i mozi da se napraj koga na request ce dobijame invalid token, logout and redirect to login
-Naredno - handle login redirects
-My rides driver add loc suggestion text
-Set rideId even on correctly typed not only on dropdown click
+Change post ride Tommo
+
+Set rideId even on correctly typed not only on dropdown click or like prevozi.org if you don't click on autocomplete then value of field not set ??
 Driver can click arrived only if time<departuretime-10 min ??
 
 Make seperate components for modals in wallet
@@ -32,8 +28,6 @@ Make seperate components for modals in wallet
 
 Journey indicator set width
 
-
-Check if already has a proposal for the ride ??
-
+Make responsive
 
 

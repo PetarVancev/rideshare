@@ -79,8 +79,13 @@ async function deposit(req, res) {
       await connection.rollback();
     }
 
-    if (error.name === "JsonWebTokenError") {
-      return res.status(401).json({ error: "Unauthorized: Invalid token" });
+    if (
+      error.name === "JsonWebTokenError" ||
+      error.name === "TokenExpiredError"
+    ) {
+      return res
+        .status(401)
+        .json({ error: "Unauthorized: Invalid or expired token" });
     } else {
       console.error("Error when depositing:", error);
       return res.status(500).json({ error: "Internal Server Error" });
@@ -120,8 +125,13 @@ async function getDeposits(req, res) {
 
     return res.status(200).json(deposits);
   } catch (error) {
-    if (error.name === "JsonWebTokenError") {
-      return res.status(401).json({ error: "Unauthorized: Invalid token" });
+    if (
+      error.name === "JsonWebTokenError" ||
+      error.name === "TokenExpiredError"
+    ) {
+      return res
+        .status(401)
+        .json({ error: "Unauthorized: Invalid or expired token" });
     } else {
       console.error("Error when withdrawing:", error);
       return res.status(500).json({ error: "Internal Server Error" });
