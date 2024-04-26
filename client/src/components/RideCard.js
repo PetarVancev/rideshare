@@ -43,7 +43,7 @@ const RideCard = ({ ride, seats }) => {
       <Card.Header className="d-flex justify-content-between">
         <div className="driver-info">
           <h3 className="body-bold-medium">{ride.driver_name}</h3>
-          <a className="body-xs">4.8/5</a>
+          <a className="body-xs">{ride.driver_average_review}/5</a>
         </div>
         <div className="ride-price-box body-bold-medium">
           {ride.price * seats + "мкд"}

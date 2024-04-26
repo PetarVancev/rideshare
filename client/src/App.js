@@ -16,6 +16,7 @@ import RideInfo from "./components/RideInfo";
 import PostRide from "./components/PostRide";
 import Wallet from "./components/Wallet";
 import MyProfile from "./components/MyProfile";
+import Reviews from "./components/Reviews";
 
 import DriverRoute from "./components/DriverRoute";
 import PrivateRoute from "./components/PrivateRoute";
@@ -36,6 +37,7 @@ function App() {
           <Route path="/reset-password" element={<PasswordResetForm />} />
           <Route path="/results" element={<SearchResults />} />
           <Route path="/ride-info" element={<RideInfo />} />
+          <Route path="/reviews" element={<Reviews />} />
           <Route
             path="/my-rides"
             element={<PrivateRoute element={<MyRides />} />}

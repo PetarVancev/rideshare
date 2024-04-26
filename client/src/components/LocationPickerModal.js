@@ -99,26 +99,28 @@ const LocationPickerModal = ({
 
   const renderMap = () => {
     return (
-      <GoogleMap
-        options={{
-          streetViewControl: false,
-          minZoom: 1,
-          restriction: {
-            latLngBounds: latLngBounds,
-          },
-          mapTypeControl: false,
-        }}
-        mapContainerStyle={mapStyles}
-        zoom={15}
-        center={markerPosition}
-        onClick={(e) => handleMarkerChange(e)}
-      >
-        <MarkerF
-          draggable={true}
-          position={markerPosition}
-          onDragEnd={handleMarkerChange}
-        />
-      </GoogleMap>
+      <div className="custom-map-wrapper">
+        <GoogleMap
+          options={{
+            streetViewControl: false,
+            minZoom: 1,
+            restriction: {
+              latLngBounds: latLngBounds,
+            },
+            mapTypeControl: false,
+          }}
+          mapContainerStyle={mapStyles}
+          zoom={15}
+          center={markerPosition}
+          onClick={(e) => handleMarkerChange(e)}
+        >
+          <MarkerF
+            draggable={true}
+            position={markerPosition}
+            onDragEnd={handleMarkerChange}
+          />
+        </GoogleMap>
+      </div>
     );
   };
 

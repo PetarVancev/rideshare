@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const dbCon = require("../db");
 
 const locationsController = require("./geoLocationController");
+const reviewsController = require("./reviewsController");
 
 async function isDriverAssociatedWithRide(driverId, rideId) {
   const checkDriverQuery = `
@@ -260,7 +261,8 @@ async function searchForRides(req, res) {
         r.price, 
         r.car_model, 
         r.car_color, 
-        d.name AS driver_name, 
+        d.name AS driver_name,
+        d.id AS driver_id, 
         from_loc.name AS from_location_name, 
         to_loc.name AS to_location_name
       FROM 
@@ -292,10 +294,12 @@ async function searchForRides(req, res) {
       seats,
     ]);
 
-    rides.forEach((ride) => {
-      ride.from_location_name = ride.from_location_name;
-      ride.to_location_name = ride.to_location_name;
+    const driverAverageReviewsPromises = rides.map(async (ride) => {
+      ride.driver_average_review =
+        await reviewsController.getDriverReviewsAverage(ride.driver_id);
     });
+
+    await Promise.all(driverAverageReviewsPromises);
 
     return res.status(200).json(rides);
   } catch (error) {
@@ -354,8 +358,9 @@ async function getRideInfo(req, res) {
     }
 
     const driverReviewsSql = `
-    SELECT time_correctness_score, safety_score, comfort_score
-    FROM ride_reviews
+    SELECT r.text, r.time_correctness_score, r.safety_score, r.comfort_score, r.date_time, p.name
+    FROM ride_reviews r
+    INNER JOIN passenger_accounts p ON r.passenger_id = p.id
     WHERE driver_id = ?
     ORDER BY date_time DESC
     LIMIT 3;

@@ -382,8 +382,13 @@ const RideInfo = () => {
                 </Swiper>
               </Col>
               <Col xs={12}>
-                <Button className="col-12 mt-4 white-button body-bold-xs">
-                  Повеќе
+                <Button
+                  className="col-12 mt-4 white-button body-bold-xs"
+                  onClick={() =>
+                    navigate(`/reviews?driverId=${ride.driver_id}`)
+                  }
+                >
+                  Види ги сите
                 </Button>
               </Col>
             </Row>

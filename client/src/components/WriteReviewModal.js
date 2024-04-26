@@ -14,7 +14,7 @@ const WriteReviewModal = ({ handleClose, open, rideId }) => {
   const [reviewText, setReviewText] = useState("");
 
   const handleReviewTextChange = (event) => {
-    if (event.target.value.length <= 100) {
+    if (event.target.value.length <= 300) {
       setReviewText(event.target.value);
     }
   };
@@ -93,7 +93,7 @@ const WriteReviewModal = ({ handleClose, open, rideId }) => {
           ></textarea>
           <div className="d-flex justify-content-between gray-text body-bold-s">
             <span>*Полето не е задолжително</span>
-            {reviewText.length}/100
+            {reviewText.length}/300
           </div>
           <Row className="submission-bottom-bar modal-bottom-bar">
             <Col xs={6}>

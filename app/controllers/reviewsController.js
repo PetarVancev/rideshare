@@ -6,7 +6,7 @@ async function getDriverReviewsAverage(driverId) {
   try {
     const sql = `
       SELECT 
-        ROUND(AVG((time_correctness_score + safety_score + comfort_score) / 3),2) AS average_score
+        ROUND(AVG((time_correctness_score + safety_score + comfort_score) / 3),1) AS average_score
       FROM 
         ride_reviews
       WHERE 
@@ -28,14 +28,22 @@ async function getReviews(req, res) {
   const driverId = req.query.driverId;
 
   try {
-    const sql = "SELECT * FROM ride_reviews WHERE driver_id = ?";
+    const sql = `
+      SELECT r.*, p.name 
+      FROM ride_reviews r
+      INNER JOIN passenger_accounts p ON r.passenger_id = p.id
+      WHERE r.driver_id = ?`;
     const [reviews] = await dbCon.query(sql, [driverId]);
-    if (reviews.length == 0) {
+
+    if (reviews.length === 0) {
       return res.status(404).json({ message: "No reviews found for the user" });
     }
-    return res.status(200).json(reviews);
+
+    const averageScore = await getDriverReviewsAverage(driverId);
+
+    return res.status(200).json({ reviews, averageScore });
   } catch (error) {
-    console.error("Error when getting drivers's reviews:", error);
+    console.error("Error when getting driver's reviews:", error);
     return res.status(500).json({ error: "Internal Server Error" });
   }
 }

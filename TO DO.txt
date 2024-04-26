@@ -3,7 +3,6 @@ Can't post a ride if no driver license info provided???
 Both
 
 Change phone number
-View reviews
 Saved
 Invoice system
 Complaints dashboard
@@ -18,7 +17,7 @@ Store bank_acc_num in withdrawal table also???
 
 Client
 
-Change post ride Tommo
+Change post ride Deneska
 
 Set rideId even on correctly typed not only on dropdown click or like prevozi.org if you don't click on autocomplete then value of field not set ??
 Driver can click arrived only if time<departuretime-10 min ??
