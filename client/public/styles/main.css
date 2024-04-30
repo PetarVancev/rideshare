@@ -145,11 +145,11 @@ input:focus-visible {
 }
 
 .blue-text {
-  color: #022c66;
+  color: #022c66 !important;
 }
 
 .green-text {
-  color: #4ac777;
+  color: #4ac777 !important;
 }
 
 .white-text {
@@ -338,6 +338,7 @@ button.buy-button {
   background-color: #edf0f7;
   margin-bottom: 12px;
   border: 0;
+  color: #022c66 !important;
 }
 
 .auth-forms input::placeholder,
@@ -888,6 +889,28 @@ button.reserve-button {
   border-bottom: 1px solid #022c66;
 }
 
+.post-ride-container .input-container2 {
+  width: 100%;
+}
+
+.post-ride-container .input-container2 .left-corner-div {
+  height: 48px;
+  width: 55px;
+  font-size: 16px !important;
+  color: #8095b2;
+  background-color: rgba(2, 44, 102, 0.1);
+}
+
+.collapse-button {
+  padding: 0 10px 5px 5px;
+}
+
+#fee-breakdown-collapsible span {
+  font-size: 16px;
+  font-weight: bold;
+  color: #8095b2;
+}
+
 .post-input::placeholder,
 .post-input {
   color: #8095b2;
@@ -895,12 +918,18 @@ button.reserve-button {
   font-weight: bold;
 }
 
+textarea.post-input {
+  background-color: white;
+}
+
 .post-input {
+  background-color: #edf0f7;
   width: 100%;
   height: 48px;
   text-align: center;
   border-radius: 5px;
-  border: 1px solid #022c66;
+  border: none;
+  color: #022c66;
 }
 
 .input-container {
@@ -1390,6 +1419,10 @@ input.withdrawal-input {
   padding-top: 32px;
 }
 
+.profile-info .container {
+  min-height: 264px;
+}
+
 .profile-field-rectangle {
   background-color: #edf0f7;
   color: #022c66;
@@ -1406,7 +1439,7 @@ input.withdrawal-input {
 .profile-actions {
   width: 100%;
   bottom: 100px;
-  position: absolute;
+  position: fixed;
 }
 
 .profile-action-button {
@@ -1426,6 +1459,49 @@ input.withdrawal-input {
 .delete-profile-button {
   background-color: #edf0f7;
   border: none;
+}
+
+.change-phone-container {
+  position: fixed;
+  top: 169px; /* Adjust as needed */
+  left: 100%;
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+.change-phone-container.show {
+  left: 0;
+}
+
+.change-phone-container .title {
+  padding-bottom: 20px;
+  border-bottom: 1px solid #8095b2;
+  margin-bottom: 20px;
+}
+
+.change-phone-container input.change-phone {
+  color: #8095b2;
+  font-size: 14px;
+  font-weight: bold;
+  background-color: transparent;
+  width: 100%;
+  border: 0;
+  padding-left: 8px;
+}
+
+.change-phone-container input.change-phone:focus,
+.change-phone-container input.change-phone:focus-visible {
+  border: 0 !important;
+}
+
+.save-profile-changes {
+  width: 80%;
+  height: 61px;
+}
+
+.custom-back-button {
+  position: absolute;
+  top: 0;
 }
 
 /* Write a review  */

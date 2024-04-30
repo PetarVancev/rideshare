@@ -23,6 +23,10 @@ const Registration = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (phone.length < 9) {
+      setError("Телефонскиот број не е валиден.");
+      return;
+    }
     const user = { email, password, name, phone };
     const res = await registerUser(user, userType);
     if (res.error) {
@@ -65,7 +69,14 @@ const Registration = () => {
                 type="tel"
                 placeholder="Телефонски број"
                 value={phone}
-                onChange={(e) => setPhone(e.target.value)}
+                pattern="[0-9()+]+"
+                onChange={(e) => {
+                  const formattedPhoneNumber = e.target.value.replace(
+                    /[^0-9+()]/g,
+                    ""
+                  );
+                  setPhone(formattedPhoneNumber);
+                }}
                 required
                 className="auth-text-input"
               />

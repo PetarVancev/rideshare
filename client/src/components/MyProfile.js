@@ -5,12 +5,14 @@ import axios from "axios";
 import { useAuth } from "./AuthContext";
 import NavBar from "./NavBar";
 import BottomBar from "./BottomBar";
+import ChangePhoneModal from "./ChangePhoneModal";
 
 const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 const MyProfile = () => {
   const { userType, token, logoutUser } = useAuth();
   const [user, setUser] = useState(null);
+  const [changePhoneOpen, setChangePhoneOpen] = useState(false);
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -38,7 +40,6 @@ const MyProfile = () => {
       <BottomBar />
       {user && (
         <>
-          {" "}
           <Container>
             <div className="text-center pb-4">
               <h3 className="heading-m white-text mb-0">{user.name}</h3>
@@ -85,7 +86,10 @@ const MyProfile = () => {
                 </div>
                 <img src="images/right-arrow.svg" />
               </div> */}
-              <div className="d-flex justify-content-between profile-field-rectangle">
+              <div
+                className="d-flex justify-content-between profile-field-rectangle"
+                onClick={() => setChangePhoneOpen(true)}
+              >
                 <div className="d-flex">
                   <svg
                     width="21"
@@ -126,6 +130,11 @@ const MyProfile = () => {
                 Одјави се
               </button>
             </div>
+            <ChangePhoneModal
+              close={() => setChangePhoneOpen(false)}
+              isOpen={changePhoneOpen}
+              intialPhone={user.phone_num}
+            />
           </div>
         </>
       )}

@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 
-const BackButton = ({ customNav }) => {
+const BackButton = ({ customNav, className }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -16,7 +16,7 @@ const BackButton = ({ customNav }) => {
 
   return (
     <button
-      className="transparent-button pl-0 mb-4 mt-3 back-button"
+      className={"transparent-button pl-0 mb-4 mt-3 back-button " + className}
       onClick={handleClick}
     >
       <FontAwesomeIcon icon={faChevronLeft} size="xs" />

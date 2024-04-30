@@ -1,5 +1,13 @@
 import React, { useState, useRef } from "react";
-import { Form, Button, Container, Alert, Row, Col } from "react-bootstrap";
+import {
+  Form,
+  Button,
+  Container,
+  Alert,
+  Row,
+  Col,
+  Collapse,
+} from "react-bootstrap";
 import axios from "axios";
 
 import { useAuth } from "./AuthContext";
@@ -15,7 +23,7 @@ const backendUrl = process.env.REACT_APP_BACKEND_URL;
 const PostRide = () => {
   const { token, logoutUser } = useAuth();
 
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(4);
   const [fromName, setFromName] = useState("");
   const [fromId, setFromId] = useState("");
   const [flexibleDeparture, setFlexibleDeparture] = useState(false);
@@ -32,6 +40,7 @@ const PostRide = () => {
   const [carColor, setCarColor] = useState("");
 
   const [ridePrice, setRidePrice] = useState(300);
+  const [feeBreakdownOpen, setFeeBreakdownOpen] = useState(false);
 
   const [rideNotice, setRideNotice] = useState("");
   const [policyCheck, setPolicyCheck] = useState(false);
@@ -256,7 +265,10 @@ const PostRide = () => {
                   </div>
                   <div>
                     <div className="d-flex justify-content-between accept-location-suggestions">
-                      <h4 className="heading-xxs">Добивај предлог локација</h4>
+                      <h4 className="heading-xxs">
+                        <img src="images/direction-icon.svg" /> Добивај предлог
+                        локација
+                      </h4>
                       <Form>
                         <Form.Switch
                           id="custom-switch"
@@ -334,7 +346,10 @@ const PostRide = () => {
                   </div>
                   <div>
                     <div className="d-flex justify-content-between accept-location-suggestions">
-                      <h4 className="heading-xxs">Добивај предлог локација</h4>
+                      <h4 className="heading-xxs">
+                        <img src="images/direction-icon.svg" />
+                        Добивај предлог локација
+                      </h4>
                       <Form>
                         <Form.Switch
                           id="custom-switch"
@@ -434,8 +449,10 @@ const PostRide = () => {
                 <section className="mb-3">
                   <div className="mb-2">
                     <h4 className="heading-xxs">Сума надоместок за превозот</h4>
-                    <div className="input-container mb-3">
-                      <span className="body-bold-medium">мкд</span>
+                    <div className="input-container2 mb-3">
+                      <div class="left-corner-div heading-xs d-flex justify-content-center align-items-center">
+                        ден
+                      </div>
                       <input
                         className="post-input currency-box"
                         type="number"
@@ -444,37 +461,72 @@ const PostRide = () => {
                         onChange={(e) => setRidePrice(e.target.value)}
                       />
                     </div>
+                    <p>* Износот што ќе го добиете по таксите</p>
                   </div>
                   <Row className="d-flex">
-                    <Col xs={8}>
-                      <h4 className="heading-xxs">
-                        25% такса за услуги за превозник
-                      </h4>
+                    <Col xs={12} className="d-flex justify-content-between">
+                      <h4 className="heading-xxs">Данок и такса за услуги</h4>
+                      <span
+                        onClick={() => setFeeBreakdownOpen(!feeBreakdownOpen)}
+                        aria-controls="fee-breakdown-collapsible"
+                        aria-expanded={feeBreakdownOpen}
+                        className="collapse-button"
+                      >
+                        {feeBreakdownOpen ? (
+                          <i class="fa-solid fa-angle-up"></i>
+                        ) : (
+                          <i class="fa-solid fa-angle-down"></i>
+                        )}{" "}
+                      </span>
                     </Col>
-                    <Col className="d-flex align-items-center" xs={4}>
-                      <div className="input-container mb-3 price-info">
-                        <span className="body-bold-medium">мкд</span>
+                    <Col className="d-flex align-items-center" xs={12}>
+                      <div class="input-container2 mb-3 price-info">
+                        <div class="left-corner-div heading-xs d-flex justify-content-center align-items-center">
+                          ден
+                        </div>
                         <div
                           className="post-input currency-box d-flex justify-content-end
-                    align-items-center"
+                    align-items-center gray-text"
                         >
                           {ridePrice * 0.25}
                         </div>
                       </div>
                     </Col>
+                    <Collapse in={feeBreakdownOpen}>
+                      <div id="fee-breakdown-collapsible">
+                        <div className="px-3">
+                          <div className="d-flex justify-content-between">
+                            <p>10% Данок за државата</p>
+                            <span>мкд {ridePrice * 0.1}</span>
+                          </div>
+                          <div className="d-flex justify-content-between">
+                            <p>Надоместок за трансакција</p>
+                            <span>мкд 6</span>
+                          </div>
+                          <div className="d-flex justify-content-between">
+                            <p>Такса за услуги за превозник</p>
+                            <span>
+                              мкд {ridePrice * 0.25 - ridePrice * 0.1 - 6}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </Collapse>
                   </Row>
                   <Row className="d-flex">
-                    <Col xs={8}>
+                    <Col xs={12}>
                       <h4 className="heading-xxs">
                         Сума која ќе биде прикажана на патниците
                       </h4>
                     </Col>
-                    <Col className="d-flex align-items-center" xs={4}>
-                      <div className="input-container mb-3 price-info">
-                        <span className="body-bold-medium">мкд</span>
+                    <Col className="d-flex align-items-center" xs={12}>
+                      <div className="input-container2 mb-3 price-info">
+                        <div class="left-corner-div heading-xs d-flex justify-content-center align-items-center">
+                          ден
+                        </div>
                         <div
                           className="post-input currency-box d-flex justify-content-end
-                    align-items-center"
+                    align-items-center green-text"
                         >
                           {ridePrice * 1.25}
                         </div>

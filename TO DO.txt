@@ -9,10 +9,7 @@ Complaints dashboard
 
 Backend
 
-Send emails for proposal acceptance and decline Tommo
-
 Cron jobs for proposals ??
-In getMyRides make the reservations field to be optional ???
 Store bank_acc_num in withdrawal table also???
 
 Client
@@ -23,7 +20,6 @@ Set rideId even on correctly typed not only on dropdown click or like prevozi.or
 Driver can click arrived only if time<departuretime-10 min ??
 
 Make seperate components for modals in wallet
-
 
 Journey indicator set width
 
