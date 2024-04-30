@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 import { Container, Row, Col, Form, Button, Alert } from "react-bootstrap";
 
 import NavBar from "./NavBar";
@@ -17,6 +18,7 @@ const PasswordResetRequest = () => {
 
   const handleSubmit = async () => {
     try {
+      setIsButtonDisabled(true);
       const response = await axios.post(
         backendUrl + `/auth/${userType}/request-password-reset`,
         {
@@ -28,13 +30,12 @@ const PasswordResetRequest = () => {
         "Успешно е испратено барањето за промена на лозинка, проверете ја вашата е-пошта. Доколку не добивте ништо обидете се повторно по 1 минута"
       );
       setError("");
-      setIsButtonDisabled(true);
       setTimeout(() => {
         setIsButtonDisabled(false);
       }, 60000);
     } catch (error) {
       if (error.response && error.response.data) {
-        setError(error.response.data.message);
+        setError(error.response.data.еrror);
       } else {
         setError("An unexpected error occurred. Please try again.");
       }

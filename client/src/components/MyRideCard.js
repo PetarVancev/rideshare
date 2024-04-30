@@ -109,6 +109,31 @@ const MyRideCard = ({
     }
   };
 
+  const deleteProposal = async () => {
+    try {
+      const url =
+        backendUrl +
+        `/reservations/passenger/delete-proposal?proposalId=${reservation.id}`;
+      const response = await axios.post(url, null, {
+        headers: {
+          Authorization: token,
+        },
+      });
+      toast.dismiss();
+      window.location.reload();
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        logoutUser();
+      }
+      toast.error(error.response.data.error, {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeButton: true,
+      });
+    }
+  };
+
   const confirmAtPickup = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -244,7 +269,7 @@ const MyRideCard = ({
           <div className="text-center">
             <Button
               className="dark-button col-12 mt-4 arrived-button body-bold-medium"
-              onClick={confirmArrival}
+              onClick={deleteProposal}
             >
               Избриши
             </Button>

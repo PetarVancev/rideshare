@@ -1,12 +1,24 @@
 const jwt = require("jsonwebtoken");
+const nodemailer = require("nodemailer");
 const dbCon = require("../db");
+
+const emailTemplates = require("../emailTemplates");
 
 const ridesController = require("./ridesController");
 const transactionsController = require("./transactionsController");
 const locationsController = require("./geoLocationController");
 const reviewsController = require("./reviewsController");
+const accountsController = require("./accountsController");
 
 const isDriverAssociatedWithRide = ridesController.isDriverAssociatedWithRide;
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.GMAIL_ADDRESS,
+    pass: process.env.GMAIL_PASSWORD,
+  },
+});
 
 async function checkReservationOwnership(
   connection,
@@ -196,6 +208,22 @@ async function deleteReservationProposal(connection, reservation) {
   const { id, passenger_id, num_seats, ride_price } = reservation;
   const refundAmount = num_seats * ride_price;
 
+  const statusQuery = `
+    SELECT status
+    FROM reservations
+    WHERE id = ?
+  `;
+  const [statusRows] = await connection.query(statusQuery, [id]);
+  if (statusRows.length === 0) {
+    throw new Error("Reservation not found");
+  }
+  const { status } = statusRows[0];
+
+  // Check if status is 'P'
+  if (status !== "P") {
+    throw new Error("The reservation is not a proposal");
+  }
+
   // Refund to passenger
   await addToBalance(connection, passenger_id, refundAmount);
 
@@ -205,6 +233,21 @@ async function deleteReservationProposal(connection, reservation) {
     WHERE id = ?
   `;
   await connection.query(deleteQuery, [id]);
+
+  const ride = await ridesController.getRide(dbCon, reservation.ride_id);
+
+  const passengerEmail = await accountsController.getUserEmail(
+    reservation.passenger_id,
+    "passenger"
+  );
+
+  const mailOptions = {
+    to: passengerEmail,
+    subject: "Одбиен предлог за патување",
+    html: emailTemplates.proposalDeclinedEmail(ride),
+  };
+
+  await transporter.sendMail(mailOptions);
 }
 
 async function removeExcessReservations(
@@ -384,9 +427,6 @@ async function handleReservation(req, res) {
       );
     }
 
-    console.log(!!customPickUp);
-    console.log(!!customDropOff);
-
     await insertReservation(
       connection,
       rideId,
@@ -402,6 +442,21 @@ async function handleReservation(req, res) {
     );
 
     await connection.commit();
+
+    const driverEmail = await accountsController.getUserEmail(
+      ride.driver_id,
+      "driver"
+    );
+
+    if (reservationType === "P") {
+      const mailOptions = {
+        to: driverEmail,
+        subject: "Нов предлог за патување",
+        html: emailTemplates.proposalRecievedEmail(ride),
+      };
+
+      await transporter.sendMail(mailOptions);
+    }
 
     const message =
       reservationType === "R"
@@ -693,6 +748,20 @@ async function acceptReservationProposal(req, res) {
       proposal.ride_price
     );
 
+    const ride = await ridesController.getRide(dbCon, proposal.ride_id);
+
+    const passengerEmail = await accountsController.getUserEmail(
+      proposal.passenger_id,
+      "passenger"
+    );
+
+    const mailOptions = {
+      to: passengerEmail,
+      subject: "Прифатен предлог за патување",
+      html: emailTemplates.proposalАcceptedEmail(ride),
+    };
+
+    await transporter.sendMail(mailOptions);
     return res
       .status(200)
       .json({ message: "Reservation proposal accepted successfully" });
@@ -788,6 +857,57 @@ async function confirmDriverAtPickup(req, res) {
   }
 }
 
+async function deleteProposedReservation(req, res) {
+  const token = req.headers.authorization;
+
+  if (!token) {
+    return res.status(401).json({ error: "Unauthorized: Token missing" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    const userType = decoded.userType;
+    const passengerId = decoded.userId;
+
+    if (userType != "passenger") {
+      return res
+        .status(403)
+        .json({ error: "This endpoint is only for passengers" });
+    }
+
+    const { proposalId } = req.query;
+
+    if (!proposalId) {
+      return res.status(404).json({ error: "You must provide proposal id" });
+    }
+
+    if (!(await checkReservationOwnership(dbCon, proposalId, passengerId))) {
+      return res
+        .status(403)
+        .json({ error: "You can only cancel your proposals" });
+    }
+
+    const proposal = await getProposal(proposalId);
+
+    await deleteReservationProposal(dbCon, proposal);
+
+    return res.status(200).json({ message: "Successfuly deleted proposal" });
+  } catch (error) {
+    if (
+      error.name === "JsonWebTokenError" ||
+      error.name === "TokenExpiredError"
+    ) {
+      return res
+        .status(401)
+        .json({ error: "Unauthorized: Invalid or expired token" });
+    } else {
+      console.error("Error when removing proposal", error);
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
+  }
+}
+
 // async function confirmDriverAtPickup(req, res) {
 //   try {
 //     const token = req.headers.authorization;
@@ -829,6 +949,7 @@ module.exports = {
   handleReservation,
   acceptReservationProposal,
   declineReservationProposal,
+  deleteProposedReservation,
   confirmArrival,
   getMyReservations,
   confirmDriverAtPickup,

@@ -18,9 +18,11 @@ async function isDriverAssociatedWithRide(driverId, rideId) {
 async function getRide(connection, rideId) {
   try {
     const rideSql = `
-      SELECT *
+      SELECT rides.*, from_location.name AS from_name, to_location.name AS to_name
       FROM rides
-      WHERE id = ?
+      INNER JOIN locations AS from_location ON rides.from_loc_id = from_location.id
+      INNER JOIN locations AS to_location ON rides.to_loc_id = to_location.id
+      WHERE rides.id = ?
       LIMIT 1;
     `;
     const [ride] = await connection.query(rideSql, [rideId]);

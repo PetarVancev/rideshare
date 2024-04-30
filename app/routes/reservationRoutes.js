@@ -27,4 +27,9 @@ router.post(
   reservationsController.declineReservationProposal
 );
 
+router.post(
+  "/passenger/delete-proposal",
+  reservationsController.deleteProposedReservation
+);
+
 module.exports = router;
