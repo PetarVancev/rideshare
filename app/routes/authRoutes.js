@@ -2,10 +2,13 @@ const express = require("express");
 const registerController = require("../controllers/registerController");
 const loginController = require("../controllers/loginController");
 const passwordResetController = require("../controllers/passwordResetController");
+const accountsController = require("../controllers/accountsController");
 
 const router = express.Router();
 
 router.get("/get-profile-info", loginController.getUserFromToken);
+
+router.post("/change-phone", accountsController.changePhone);
 //Register a new passenger
 router.post("/register/passenger", registerController.registerPassenger);
 //Login a new driver

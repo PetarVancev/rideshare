@@ -71,11 +71,21 @@ const Registration = () => {
                 value={phone}
                 pattern="[0-9()+]+"
                 onChange={(e) => {
+                  if (e.target.value.length < 1) {
+                    setPhone("");
+                    return;
+                  }
                   const formattedPhoneNumber = e.target.value.replace(
                     /[^0-9+()]/g,
                     ""
                   );
-                  setPhone(formattedPhoneNumber);
+                  const afterFirstCharacter = formattedPhoneNumber
+                    .substring(1)
+                    .replace(/[^0-9]/g, "");
+                  const finalPhoneNumber =
+                    formattedPhoneNumber[0] + afterFirstCharacter;
+
+                  setPhone(finalPhoneNumber);
                 }}
                 required
                 className="auth-text-input"

@@ -14,13 +14,28 @@ const ChangePhoneModal = ({ close, isOpen, intialPhone }) => {
   const [error, setError] = useState("");
 
   const changePhone = async () => {
+    if (phone == intialPhone) {
+      close();
+    }
+    if (phone.length < 9) {
+      setError("Телефонскиот број не е валиден.");
+      return;
+    }
     try {
       const url = backendUrl + `/auth/change-phone`;
-      const response = await axios.post(url, null, {
-        headers: {
-          Authorization: token,
+      const response = await axios.post(
+        url,
+        {
+          phone: phone,
         },
-      });
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      setError(null);
+      close();
     } catch (error) {
       if (error.response && error.response.status === 401) {
         logoutUser();
@@ -36,7 +51,14 @@ const ChangePhoneModal = ({ close, isOpen, intialPhone }) => {
       }
     >
       <Container>
-        <BackButton className="custom-back-button" customNav={close} />
+        <BackButton
+          className="custom-back-button"
+          customNav={() => {
+            close();
+            setError(null);
+            setPhone(intialPhone);
+          }}
+        />
         <div className="title mt-5">
           <h2 className="heading-xs text-center">
             <svg
@@ -79,14 +101,33 @@ const ChangePhoneModal = ({ close, isOpen, intialPhone }) => {
           <input
             className="change-phone"
             value={phone}
-            onChange={(e) => setPhone(e.target.value)}
+            onChange={(e) => {
+              if (e.target.value.length < 1) {
+                setPhone("");
+                return;
+              }
+              const formattedPhoneNumber = e.target.value.replace(
+                /[^0-9+()]/g,
+                ""
+              );
+              const afterFirstCharacter = formattedPhoneNumber
+                .substring(1)
+                .replace(/[^0-9]/g, "");
+              const finalPhoneNumber =
+                formattedPhoneNumber[0] + afterFirstCharacter;
+
+              setPhone(finalPhoneNumber);
+            }}
           />
         </div>
         {error && <Alert variant="danger">{error}</Alert>}
       </Container>
 
       <div className="d-flex justify-content-between profile-actions text-center">
-        <Button className="dark-button body-bold-medium save-profile-changes mx-auto">
+        <Button
+          className="dark-button body-bold-medium save-profile-changes mx-auto"
+          onClick={changePhone}
+        >
           Зачувај
         </Button>
       </div>

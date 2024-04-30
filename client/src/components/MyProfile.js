@@ -32,7 +32,7 @@ const MyProfile = () => {
       }
     };
     fetchUserInfo();
-  }, []);
+  }, [changePhoneOpen]);
 
   return (
     <div className="has-bottom-bar my-profile-wrapper">
