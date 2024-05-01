@@ -10,11 +10,11 @@ const NavBar = ({ type }) => {
 
   let colorClass = "";
   let iconsColor = "#022C66";
-  let logoColor = "";
+  let logoColor = "-bg";
   if (type == "blue") {
     colorClass = "blue";
     iconsColor = "#FFFFFF";
-    logoColor = "-white";
+    logoColor = "-wg";
   }
   if (type == "green") {
     colorClass = "green";
@@ -34,7 +34,11 @@ const NavBar = ({ type }) => {
       <Container>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Brand href="/">
-          <img src={"/images/logo" + logoColor + ".png"} alt="Logo" />
+          <img
+            src={"/images/logo" + logoColor + ".svg"}
+            alt="Logo"
+            className="logo"
+          />
         </Navbar.Brand>
         <Nav className="ml-auto">
           <Nav.Link>

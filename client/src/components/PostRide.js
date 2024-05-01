@@ -23,17 +23,19 @@ const backendUrl = process.env.REACT_APP_BACKEND_URL;
 const PostRide = () => {
   const { token, logoutUser } = useAuth();
 
-  const [step, setStep] = useState(4);
+  const [step, setStep] = useState(1);
   const [fromName, setFromName] = useState("");
   const [fromId, setFromId] = useState("");
   const [flexibleDeparture, setFlexibleDeparture] = useState(false);
   const [departureDate, setDepartureDate] = useState("");
-  const [departureTime, setDepartureTime] = useState("");
+  const [departureHours, setDepartureHours] = useState("00");
+  const [departureMinutes, setDepartureMinutes] = useState("00");
 
   const [toName, setToName] = useState("");
   const [toId, setToId] = useState("");
   const [flexibleArrival, setFlexibleArrival] = useState(false);
-  const [arrivalTime, setArrivalTime] = useState("");
+  const [arrivalHours, setArrivalHours] = useState("00");
+  const [arrivalMinutes, setArrivalMinutes] = useState("00");
 
   const [seats, setSeats] = useState(1);
   const [carModel, setCarModel] = useState("");
@@ -69,10 +71,7 @@ const PostRide = () => {
     }
   };
 
-  const calculateRideDuration = (departureTime, arrivalTime) => {
-    const departureDateTime = new Date(`2000-01-01T${departureTime}`);
-    const arrivalDateTime = new Date(`2000-01-01T${arrivalTime}`);
-
+  const calculateRideDuration = (departureDateTime, arrivalDateTime) => {
     if (isNaN(departureDateTime) || isNaN(arrivalDateTime)) {
       return "00:00:00";
     }
@@ -91,12 +90,9 @@ const PostRide = () => {
 
   const handleSubmit1 = (e) => {
     e.preventDefault();
-    const [hours, minutes] = departureTime.split(":");
     const selectedDateTime = new Date(departureDate);
-    selectedDateTime.setHours(hours);
-    selectedDateTime.setMinutes(minutes);
-    console.log(selectedDateTime);
-
+    selectedDateTime.setHours(departureHours);
+    selectedDateTime.setMinutes(departureMinutes);
     const currentDateTime = new Date();
 
     if (!fromId) {
@@ -154,8 +150,16 @@ const PostRide = () => {
 
   const postRide = async () => {
     try {
-      const departureDateTime = `${departureDate} ${departureTime}`;
-      const rideDuration = calculateRideDuration(departureTime, arrivalTime);
+      const departureDateTimeString = `${departureDate} ${departureHours}:${departureMinutes}`;
+      const arrivalDateTimeString = `${departureDate} ${arrivalHours}:${arrivalMinutes}`;
+
+      const departureDateTime = new Date(departureDateTimeString);
+      const arrivalDateTime = new Date(arrivalDateTimeString);
+
+      const rideDuration = calculateRideDuration(
+        departureDateTime,
+        arrivalDateTime
+      );
       if (carModel == "") {
         setCarModel(null);
       }
@@ -167,7 +171,7 @@ const PostRide = () => {
         {
           from_loc_id: fromId,
           to_loc_id: toId,
-          date_time: departureDateTime,
+          date_time: departureDateTimeString,
           ride_duration: rideDuration,
           flexible_departure: flexibleDeparture,
           flexible_arrival: flexibleArrival,
@@ -303,7 +307,54 @@ const PostRide = () => {
                     />
                   </div>
                   <h4 className="heading-xxs">Одберете време на поаѓање</h4>
-                  <div className="input-container mb-4">
+                  <div className="d-flex justify-content-center time-input">
+                    <div className="d-flex flex-column align-items-center me-2">
+                      <input
+                        className="heading-s"
+                        type="text"
+                        value={departureHours}
+                        onChange={(event) => {
+                          let inputValue = event.target.value;
+                          // Limit the length of input to 2 characters
+                          inputValue = inputValue.slice(0, 2);
+                          // Ensure the input value is within the valid range
+                          if (
+                            !isNaN(inputValue) &&
+                            inputValue >= 0 &&
+                            inputValue <= 24
+                          ) {
+                            setDepartureHours(inputValue);
+                          }
+                        }}
+                      />
+                      <span>Час</span>
+                    </div>
+                    <div className="d-flex align-items-center seperator heading-s">
+                      :
+                    </div>
+                    <div className="d-flex flex-column align-items-center ms-2">
+                      <input
+                        className="heading-s"
+                        type="text"
+                        value={departureMinutes}
+                        onChange={(event) => {
+                          let inputValue = event.target.value;
+                          // Limit the length of input to 2 characters
+                          inputValue = inputValue.slice(0, 2);
+                          // Ensure the input value is within the valid range
+                          if (
+                            !isNaN(inputValue) &&
+                            inputValue >= 0 &&
+                            inputValue <= 59
+                          ) {
+                            setDepartureMinutes(inputValue);
+                          }
+                        }}
+                      />
+                      <span>Минути</span>
+                    </div>
+                  </div>
+                  {/* <div className="input-container mb-4">
                     <img src="images/clock-icon.svg" alt="clock icon" />
                     <input
                       className="post-input"
@@ -315,7 +366,7 @@ const PostRide = () => {
                       required
                       pattern="([01]?[0-9]|2[0-3]):[0-5][0-9]"
                     />
-                  </div>
+                  </div> */}
                 </section>
                 <Button
                   className="col-12 mt-4 dark-button body-bold-medium"
@@ -370,18 +421,52 @@ const PostRide = () => {
                 </section>
                 <section>
                   <h4 className="heading-xxs">Одберете време на пристигање</h4>
-                  <div className="input-container mb-4">
-                    <img src="images/clock-icon.svg" alt="clock icon" />
-                    <input
-                      className="post-input"
-                      type="text"
-                      value={arrivalTime}
-                      onChange={(e) => setArrivalTime(e.target.value)}
-                      placeholder="hh:mm"
-                      maxLength="5"
-                      required
-                      pattern="([01]?[0-9]|2[0-3]):[0-5][0-9]"
-                    />
+                  <div className="d-flex justify-content-center time-input">
+                    <div className="d-flex flex-column align-items-center me-2">
+                      <input
+                        className="heading-s"
+                        type="text"
+                        value={arrivalHours}
+                        onChange={(event) => {
+                          let inputValue = event.target.value;
+                          // Limit the length of input to 2 characters
+                          inputValue = inputValue.slice(0, 2);
+                          // Ensure the input value is within the valid range
+                          if (
+                            !isNaN(inputValue) &&
+                            inputValue >= 0 &&
+                            inputValue <= 24
+                          ) {
+                            setArrivalHours(inputValue);
+                          }
+                        }}
+                      />
+                      <span>Час</span>
+                    </div>
+                    <div className="d-flex align-items-center seperator heading-s">
+                      :
+                    </div>
+                    <div className="d-flex flex-column align-items-center ms-2">
+                      <input
+                        className="heading-s"
+                        type="text"
+                        value={arrivalMinutes}
+                        onChange={(event) => {
+                          let inputValue = event.target.value;
+                          // Limit the length of input to 2 characters
+                          inputValue = inputValue.slice(0, 2);
+                          // Ensure the input value is within the valid range
+                          if (
+                            !isNaN(inputValue) &&
+                            inputValue >= 0 &&
+                            inputValue <= 59
+                          ) {
+                            setArrivalMinutes(inputValue);
+                          }
+                        }}
+                      />
+                      <span>Минути</span>
+                    </div>
                   </div>
                 </section>
                 <Button
@@ -488,7 +573,7 @@ const PostRide = () => {
                           className="post-input currency-box d-flex justify-content-end
                     align-items-center gray-text"
                         >
-                          {ridePrice * 0.25}
+                          {parseInt(ridePrice * 0.25)}
                         </div>
                       </div>
                     </Col>
@@ -497,7 +582,7 @@ const PostRide = () => {
                         <div className="px-3">
                           <div className="d-flex justify-content-between">
                             <p>10% Данок за државата</p>
-                            <span>мкд {ridePrice * 0.1}</span>
+                            <span>мкд {parseInt(ridePrice * 0.1)}</span>
                           </div>
                           <div className="d-flex justify-content-between">
                             <p>Надоместок за трансакција</p>
@@ -506,7 +591,8 @@ const PostRide = () => {
                           <div className="d-flex justify-content-between">
                             <p>Такса за услуги за превозник</p>
                             <span>
-                              мкд {ridePrice * 0.25 - ridePrice * 0.1 - 6}
+                              мкд
+                              {parseInt(ridePrice * 0.25 - ridePrice * 0.1 - 6)}
                             </span>
                           </div>
                         </div>
@@ -528,7 +614,7 @@ const PostRide = () => {
                           className="post-input currency-box d-flex justify-content-end
                     align-items-center green-text"
                         >
-                          {ridePrice * 1.25}
+                          {parseInt(ridePrice * 1.25)}
                         </div>
                       </div>
                     </Col>

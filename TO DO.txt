@@ -6,6 +6,10 @@ Saved
 Invoice system
 Complaints dashboard !!
 
+Fee model same on client and backend and decide
+Time problem if arrive next day
+Store average review in account table instead of calculating every time??
+
 Backend
 
 Cron jobs for proposals ??
@@ -13,15 +17,14 @@ Store bank_acc_num in withdrawal table also???
 
 Client
 
-Change post ride
-
 Set rideId even on correctly typed not only on dropdown click or like prevozi.org if you don't click on autocomplete then value of field not set ??
 Driver can click arrived only if time<departuretime-10 min ??
 
+Refactoring
 Make seperate components for modals in wallet
 
+Desktop version
 Journey indicator set width
-
 Make responsive
 
 
