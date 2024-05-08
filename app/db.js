@@ -5,9 +5,9 @@ dotenv.config();
 
 const access = {
   host: "localhost",
-  user: "root",
+  user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
-  database: "rideshare",
+  database: "ride_share",
 };
 
 // Prev user admin, database ride_share

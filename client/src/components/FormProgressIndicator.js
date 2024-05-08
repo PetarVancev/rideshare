@@ -1,17 +1,19 @@
 import React from "react";
+import { Container } from "react-bootstrap";
 
 const FormProgressIndicator = ({ step }) => {
   return (
-    <div
-      className="steps-container"
-      style={step > 1 ? { paddingTop: "0" } : {}}
+    <Container
+    // className="steps-container"
+    // style={step > 1 ? { paddingTop: "0" } : {}}
     >
       <div className="d-flex steps-inside-container">
         <div className={`step-indicator ${step === 1 ? "current" : ""}`}>
           <br />
           <div className="d-flex align-items-center">
             <div className="step-circle">1</div>
-            <svg
+            <div className={"step-arrow" + (step === 1 ? " current" : "")} />
+            {/* <svg
               width="40"
               height="9"
               viewBox="0 0 40 9"
@@ -22,7 +24,7 @@ const FormProgressIndicator = ({ step }) => {
                 d="M39.7286 4.85355C39.9238 4.65829 39.9238 4.34171 39.7286 4.14645L36.5466 0.964466C36.3513 0.769204 36.0347 0.769204 35.8395 0.964466C35.6442 1.15973 35.6442 1.47631 35.8395 1.67157L38.6679 4.5L35.8395 7.32843C35.6442 7.52369 35.6442 7.84027 35.8395 8.03553C36.0347 8.2308 36.3513 8.2308 36.5466 8.03553L39.7286 4.85355ZM0.375 5H39.375V4H0.375V5Z"
                 fill={step === 1 ? "#022c66" : "#8095B2"}
               />
-            </svg>
+            </svg> */}
           </div>
           <span className="body-bold-xxs">Поаѓање</span>
         </div>
@@ -30,8 +32,9 @@ const FormProgressIndicator = ({ step }) => {
           <span className="body-bold-xxs">Пристигање</span>
           <div className="d-flex align-items-center">
             <div className="step-circle">2</div>
-            <svg
-              width="40"
+            <div className={"step-arrow" + (step === 2 ? " current" : "")} />
+            {/* <svg
+              width="0"
               height="9"
               viewBox="0 0 40 9"
               fill="none"
@@ -41,7 +44,7 @@ const FormProgressIndicator = ({ step }) => {
                 d="M39.7286 4.85355C39.9238 4.65829 39.9238 4.34171 39.7286 4.14645L36.5466 0.964466C36.3513 0.769204 36.0347 0.769204 35.8395 0.964466C35.6442 1.15973 35.6442 1.47631 35.8395 1.67157L38.6679 4.5L35.8395 7.32843C35.6442 7.52369 35.6442 7.84027 35.8395 8.03553C36.0347 8.2308 36.3513 8.2308 36.5466 8.03553L39.7286 4.85355ZM0.375 5H39.375V4H0.375V5Z"
                 fill={step === 2 ? "#022c66" : "#8095B2"}
               />
-            </svg>
+            </svg> */}
           </div>
           <br />
         </div>
@@ -49,7 +52,8 @@ const FormProgressIndicator = ({ step }) => {
           <br />
           <div className="d-flex align-items-center">
             <div className="step-circle">3</div>
-            <svg
+            <div className={"step-arrow" + (step === 3 ? " current" : "")} />
+            {/* <svg
               width="40"
               height="9"
               viewBox="0 0 40 9"
@@ -60,7 +64,7 @@ const FormProgressIndicator = ({ step }) => {
                 d="M39.7286 4.85355C39.9238 4.65829 39.9238 4.34171 39.7286 4.14645L36.5466 0.964466C36.3513 0.769204 36.0347 0.769204 35.8395 0.964466C35.6442 1.15973 35.6442 1.47631 35.8395 1.67157L38.6679 4.5L35.8395 7.32843C35.6442 7.52369 35.6442 7.84027 35.8395 8.03553C36.0347 8.2308 36.3513 8.2308 36.5466 8.03553L39.7286 4.85355ZM0.375 5H39.375V4H0.375V5Z"
                 fill={step === 3 ? "#022c66" : "#8095B2"}
               />
-            </svg>
+            </svg> */}
           </div>
           <span className="body-bold-xxs">Места</span>
         </div>
@@ -69,7 +73,8 @@ const FormProgressIndicator = ({ step }) => {
           <br />
           <div className="d-flex align-items-center">
             <div className="step-circle">4</div>
-            <svg
+            <div className={"step-arrow" + (step === 4 ? " current" : "")} />
+            {/* <svg
               width="40"
               height="9"
               viewBox="0 0 40 9"
@@ -80,7 +85,7 @@ const FormProgressIndicator = ({ step }) => {
                 d="M39.7286 4.85355C39.9238 4.65829 39.9238 4.34171 39.7286 4.14645L36.5466 0.964466C36.3513 0.769204 36.0347 0.769204 35.8395 0.964466C35.6442 1.15973 35.6442 1.47631 35.8395 1.67157L38.6679 4.5L35.8395 7.32843C35.6442 7.52369 35.6442 7.84027 35.8395 8.03553C36.0347 8.2308 36.3513 8.2308 36.5466 8.03553L39.7286 4.85355ZM0.375 5H39.375V4H0.375V5Z"
                 fill={step === 4 ? "#022c66" : "#8095B2"}
               />
-            </svg>
+            </svg> */}
           </div>
         </div>
         <div
@@ -91,7 +96,7 @@ const FormProgressIndicator = ({ step }) => {
           <span className="body-bold-xxs">Порака</span>
         </div>
       </div>
-    </div>
+    </Container>
   );
 };
 

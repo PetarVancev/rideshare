@@ -125,7 +125,7 @@ const ChangePhoneModal = ({ close, isOpen, intialPhone }) => {
 
       <div className="d-flex justify-content-between profile-actions text-center">
         <Button
-          className="dark-button body-bold-medium save-profile-changes mx-auto"
+          className="dark-button body-bold-medium save-profile-changes mx-auto container"
           onClick={changePhone}
         >
           Зачувај

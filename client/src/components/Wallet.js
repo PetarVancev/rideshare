@@ -333,160 +333,168 @@ const Wallet = () => {
           setShowSuccess(false);
         }}
       />
-      <Container
+      <div
         className={`withdraw-container ${
           currModal === "withdraw" ? "show" : ""
         }`}
       >
-        <h2 className="heading-xs mt-5 text-center mb-5">
-          <img src="images/bank-icon.svg" /> Префрли во банка
-        </h2>
-        <div className="bottom-border-gray">
-          <h4 className=" heading-xxs">Трансакциска сметка</h4>
-          <div className="bank-acc-number d-flex align-items-center">
-            {bankAcc}
-          </div>
-        </div>
-        <div className="amount-container">
-          <h4 className="heading-xxs">Сума која ќе биде префрлена</h4>
-          <div class="input-container2">
-            <div class="left-corner-div heading-xs d-flex justify-content-center align-items-center">
-              ден
+        <Container>
+          <h2 className="heading-xs mt-5 text-center mb-5">
+            <img src="images/bank-icon.svg" /> Префрли во банка
+          </h2>
+          <div className="bottom-border-gray">
+            <h4 className=" heading-xxs">Трансакциска сметка</h4>
+            <div className="bank-acc-number d-flex align-items-center">
+              {bankAcc}
             </div>
-            <input
-              className="withdrawal-input"
-              type="text"
-              value={withdrawAmount}
-              onChange={handleWithAmountChange}
-            />
           </div>
-        </div>
-        <Row className="withdraw-actions">
-          <Col xs={6}>
-            <Button
-              variant="outline-primary"
-              onClick={() => setCurrModal(null)}
-            >
-              Откажи
-            </Button>
-          </Col>
-          <Col xs={6} className="text-end">
-            <Button variant="outline-success" onClick={requestWithdraw}>
-              Префрли
-            </Button>
-          </Col>
-        </Row>
-      </Container>
-
-      <Container
-        className={`withdraw-container ${currModal === "bank" ? "show" : ""}`}
-      >
-        <h2 className="heading-xs mt-5 text-center mb-5">
-          <img src="images/card-icon.svg" />
-          Трансакциска
-        </h2>
-        <form onSubmit={handleBankAccountChange}>
-          <div className="bank-acc-input-container">
-            <h4 className="heading-xxs">Внесете трансакциска сметка</h4>
-            <input
-              className="withdrawal-input bank-input mb-4"
-              type="text"
-              value={bankAcc}
-              onChange={(event) => setBankAcc(event.target.value)}
-            />
-            <h4 className="heading-xxs">Повторете ја трансакциската сметка</h4>
-            <input
-              className="withdrawal-input bank-input "
-              type="text"
-              value={bankAccConfirm}
-              onChange={(event) => setBankAccConfirm(event.target.value)}
-            />
+          <div className="amount-container">
+            <h4 className="heading-xxs">Сума која ќе биде префрлена</h4>
+            <div class="input-container2">
+              <div class="left-corner-div heading-xs d-flex justify-content-center align-items-center">
+                ден
+              </div>
+              <input
+                className="withdrawal-input"
+                type="text"
+                value={withdrawAmount}
+                onChange={handleWithAmountChange}
+              />
+            </div>
           </div>
-          <p className="body-bold-s blue-text mt-2">
-            На горе наведената сметка ќе ги примате плаќањата
-          </p>
-          {error && (
-            <Alert className="mt-2" variant="danger">
-              {error}
-            </Alert>
-          )}
           <Row className="withdraw-actions">
             <Col xs={6}>
               <Button
                 variant="outline-primary"
-                onClick={() => {
-                  setCurrModal(null);
-                  setError(null);
-                }}
+                onClick={() => setCurrModal(null)}
               >
                 Откажи
               </Button>
             </Col>
             <Col xs={6} className="text-end">
-              <Button variant="outline-success" type="submit">
-                Зачувај
+              <Button variant="outline-success" onClick={requestWithdraw}>
+                Префрли
               </Button>
             </Col>
           </Row>
-        </form>
-      </Container>
+        </Container>
+      </div>
+
+      <div
+        className={`withdraw-container ${currModal === "bank" ? "show" : ""}`}
+      >
+        <Container>
+          <h2 className="heading-xs mt-5 text-center mb-5">
+            <img src="images/card-icon.svg" />
+            Трансакциска
+          </h2>
+          <form onSubmit={handleBankAccountChange}>
+            <div className="bank-acc-input-container">
+              <h4 className="heading-xxs">Внесете трансакциска сметка</h4>
+              <input
+                className="withdrawal-input bank-input mb-4"
+                type="text"
+                value={bankAcc}
+                onChange={(event) => setBankAcc(event.target.value)}
+              />
+              <h4 className="heading-xxs">
+                Повторете ја трансакциската сметка
+              </h4>
+              <input
+                className="withdrawal-input bank-input "
+                type="text"
+                value={bankAccConfirm}
+                onChange={(event) => setBankAccConfirm(event.target.value)}
+              />
+            </div>
+            <p className="body-bold-s blue-text mt-2">
+              На горе наведената сметка ќе ги примате плаќањата
+            </p>
+            {error && (
+              <Alert className="mt-2" variant="danger">
+                {error}
+              </Alert>
+            )}
+            <Row className="withdraw-actions">
+              <Col xs={6}>
+                <Button
+                  variant="outline-primary"
+                  onClick={() => {
+                    setCurrModal(null);
+                    setError(null);
+                  }}
+                >
+                  Откажи
+                </Button>
+              </Col>
+              <Col xs={6} className="text-end">
+                <Button variant="outline-success" type="submit">
+                  Зачувај
+                </Button>
+              </Col>
+            </Row>
+          </form>
+        </Container>
+      </div>
       {/* Deposit modal */}
-      <Container
+      <div
         className={`withdraw-container deposit-container ${
           currModal === "deposit" ? "show" : ""
         }`}
       >
-        <h2 className="heading-xs mt-5 text-center mb-5">
-          <img src="images/plus-icon.svg" /> Надополни средства
-        </h2>
-        <div className="amount-container">
-          <h4 className="heading-xxs">Сума која ќе биде надополнета</h4>
-          <div class="input-container2">
-            <div class="left-corner-div heading-xs d-flex justify-content-center align-items-center">
-              ден
+        <Container>
+          <h2 className="heading-xs mt-5 text-center mb-5">
+            <img src="images/plus-icon.svg" /> Надополни средства
+          </h2>
+          <div className="amount-container">
+            <h4 className="heading-xxs">Сума која ќе биде надополнета</h4>
+            <div class="input-container2">
+              <div class="left-corner-div heading-xs d-flex justify-content-center align-items-center">
+                ден
+              </div>
+              <input
+                className="withdrawal-input"
+                type="text"
+                value={depositAmount}
+                onChange={(event) => handleDepositChange(event.target.value)}
+              />
             </div>
-            <input
-              className="withdrawal-input"
-              type="text"
-              value={depositAmount}
-              onChange={(event) => handleDepositChange(event.target.value)}
-            />
           </div>
-        </div>
-        <Row className="deposit-values-container text-center">
-          <h4 className="heading-xxs text-start">
-            Одберете износ за надополнување
-          </h4>
-          {depositValues.map((value, index) => (
-            <Col
-              key={index}
-              xs={3}
-              className={`deposit-values ${
-                depositAmount === value ? "selected" : ""
-              }`}
-              onClick={() => handleDepositChange(value)}
-            >
-              <div className="heading-xs deposit-amount">{value}</div>
-              ден
+          <Row className="deposit-values-container text-center">
+            <h4 className="heading-xxs text-start">
+              Одберете износ за надополнување
+            </h4>
+            {depositValues.map((value, index) => (
+              <Col
+                key={index}
+                xs={3}
+                className={`deposit-values ${
+                  depositAmount === value ? "selected" : ""
+                }`}
+                onClick={() => handleDepositChange(value)}
+              >
+                <div className="heading-xs deposit-amount">{value}</div>
+                ден
+              </Col>
+            ))}
+          </Row>
+          <Row className="withdraw-actions">
+            <Col xs={6}>
+              <Button
+                variant="outline-primary"
+                onClick={() => setCurrModal(null)}
+              >
+                Откажи
+              </Button>
             </Col>
-          ))}
-        </Row>
-        <Row className="withdraw-actions">
-          <Col xs={6}>
-            <Button
-              variant="outline-primary"
-              onClick={() => setCurrModal(null)}
-            >
-              Откажи
-            </Button>
-          </Col>
-          <Col xs={6} className="text-end">
-            <Button variant="outline-success" onClick={handleDeposit}>
-              Префрли
-            </Button>
-          </Col>
-        </Row>
-      </Container>
+            <Col xs={6} className="text-end">
+              <Button variant="outline-success" onClick={handleDeposit}>
+                Префрли
+              </Button>
+            </Col>
+          </Row>
+        </Container>
+      </div>
 
       {/* Main */}
       <div className="wallet-background"></div>

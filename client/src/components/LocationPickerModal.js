@@ -19,11 +19,8 @@ const LocationPickerModal = ({
   });
 
   const mapStyles = {
-    height: "300px",
-    width: "100vw",
-    position: "absolute",
-    left: "0",
-    bottom: "30%",
+    height: "100%",
+    width: "100%",
   };
 
   let boundaryMeters = 3000; // 7 km
@@ -113,6 +110,7 @@ const LocationPickerModal = ({
           zoom={15}
           center={markerPosition}
           onClick={(e) => handleMarkerChange(e)}
+          className="google-map"
         >
           <MarkerF
             draggable={true}

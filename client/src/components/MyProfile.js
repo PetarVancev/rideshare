@@ -123,7 +123,7 @@ const MyProfile = () => {
             </Container>
             <div className="d-flex justify-content-between profile-actions text-center">
               <button
-                className="profile-action-button log-out-button mx-auto"
+                className="profile-action-button log-out-button mx-auto container"
                 onClick={logoutUser}
               >
                 <img src="images/log-out-icon.svg" className="me-2" />

@@ -1,4 +1,10 @@
 /* General */
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
 body {
   color: #022c66;
   font-family: "Inter", sans-serif !important;
@@ -835,6 +841,33 @@ button.reserve-button {
   border-bottom: 1px solid #022c66;
 }
 
+.step-arrow {
+  background-image: url("../images/step-arrow.svg");
+  width: 40px;
+  height: 9px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.step-arrow.current {
+  background-image: url("../images/step-arrow-blue.svg");
+}
+
+@media only screen and (min-width: 769px) {
+  .step-indicator span {
+    margin-left: 20px;
+  }
+  .step-arrow {
+    background-image: url("../images/step-arrow-bg.svg");
+    width: 125px;
+    height: 9px;
+  }
+  .step-arrow.current {
+    background-image: url("../images/step-arrow-bg-blue.svg");
+  }
+}
+
 .step-circle {
   width: 27px;
   height: 27px;
@@ -849,7 +882,6 @@ button.reserve-button {
 
 .steps-inside-container {
   justify-content: center;
-  width: 80%;
   margin: auto;
   flex-wrap: nowrap;
 }
@@ -1284,6 +1316,13 @@ button.choose-transaction-type.selected {
   border-top-left-radius: 1rem;
   border-top-right-radius: 1rem;
   transition: 0.5s ease;
+  box-shadow: 0px -5px 10px rgba(2, 44, 102, 0.2);
+}
+
+@media only screen and (min-width: 769px) {
+  .withdraw-container {
+    height: 86vh;
+  }
 }
 
 .withdraw-container.show {
@@ -1340,6 +1379,13 @@ input.withdrawal-input {
   position: absolute;
   width: 100vw;
   bottom: 120px;
+  display: flex;
+}
+
+@media only screen and (min-width: 769px) {
+  .row.withdraw-actions {
+    left: 12px;
+  }
 }
 
 .withdraw-actions button {
@@ -1479,6 +1525,10 @@ input.withdrawal-input {
   color: #022c66;
   padding: 16px 20px;
   border-radius: 0.375rem;
+}
+
+button.container {
+  min-height: initial !important;
 }
 
 .log-out-button {
@@ -1623,6 +1673,22 @@ input.withdrawal-input {
 
 .location-pick-modal.hide {
   bottom: -100vh;
+}
+
+.custom-map-wrapper {
+  position: absolute;
+  left: 0;
+  bottom: 30%;
+  width: 100vw;
+  height: 300px;
+}
+
+@media only screen and (min-width: 769px) {
+  .custom-map-wrapper {
+    height: 500px;
+    margin: auto;
+    left: 0;
+  }
 }
 
 .location-pick-modal.hide .custom-map-wrapper {
