@@ -243,13 +243,35 @@ async function deleteRide(req, res) {
 // General functions
 
 async function searchForRides(req, res) {
-  const { from_loc_id, to_loc_id, date_time, seats } = req.query;
+  const { from_loc_id, to_loc_id, date_time, seats, sortBy, timeRange } =
+    req.query;
 
   try {
     if (!from_loc_id || !to_loc_id || !date_time || !seats) {
       return res.status(404);
     }
-    // Your existing code for fetching rides remains unchanged
+
+    let orderByClause = "";
+    let timeRangeCondition = "";
+
+    if (sortBy === "price") {
+      orderByClause = "ORDER BY r.price ASC";
+    } else {
+      orderByClause = "ORDER BY r.date_time ASC";
+    }
+    console.log(timeRange);
+    if (timeRange) {
+      const [start, end] = timeRange.split("-");
+      startTime = start.trim();
+      endTime = end.trim();
+
+      timeRangeCondition = `
+        AND 
+        TIME(r.date_time) >= ?
+        AND 
+        TIME(r.date_time) <= ?`;
+    }
+
     const sql = `
       SELECT 
         r.id, 
@@ -283,8 +305,8 @@ async function searchForRides(req, res) {
         DATE(r.date_time) = ?
         AND 
         r.free_seats >= ?
-        ORDER BY 
-        r.date_time ASC;
+        ${timeRangeCondition} 
+        ${orderByClause};
     `;
 
     const [rides] = await dbCon.query(sql, [
@@ -294,6 +316,8 @@ async function searchForRides(req, res) {
       to_loc_id,
       date_time,
       seats,
+      startTime,
+      endTime,
     ]);
 
     const driverAverageReviewsPromises = rides.map(async (ride) => {

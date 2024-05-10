@@ -39,4 +39,20 @@ async function locationsLookup(req, res) {
   }
 }
 
-module.exports = { locationsLookup, getLocation };
+async function getLocationApi(req, res) {
+  try {
+    const locationId = req.query.locationId; // Assuming searchString is passed as a query parameter
+    const location = await getLocation(locationId);
+
+    if (location.length > 0) {
+      res.status(200).json(location[0]);
+    } else {
+      res.status(404).json({ message: "No matching location" });
+    }
+  } catch (error) {
+    console.error("Error when getting location:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
+
+module.exports = { locationsLookup, getLocation, getLocationApi };
