@@ -253,13 +253,15 @@ async function searchForRides(req, res) {
 
     let orderByClause = "";
     let timeRangeCondition = "";
+    let startTime = "";
+    let endTime = "";
 
     if (sortBy === "price") {
       orderByClause = "ORDER BY r.price ASC";
     } else {
       orderByClause = "ORDER BY r.date_time ASC";
     }
-    console.log(timeRange);
+
     if (timeRange) {
       const [start, end] = timeRange.split("-");
       startTime = start.trim();

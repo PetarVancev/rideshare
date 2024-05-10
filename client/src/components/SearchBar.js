@@ -20,6 +20,8 @@ const SearchBar = ({ options, initialSortBy, initialTimeRange }) => {
     setDepartureTime(null);
   };
 
+  let initials = {};
+
   if (!options) {
     return null; // Or display a loading indicator
   }
@@ -30,7 +32,6 @@ const SearchBar = ({ options, initialSortBy, initialTimeRange }) => {
       url += `&sortBy=${sortBy}`;
     }
     if (departureTime) {
-      console.log(departureTime);
       url += `&timeRange=${departureTime}`;
     }
     navigate(url);
@@ -51,7 +52,7 @@ const SearchBar = ({ options, initialSortBy, initialTimeRange }) => {
                 </p>
               </div>
             </div>
-            <SearchRideCard />
+            <SearchRideCard initials={options} />
           </div>
         </Container>
       </div>

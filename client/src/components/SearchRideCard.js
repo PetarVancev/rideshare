@@ -4,14 +4,15 @@ import LocationAutocomplete from "./LocationAutocomplete";
 import { Dropdown } from "primereact/dropdown";
 import { useNavigate } from "react-router-dom";
 
-const SearchRideCard = () => {
+const SearchRideCard = ({ initials }) => {
   const navigate = useNavigate();
-  const [fromName, setFromName] = useState("");
-  const [fromId, setFromId] = useState("");
-  const [toName, setToName] = useState("");
-  const [toId, setToId] = useState("");
-  const [seatsNumber, setSeatsNumber] = useState(1);
-  const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
+
+  const [fromName, setFromName] = useState(initials.fromLocName);
+  const [fromId, setFromId] = useState(parseInt(initials.fromId));
+  const [toName, setToName] = useState(initials.toLocName);
+  const [toId, setToId] = useState(parseInt(initials.toId));
+  const [seatsNumber, setSeatsNumber] = useState(parseInt(initials.seats));
+  const [date, setDate] = useState(initials.date);
 
   const seats = [
     { text: "1 Место", value: 1 },
@@ -101,7 +102,6 @@ const SearchRideCard = () => {
                 onChange={(e) => setSeatsNumber(e.value)}
                 options={seats}
                 optionLabel="text"
-                placeholder="Select a City"
                 panelClassName="autocomplete-dropdown"
               />
             </div>
