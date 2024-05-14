@@ -177,6 +177,10 @@ input:focus-visible {
 .bold {
   font-weight: bold;
 }
+
+.no-scroll {
+  overflow: hidden !important;
+}
 /* Buttons */
 
 button.dark-button {
@@ -404,6 +408,11 @@ img.logo {
 }
 
 /* Home page */
+
+.home-container .card-payment-info {
+  position: absolute;
+  bottom: 80px;
+}
 
 .home-background {
   height: 100vh;
@@ -1387,6 +1396,10 @@ input.withdrawal-input {
   display: flex;
 }
 
+.row.deposit-actions {
+  bottom: 80px;
+}
+
 @media only screen and (min-width: 769px) {
   .row.withdraw-actions {
     left: 12px;
@@ -1455,8 +1468,8 @@ input.withdrawal-input {
 }
 
 .row.deposit-values-container h4 {
-  margin-top: 24px;
-  margin-bottom: 24px;
+  margin-top: 20px;
+  margin-bottom: 20px;
   padding-left: 0 !important;
 }
 
@@ -1937,4 +1950,10 @@ button.container {
 
 .search-filters-modal .margin-bottom {
   margin-bottom: 100px;
+}
+
+@media only screen and (max-width: 769px) {
+  button.container {
+    max-width: 350px;
+  }
 }

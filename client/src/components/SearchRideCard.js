@@ -7,12 +7,16 @@ import { useNavigate } from "react-router-dom";
 const SearchRideCard = ({ initials }) => {
   const navigate = useNavigate();
 
+  const formatDate = (date) => {
+    return date.toISOString().split("T")[0];
+  };
+
   const [fromName, setFromName] = useState(initials.fromLocName);
   const [fromId, setFromId] = useState(parseInt(initials.fromId));
   const [toName, setToName] = useState(initials.toLocName);
   const [toId, setToId] = useState(parseInt(initials.toId));
   const [seatsNumber, setSeatsNumber] = useState(parseInt(initials.seats));
-  const [date, setDate] = useState(initials.date);
+  const [date, setDate] = useState(formatDate(new Date(initials.date)));
 
   const seats = [
     { text: "1 Место", value: 1 },

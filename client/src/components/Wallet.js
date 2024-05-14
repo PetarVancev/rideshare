@@ -81,17 +81,20 @@ const Wallet = () => {
   }, [showSuccess, location.search]);
 
   useEffect(() => {
-    if (showSuccess || currModal) {
+    if (currModal) {
       window.scrollTo(0, 0);
-      document.body.style.overflow = "hidden";
+      document.body.style.overflowY = "hidden";
+      document.documentElement.style.overflowY = "hidden";
     } else {
-      document.body.style.overflow = "auto";
+      document.body.style.overflowY = "auto";
+      document.documentElement.style.overflowY = "auto";
     }
 
     return () => {
-      document.body.style.overflow = "auto";
+      document.body.style.overflowY = "auto";
+      document.documentElement.style.overflowY = "auto";
     };
-  }, [showSuccess, currModal]);
+  }, [currModal]);
 
   const getWallet = async () => {
     try {
@@ -320,7 +323,7 @@ const Wallet = () => {
   return (
     <div
       className={`${
-        currModal === null && !showSuccess ? "has-bottom-bar" : "no-scroll"
+        currModal === null && !showSuccess ? "has-bottom-bar" : ""
       }`}
     >
       {/* Modals */}
@@ -478,7 +481,7 @@ const Wallet = () => {
               </Col>
             ))}
           </Row>
-          <Row className="withdraw-actions">
+          <Row className="withdraw-actions deposit-actions">
             <Col xs={6}>
               <Button
                 variant="outline-primary"
@@ -492,6 +495,14 @@ const Wallet = () => {
                 Префрли
               </Button>
             </Col>
+            <div className="text-center card-payment-info mt-2">
+              <img src="images/visa-secure-icon.png" className="me-2" />
+              <img src="images/mastercard-secure-icon.png" className="ms-2" />
+              <p className="text-center body-xs blue-text">
+                Сите ваши трансакции се сигурни со нашата заштита, а истото важи
+                и за податоците што ги внесувате при резервирање.
+              </p>
+            </div>
           </Row>
         </Container>
       </div>
