@@ -1,6 +1,8 @@
 import React, { useRef } from "react";
 import { Container, Form } from "react-bootstrap";
 import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import NavBar from "./NavBar";
 import BottomBar from "./BottomBar";
@@ -30,21 +32,21 @@ const Contact = () => {
 
       if (response.status === 200) {
         formRef.current.reset();
-        alert("Вашата порака е успешно испратена.");
+        toast.success("Вашата порака е успешно испратена.");
       } else {
-        alert(
-          "Грешка при испракањето на пораката. Ве молиме обидете се подоцна."
+        toast.error(
+          "Грешка при испраќањето на пораката. Ве молиме обидете се подоцна."
         );
       }
     } catch (error) {
-      alert(
-        "Грешка при испракањето на пораката. Ве молиме обидете се подоцна."
+      toast.error(
+        "Грешка при испраќањето на пораката. Ве молиме обидете се подоцна."
       );
     }
   };
 
   return (
-    <div>
+    <div className="has-bottom-bar">
       <NavBar type="white" />
       <BottomBar />
       <Container className="contact-container">
@@ -53,23 +55,35 @@ const Contact = () => {
         </h1>
         <div className="d-flex justify-content-between border-bottom pb-4 pt-4">
           <h3 className="body-bold-l mb-0">Генерални прашања</h3>
-          <a className="body-s blue-text d-flex align-items-center">
+          <a
+            href="mailto:contact@rideshare.mk"
+            className="body-s blue-text d-flex align-items-center"
+          >
             contact@rideshare.mk
           </a>
         </div>
         <div className="d-flex justify-content-between border-bottom pb-4 pt-4">
           <h3 className="body-bold-l mb-0">За плаќања</h3>
-          <a className="body-s blue-text d-flex align-items-center">
+          <a
+            href="mailto:payments@rideshare.mk"
+            className="body-s blue-text d-flex align-items-center"
+          >
             payments@rideshare.mk
           </a>
         </div>
         <div className="d-flex justify-content-between border-bottom pb-4 pt-4">
           <h3 className="body-bold-l mb-0">Следете не</h3>
           <div className="d-flex">
-            <a className="body-s blue-text d-flex align-items-center me-4">
+            <a
+              className="body-s blue-text d-flex align-items-center me-4"
+              href="https://www.instagram.com/ridesharemk/"
+            >
               Instagram
             </a>
-            <a className="body-s blue-text d-flex align-items-center">
+            <a
+              className="body-s blue-text d-flex align-items-center"
+              href="https://www.facebook.com/people/Rideshare/61558760050670/"
+            >
               Facebook
             </a>
           </div>
