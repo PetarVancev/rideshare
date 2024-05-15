@@ -13,6 +13,7 @@ const walletRoutes = require("./routes/walletRoutes");
 const reviewsRoutes = require("./routes/reviewsRoutes");
 const reservationRoutes = require("./routes/reservationRoutes");
 const complaintRoutes = require("./routes/complaintRoutes");
+const supportRoutes = require("./routes/supportRoutes");
 
 dotenv.config();
 
@@ -45,6 +46,7 @@ app.use("/wallet", walletRoutes);
 app.use("/reviews", reviewsRoutes);
 app.use("/reservations", reservationRoutes);
 app.use("/complaints", complaintRoutes);
+app.use("/support", supportRoutes);
 
 app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
