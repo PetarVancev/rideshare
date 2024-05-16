@@ -18,6 +18,7 @@ import Wallet from "./components/Wallet";
 import MyProfile from "./components/MyProfile";
 import Reviews from "./components/Reviews";
 import Contact from "./components/Contact";
+import AboutUs from "./components/AboutUs";
 
 import DriverRoute from "./components/DriverRoute";
 import PrivateRoute from "./components/PrivateRoute";
@@ -40,6 +41,7 @@ function App() {
           <Route path="/ride-info" element={<RideInfo />} />
           <Route path="/reviews" element={<Reviews />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/about-us" element={<AboutUs />} />
           <Route
             path="/my-rides"
             element={<PrivateRoute element={<MyRides />} />}

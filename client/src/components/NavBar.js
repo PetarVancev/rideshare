@@ -87,7 +87,7 @@ const NavBar = ({ type }) => {
         </div>
         <div>
           <h4 className="white-text mb-3 heading-s">МЕНИ</h4>
-          <a>
+          <a href="/about-us">
             <img src="images/group-icon-white.svg" /> За нас
           </a>
           <a>
