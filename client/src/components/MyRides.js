@@ -24,6 +24,7 @@ const MyRides = () => {
 
   useEffect(() => {
     if (isLoggedIn()) {
+      setRideData(null);
       fetchRideData();
     }
   }, [location.search, category, setReviewModalOpen, complaintModalOpen]);

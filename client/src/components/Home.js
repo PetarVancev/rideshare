@@ -101,16 +101,14 @@ const Home = () => {
                 <br /> Ве покануваме да станете дел од нашата заедница и да ги
                 искусите придобивките од споделувањето на превозот.
               </p>
-              <div className="mobile-hide">
-                <button
-                  className="green-button"
-                  onClick={() => (window.location.href = "/about-us")}
-                >
-                  Прочитај повеќе
-                </button>
-              </div>
+              <button
+                className="green-button"
+                onClick={() => (window.location.href = "/about-us")}
+              >
+                Прочитај повеќе
+              </button>
             </Col>
-            <Col xs={12} xl={6} className="d-flex">
+            <Col xs={12} xl={6} className="d-flex mobile-hide">
               <img
                 src="images/home-photo1-desktop.png"
                 className="home-section-img2"

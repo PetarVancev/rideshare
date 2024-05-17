@@ -157,7 +157,7 @@ const Wallet = () => {
 
       for (let ride of rides) {
         const transactions = await getRideTransactions(ride.id);
-        if (transactions.length > 0) {
+        if (transactions && transactions.length > 0) {
           ridesWithTransactions.push({
             ...ride,
             transactions,
@@ -463,7 +463,7 @@ const Wallet = () => {
               />
             </div>
           </div>
-          <Row className="deposit-values-container text-center">
+          {/* <Row className="deposit-values-container text-center">
             <h4 className="heading-xxs text-start">
               Одберете износ за надополнување
             </h4>
@@ -480,7 +480,7 @@ const Wallet = () => {
                 ден
               </Col>
             ))}
-          </Row>
+          </Row> */}
           <Row className="withdraw-actions deposit-actions">
             <Col xs={6}>
               <Button

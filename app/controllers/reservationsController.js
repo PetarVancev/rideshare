@@ -520,7 +520,7 @@ async function confirmArrival(req, res) {
       });
     }
 
-    await updateReservationStatus(connection, reservationId);
+    await updateReservationStatus(connection, reservationId, "C");
 
     const rideAndDriver = await getRideAndDriverDetails(
       connection,

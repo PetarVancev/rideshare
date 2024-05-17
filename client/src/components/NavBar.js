@@ -90,12 +90,12 @@ const NavBar = ({ type }) => {
           <a href="/about-us">
             <img src="images/group-icon-white.svg" /> За нас
           </a>
-          <a>
+          {/* <a>
             <img src="images/book-icon.svg" /> Како да ја користите rideshare
-          </a>
-          <a>
+          </a> */}
+          {/* <a>
             <img src="images/question-icon.svg" /> Често поставувани прашања
-          </a>
+          </a> */}
           <a href="/contact">
             <img src="images/message-bubble-icon.svg" /> Контакт
           </a>

@@ -176,7 +176,7 @@ const PostRide = () => {
           flexible_departure: flexibleDeparture,
           flexible_arrival: flexibleArrival,
           total_seats: seats,
-          price: parseInt(ridePrice),
+          price: parseInt(ridePrice * 1.25),
           additional_info: rideNotice,
           car_model: carModel,
           car_color: carColor,
