@@ -50,14 +50,18 @@ async function requestPasswordReset(userType, req, res) {
     expirationTime.setHours(expirationTime.getHours() + 1);
 
     const transporter = nodemailer.createTransport({
-      service: "gmail",
+      name: "mail.rideshare.mk",
+      host: "mail.rideshare.mk",
+      port: 465,
+      secure: true,
       auth: {
-        user: process.env.GMAIL_ADDRESS,
-        pass: process.env.GMAIL_PASSWORD,
+        user: "donotreply@rideshare.mk",
+        pass: process.env.EMAIL_PASSWORD,
       },
     });
 
     const mailOptions = {
+      from: "donotreply@rideshare.mk",
       to: email,
       subject: "Reset Your Password",
       html: `<!DOCTYPE html>
@@ -145,7 +149,11 @@ async function requestPasswordReset(userType, req, res) {
       </html>`,
     };
 
-    await transporter.sendMail(mailOptions);
+    await transporter.sendMail(mailOptions, (error) => {
+      if (error) {
+        console.log("Error occurred when sending email:", error.message);
+      }
+    });
 
     const sql = `INSERT INTO password_reset_tokens (${userType}_id, token, expires_at) VALUES (?, ?, ?)`;
     await dbCon.query(sql, [user.id, token, expirationTime]);

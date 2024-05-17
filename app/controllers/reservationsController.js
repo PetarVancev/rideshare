@@ -13,10 +13,12 @@ const accountsController = require("./accountsController");
 const isDriverAssociatedWithRide = ridesController.isDriverAssociatedWithRide;
 
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "mail.rideshare.mk",
+  port: 465,
+  secure: true,
   auth: {
-    user: process.env.GMAIL_ADDRESS,
-    pass: process.env.GMAIL_PASSWORD,
+    user: "donotreply@rideshare.mk",
+    pass: process.env.EMAIL_PASSWORD,
   },
 });
 
@@ -242,12 +244,17 @@ async function deleteReservationProposal(connection, reservation) {
   );
 
   const mailOptions = {
+    from: "donotreply@rideshare.mk",
     to: passengerEmail,
     subject: "Одбиен предлог за патување",
     html: emailTemplates.proposalDeclinedEmail(ride),
   };
 
-  await transporter.sendMail(mailOptions);
+  await transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log("Error occurred:", error.message);
+    }
+  });
 }
 
 async function removeExcessReservations(
@@ -450,6 +457,7 @@ async function handleReservation(req, res) {
 
     if (reservationType === "P") {
       const mailOptions = {
+        from: "donotreply@rideshare.mk",
         to: driverEmail,
         subject: "Нов предлог за патување",
         html: emailTemplates.proposalRecievedEmail(ride),
@@ -756,6 +764,7 @@ async function acceptReservationProposal(req, res) {
     );
 
     const mailOptions = {
+      from: "donotreply@rideshare.mk",
       to: passengerEmail,
       subject: "Прифатен предлог за патување",
       html: emailTemplates.proposalАcceptedEmail(ride),

@@ -1,5 +1,9 @@
 <IfModule mod_rewrite.c>
-  Options -MultiViews RewriteEngine On # Exclude requests to api.rideshare.mk
-  subdomain RewriteCond %{HTTP_HOST} !^api\.rideshare\.mk$ [NC] RewriteCond
-  %{REQUEST_FILENAME} !-f RewriteRule ^ index.html [QSA,L]
+  Options -MultiViews
+  RewriteEngine On
+
+  # Exclude requests to api.rideshare.mk subdomain
+  RewriteCond %{HTTP_HOST} !^api\.rideshare\.mk$ [NC]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule ^ index.html [QSA,L]
 </IfModule>

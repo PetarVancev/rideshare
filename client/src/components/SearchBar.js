@@ -231,7 +231,7 @@ const SearchBar = ({ options, initialSortBy, initialTimeRange }) => {
             </div>
           </Col>
           <Col xs={2} className="text-end pe-0">
-            <button onClick={() => setModal(2)}>
+            <button className="text-center" onClick={() => setModal(2)}>
               <img src="images/filter-icon.svg" />
             </button>
           </Col>

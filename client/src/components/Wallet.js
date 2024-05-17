@@ -492,7 +492,7 @@ const Wallet = () => {
             </Col>
             <Col xs={6} className="text-end">
               <Button variant="outline-success" onClick={handleDeposit}>
-                Префрли
+                Надополни
               </Button>
             </Col>
             <div className="text-center card-payment-info mt-2">

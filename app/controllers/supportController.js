@@ -4,10 +4,12 @@ const sendContactForm = async (req, res) => {
   const { name, email, message } = req.body;
 
   const transporter = nodemailer.createTransport({
-    service: "gmail",
+    host: "mail.rideshare.mk",
+    port: 465,
+    secure: true,
     auth: {
-      user: process.env.GMAIL_ADDRESS,
-      pass: process.env.GMAIL_PASSWORD,
+      user: "donotreply@rideshare.mk",
+      pass: process.env.EMAIL_PASSWORD,
     },
   });
 

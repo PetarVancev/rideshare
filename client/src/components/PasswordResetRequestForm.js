@@ -29,15 +29,22 @@ const PasswordResetRequest = () => {
       setSuccessMessage(
         "Успешно е испратено барањето за промена на лозинка, проверете ја вашата е-пошта. Доколку не добивте ништо обидете се повторно по 1 минута"
       );
+      console.log(response);
       setError("");
       setTimeout(() => {
         setIsButtonDisabled(false);
       }, 60000);
     } catch (error) {
       if (error.response && error.response.data) {
-        setError(error.response.data.еrror);
+        setError(error.response.data.message);
+        setTimeout(() => {
+          setIsButtonDisabled(false);
+        }, 60000);
       } else {
         setError("An unexpected error occurred. Please try again.");
+        setTimeout(() => {
+          setIsButtonDisabled(false);
+        }, 60000);
       }
     }
   };

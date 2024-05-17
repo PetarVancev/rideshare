@@ -724,8 +724,7 @@ button.search-button {
   padding-right: 20px;
   background-color: #022c66;
   color: #4ac777;
-  border-top-left-radius: 30%;
-  border-bottom-left-radius: 30%;
+  border-radius: 5rem 0rem 0rem 5rem;
 }
 
 .card .card-header {

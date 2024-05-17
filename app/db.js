@@ -4,10 +4,10 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const access = {
-  host: "localhost",
+  host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
-  database: "ride_share",
+  database: process.env.DB_NAME,
 };
 
 // Prev user admin, database ride_share
