@@ -39,7 +39,7 @@ const MyRideCard = ({
     proposals = rideData.reservations.filter((item) => item.status === "P");
     reservations = {
       custom_location: rideData.reservations.filter((item) => {
-        const customLocations = !!item.custom_pick_up || !!item.custom_drop_off;
+        const customLocations = !!item.custom_pick_up;
         return item.status === "R" && customLocations;
       }),
       original_location: rideData.reservations.filter((item) => {

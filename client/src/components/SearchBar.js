@@ -59,7 +59,10 @@ const SearchBar = ({ options, initialSortBy, initialTimeRange }) => {
       <div className={`search-filters-modal ${modal === 2 ? "open" : ""}`}>
         <Container>
           <div className="pt-4 pb-4 bottom-border">
-            <button className="close-button" onClick={() => setModal(0)}>
+            <button
+              className="close-button text-center"
+              onClick={() => setModal(0)}
+            >
               X
             </button>
             <h3 className="text-center heading-xs mb-0">Филтри</h3>
@@ -149,7 +152,7 @@ const SearchBar = ({ options, initialSortBy, initialTimeRange }) => {
                 <input
                   type="radio"
                   name="time"
-                  value="00:00 - 06:00"
+                  value="00:00-06:00"
                   checked={departureTime === "00:00-06:00"}
                   onChange={(e) => setDepartureTime(e.target.value)}
                 />
@@ -232,7 +235,7 @@ const SearchBar = ({ options, initialSortBy, initialTimeRange }) => {
           </Col>
           <Col xs={2} className="text-end pe-0">
             <button className="text-center" onClick={() => setModal(2)}>
-              <img src="images/filter-icon.svg" />
+              <img src="images/filter-icon.svg" className="filter-icon" />
             </button>
           </Col>
         </Row>

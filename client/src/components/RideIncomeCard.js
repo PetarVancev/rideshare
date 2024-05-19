@@ -70,7 +70,10 @@ const RideIncomeCard = ({ data, userType }) => {
                 {userType == "driver" ? "Приливи" : "Платено"}
               </span>
               <span className="green-text btn-text-m">
-                ден{userType == "driver" ? totalRideIncome : data.amount}
+                ден
+                {userType == "driver"
+                  ? totalRideIncome
+                  : parseInt(data.amount / 0.75)}
               </span>
             </div>
             <div className="income-breakdown">

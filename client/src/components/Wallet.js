@@ -342,7 +342,7 @@ const Wallet = () => {
         }`}
       >
         <Container>
-          <h2 className="heading-xs mt-5 text-center mb-5">
+          <h2 className="heading-xs mt-4 text-center mb-4">
             <img src="images/bank-icon.svg" /> Префрли во банка
           </h2>
           <div className="bottom-border-gray">
@@ -387,7 +387,7 @@ const Wallet = () => {
         className={`withdraw-container ${currModal === "bank" ? "show" : ""}`}
       >
         <Container>
-          <h2 className="heading-xs mt-5 text-center mb-5">
+          <h2 className="heading-xs mt-4 text-center mb-4">
             <img src="images/card-icon.svg" />
             Трансакциска
           </h2>
@@ -446,7 +446,7 @@ const Wallet = () => {
         }`}
       >
         <Container>
-          <h2 className="heading-xs mt-5 text-center mb-5">
+          <h2 className="heading-xs mt-4 text-center mb-4">
             <img src="images/plus-icon.svg" /> Надополни средства
           </h2>
           <div className="amount-container">

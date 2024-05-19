@@ -1497,10 +1497,10 @@ button.choose-transaction-type.selected {
   position: fixed;
   width: 100vw !important;
   max-width: none !important;
-  height: 80svh;
+  height: calc(100dvh - 140px);
   z-index: 10;
   background-color: white;
-  bottom: -80svh;
+  bottom: calc(-100dvh + 140px);
   transform: translateY(100%);
   border-top-left-radius: 1rem;
   border-top-right-radius: 1rem;
@@ -1510,7 +1510,8 @@ button.choose-transaction-type.selected {
 
 @media only screen and (min-width: 769px) {
   .withdraw-container {
-    height: 86vh;
+    height: calc(100dvh - 170px);
+    bottom: calc(-100dvh + 140px);
   }
 }
 
@@ -1626,10 +1627,6 @@ input.withdrawal-input {
 .bank-acc-input-container {
   padding-bottom: 24px;
   border-bottom: 1px solid #e6eaf0;
-}
-
-.deposit-container {
-  height: 80svh !important;
 }
 
 .deposit-open {
@@ -1785,7 +1782,7 @@ button.container {
   position: fixed;
   background-color: white;
   z-index: 101;
-  height: 90svh;
+  height: calc(100vh - 68px);
   width: 100vw;
   border-top-left-radius: 1rem;
   border-top-right-radius: 1rem;
@@ -1794,7 +1791,7 @@ button.container {
 }
 
 .write-review-modal.hide {
-  bottom: -90svh;
+  bottom: calc(-100vh + 68px);
 }
 
 .star-selector .fa-star {
@@ -2120,6 +2117,10 @@ button.container {
 
 .search-filters-modal .margin-bottom {
   margin-bottom: 100px;
+}
+
+.filter-icon {
+  width: 19px;
 }
 
 /* Contact */

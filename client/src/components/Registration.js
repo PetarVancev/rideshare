@@ -27,6 +27,13 @@ const Registration = () => {
       setError("Телефонскиот број не е валиден.");
       return;
     }
+    const passwordRegex = /^(?=.*[A-ZА-Ш]).{8,}$/i;
+    if (!passwordRegex.test(password)) {
+      setError(
+        "Лозинката мора да има најмалку 8 карактери и една голема буква"
+      );
+      return;
+    }
     const user = { email, password, name, phone };
     const res = await registerUser(user, userType);
     if (res.error) {
