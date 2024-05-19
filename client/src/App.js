@@ -19,6 +19,7 @@ import MyProfile from "./components/MyProfile";
 import Reviews from "./components/Reviews";
 import Contact from "./components/Contact";
 import AboutUs from "./components/AboutUs";
+import PrivacyPolicy from "./components/PrivacyPolicy";
 
 import DriverRoute from "./components/DriverRoute";
 import PrivateRoute from "./components/PrivateRoute";
@@ -42,6 +43,7 @@ function App() {
           <Route path="/reviews" element={<Reviews />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/about-us" element={<AboutUs />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route
             path="/my-rides"
             element={<PrivateRoute element={<MyRides />} />}

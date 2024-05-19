@@ -29,7 +29,6 @@ const PasswordResetRequest = () => {
       setSuccessMessage(
         "Успешно е испратено барањето за промена на лозинка, проверете ја вашата е-пошта. Доколку не добивте ништо обидете се повторно по 1 минута"
       );
-      console.log(response);
       setError("");
       setTimeout(() => {
         setIsButtonDisabled(false);

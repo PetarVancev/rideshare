@@ -13,6 +13,7 @@ const accountsController = require("./accountsController");
 const isDriverAssociatedWithRide = ridesController.isDriverAssociatedWithRide;
 
 const transporter = nodemailer.createTransport({
+  name: "mail.rideshare.mk",
   host: "mail.rideshare.mk",
   port: 465,
   secure: true,

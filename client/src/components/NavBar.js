@@ -108,8 +108,7 @@ const NavBar = ({ type }) => {
           >
             Facebook
           </a>
-          <a>Правила и услови на користење</a>
-          <a>Политика на приватност</a>
+          <a href="/privacy-policy">Политика и правила на користење</a>
           <div className="text-center mb-5 mt-4">
             <img src="images/logo-white.svg" />
           </div>

@@ -149,7 +149,8 @@ const Home = () => {
           податоците што ги внесувате при резервирање.
         </p>
         <div className="text-center body-xs mt-2">
-          <a>Политика на приватност</a> | © rideshare 2024
+          <a href="/privacy-policy">Политика на приватност</a> | © rideshare
+          2024
         </div>
       </footer>
     </>
