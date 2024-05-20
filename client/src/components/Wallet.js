@@ -342,7 +342,7 @@ const Wallet = () => {
         }`}
       >
         <Container>
-          <h2 className="heading-xs mt-4 text-center mb-4">
+          <h2 className="heading-xs mt-5 text-center mb-5">
             <img src="images/bank-icon.svg" /> Префрли во банка
           </h2>
           <div className="bottom-border-gray">
@@ -351,7 +351,7 @@ const Wallet = () => {
               {bankAcc}
             </div>
           </div>
-          <div className="amount-container">
+          <div className="amount-container mt-4">
             <h4 className="heading-xxs">Сума која ќе биде префрлена</h4>
             <div class="input-container2">
               <div class="left-corner-div heading-xs d-flex justify-content-center align-items-center">
@@ -387,56 +387,55 @@ const Wallet = () => {
         className={`withdraw-container ${currModal === "bank" ? "show" : ""}`}
       >
         <Container>
-          <h2 className="heading-xs mt-4 text-center mb-4">
-            <img src="images/card-icon.svg" />
+          <h2 className="heading-xs mt-5 text-center mb-5">
+            <img src="images/card-icon.svg" className="me-1" />
             Трансакциска
           </h2>
-          <form onSubmit={handleBankAccountChange}>
-            <div className="bank-acc-input-container">
-              <h4 className="heading-xxs">Внесете трансакциска сметка</h4>
-              <input
-                className="withdrawal-input bank-input mb-4"
-                type="text"
-                value={bankAcc}
-                onChange={(event) => setBankAcc(event.target.value)}
-              />
-              <h4 className="heading-xxs">
-                Повторете ја трансакциската сметка
-              </h4>
-              <input
-                className="withdrawal-input bank-input "
-                type="text"
-                value={bankAccConfirm}
-                onChange={(event) => setBankAccConfirm(event.target.value)}
-              />
-            </div>
-            <p className="body-bold-s blue-text mt-2">
-              На горе наведената сметка ќе ги примате плаќањата
-            </p>
-            {error && (
-              <Alert className="mt-2" variant="danger">
-                {error}
-              </Alert>
-            )}
-            <Row className="withdraw-actions">
-              <Col xs={6}>
-                <Button
-                  variant="outline-primary"
-                  onClick={() => {
-                    setCurrModal(null);
-                    setError(null);
-                  }}
-                >
-                  Откажи
-                </Button>
-              </Col>
-              <Col xs={6} className="text-end">
-                <Button variant="outline-success" type="submit">
-                  Зачувај
-                </Button>
-              </Col>
-            </Row>
-          </form>
+          <div className="bank-acc-input-container">
+            <h4 className="heading-xxs">Внесете трансакциска сметка</h4>
+            <input
+              className="withdrawal-input bank-input mb-4"
+              type="number"
+              value={bankAcc}
+              onChange={(event) => setBankAcc(event.target.value)}
+            />
+            <h4 className="heading-xxs">Повторете ја трансакциската сметка</h4>
+            <input
+              className="withdrawal-input bank-input "
+              type="number"
+              value={bankAccConfirm}
+              onChange={(event) => setBankAccConfirm(event.target.value)}
+            />
+          </div>
+          <p className="body-bold-s blue-text mt-2">
+            На горе наведената сметка ќе ги примате плаќањата
+          </p>
+          {error && (
+            <Alert className="mt-2" variant="danger">
+              {error}
+            </Alert>
+          )}
+          <Row className="withdraw-actions">
+            <Col xs={6}>
+              <Button
+                variant="outline-primary"
+                onClick={() => {
+                  setCurrModal(null);
+                  setError(null);
+                }}
+              >
+                Откажи
+              </Button>
+            </Col>
+            <Col xs={6} className="text-end">
+              <Button
+                variant="outline-success"
+                onClick={handleBankAccountChange}
+              >
+                Зачувај
+              </Button>
+            </Col>
+          </Row>
         </Container>
       </div>
       {/* Deposit modal */}
@@ -446,7 +445,7 @@ const Wallet = () => {
         }`}
       >
         <Container>
-          <h2 className="heading-xs mt-4 text-center mb-4">
+          <h2 className="heading-xs mt-5 text-center mb-5">
             <img src="images/plus-icon.svg" /> Надополни средства
           </h2>
           <div className="amount-container">
@@ -463,7 +462,7 @@ const Wallet = () => {
               />
             </div>
           </div>
-          {/* <Row className="deposit-values-container text-center">
+          <Row className="deposit-values-container text-center">
             <h4 className="heading-xxs text-start">
               Одберете износ за надополнување
             </h4>
@@ -480,7 +479,7 @@ const Wallet = () => {
                 ден
               </Col>
             ))}
-          </Row> */}
+          </Row>
           <Row className="withdraw-actions deposit-actions">
             <Col xs={6}>
               <Button
@@ -559,7 +558,10 @@ const Wallet = () => {
               className={`choose-transaction-type ${
                 selectedTransactionType === "income" ? "selected" : ""
               }`}
-              onClick={() => setSelectedTransactionType("income")}
+              onClick={() => {
+                setData(null);
+                setSelectedTransactionType("income");
+              }}
             >
               {userType == "driver" ? "Последни приливи" : "Платени превози"}
             </button>
@@ -569,7 +571,10 @@ const Wallet = () => {
               className={`choose-transaction-type ${
                 selectedTransactionType === "bank" ? "selected" : ""
               }`}
-              onClick={() => setSelectedTransactionType("bank")}
+              onClick={() => {
+                setData(null);
+                setSelectedTransactionType("bank");
+              }}
             >
               {userType == "driver" ? "Префрлања во банка" : "Надополнувања"}
             </button>

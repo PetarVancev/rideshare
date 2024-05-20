@@ -18,13 +18,13 @@ const PasswordResetForm = () => {
 
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Check if password meets criteria
     const passwordRegex = /^(?=.*[A-ZА-Ш]).{8,}$/i;
     if (!passwordRegex.test(password)) {
       setError(
@@ -39,7 +39,6 @@ const PasswordResetForm = () => {
     }
 
     try {
-      console.log(password);
       const response = await axios.post(
         backendUrl + `/auth/${userType}/password-reset`,
         {
@@ -74,18 +73,33 @@ const PasswordResetForm = () => {
           <h2>Промена на лозинка</h2>
           <Form onSubmit={handleSubmit} className="auth-forms">
             <Form.Group controlId="formBasicPassword">
-              <Form.Control
-                type="password"
-                placeholder="Лозинка"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="auth-text-input mb-1"
-              />
+              <div className="input-group">
+                <Form.Control
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Лозинка"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="auth-text-input mb-3"
+                />
+                <div className="input-group-append">
+                  <button
+                    type="button"
+                    className="show-password"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? (
+                      <i class="fa-regular fa-eye"></i>
+                    ) : (
+                      <i class="fa-regular fa-eye-slash"></i>
+                    )}
+                  </button>
+                </div>
+              </div>
             </Form.Group>
             <Form.Group controlId="formBasicPassword">
               <Form.Control
-                type="password"
+                type={showPassword ? "text" : "password"}
                 placeholder="Повторете ја лозинката"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}

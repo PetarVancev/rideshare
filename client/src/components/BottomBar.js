@@ -124,7 +124,7 @@ const BottomBar = () => {
       </div>
       <div
         className={`icon ${
-          location.pathname === "/profile" ||
+          location.pathname === "/my-profile" ||
           location.pathname === "/login" ||
           location.pathname === "/register" ||
           location.pathname === "/request-password-reset"

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Container, Row, Col, Form, Button, Alert } from "react-bootstrap";
-
 import { useAuth } from "./AuthContext";
 import NavBar from "./NavBar";
 import BackButton from "./BackButton";
@@ -12,7 +11,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userType, setUserType] = useState("passenger");
-
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
 
   const { loginUser } = useAuth();
@@ -27,6 +26,10 @@ const Login = () => {
 
   const handleUserTypeChange = (e) => {
     setUserType(e.target.value);
+  };
+
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -50,14 +53,29 @@ const Login = () => {
             </Form.Group>
 
             <Form.Group controlId="formBasicPassword">
-              <Form.Control
-                type="password"
-                placeholder="Лозинка"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="auth-text-input mb-1"
-              />
+              <div className="input-group">
+                <Form.Control
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Лозинка"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="auth-text-input mb-1"
+                />
+                <div className="input-group-append">
+                  <button
+                    type="button"
+                    className="show-password"
+                    onClick={toggleShowPassword}
+                  >
+                    {showPassword ? (
+                      <i class="fa-regular fa-eye"></i>
+                    ) : (
+                      <i class="fa-regular fa-eye-slash"></i>
+                    )}
+                  </button>
+                </div>
+              </div>
             </Form.Group>
             <div className="text-end">
               <a
@@ -101,7 +119,7 @@ const Login = () => {
               Најави се
             </Button>
             <Button
-              className="dark-button col-12 mt-2"
+              className="dark-button dark-outline-button col-12 mt-2"
               onClick={() => navigate("/register")}
             >
               Регистрирај се

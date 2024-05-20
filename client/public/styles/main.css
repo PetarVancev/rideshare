@@ -271,9 +271,9 @@ button.buy-button {
 
 .dark-button.dark-outline-button:hover,
 .dark-button.dark-outline-button:active {
-  background-color: white;
-  color: #022c66;
-  border: 1px solid #022c66;
+  background-color: white !important;
+  color: #022c66 !important;
+  border: 1px solid #022c66 !important;
 }
 
 .close-button {
@@ -522,6 +522,13 @@ input.form-control.outline-input {
   font-size: 0.875rem;
 }
 
+.auth-container button {
+  min-height: 56px;
+  margin-top: 10px;
+  font-weight: bold;
+  font-size: 0.875rem;
+}
+
 .forgot-password {
   color: #022c66;
   text-decoration: none;
@@ -529,6 +536,20 @@ input.form-control.outline-input {
   font-weight: bold;
 }
 
+.auth-container .show-password {
+  position: absolute;
+  background-color: transparent;
+  border: none;
+  right: 5px;
+  color: #022c66;
+  top: 0;
+  margin-top: 0;
+  z-index: 200;
+}
+
+.auth-container .show-password i {
+  font-size: 1rem;
+}
 /* Home page */
 
 .home-container {
@@ -539,6 +560,10 @@ input.form-control.outline-input {
   margin-top: auto;
   /* background-color: #022c66;
   color: white; */
+}
+
+.card-payment-info p {
+  margin-bottom: 0;
 }
 
 footer {
@@ -1091,6 +1116,10 @@ button.reserve-button {
   width: 10%;
 }
 
+.steps-inside-container .step-indicator.last-step span {
+  margin-left: -10px;
+}
+
 .steps-inside-container .step-indicator span {
   color: #8095b2;
 }
@@ -1182,6 +1211,14 @@ textarea.post-input {
   border-radius: 5px;
   border: none;
   color: #022c66;
+}
+
+.post-input[type="date"] {
+  min-width: calc(100vw - 40px);
+}
+
+.post-input::-webkit-date-and-time-value {
+  text-align: center;
 }
 
 .input-container {
@@ -1506,6 +1543,13 @@ button.choose-transaction-type.selected {
   border-top-right-radius: 1rem;
   transition: 0.5s ease;
   box-shadow: 0px -5px 10px rgba(2, 44, 102, 0.2);
+  overflow-y: auto;
+}
+
+.withdraw-container .container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
 }
 
 @media only screen and (min-width: 769px) {
@@ -1530,8 +1574,8 @@ div.bank-acc-number {
   margin-bottom: 24px;
 }
 
-.amount-container {
-  margin-top: 24px;
+.withdraw-container .amount-container {
+  margin-top: 0;
 }
 
 .input-container2 {
@@ -1566,14 +1610,13 @@ input.withdrawal-input {
 }
 
 .row.withdraw-actions {
-  position: absolute;
+  margin-top: auto;
   width: 100vw;
-  bottom: 120px;
-  display: flex;
+  margin-bottom: 90px;
 }
 
 .row.deposit-actions {
-  bottom: 80px;
+  margin-bottom: 80px;
 }
 
 @media only screen and (min-width: 769px) {
@@ -1679,15 +1722,23 @@ input.withdrawal-input {
 }
 
 .profile-info {
-  min-height: 70vh;
+  bottom: 0;
+  position: fixed;
+  width: 100vw;
+  min-height: calc(100dvh - 180px);
   background-color: white;
   border-top-left-radius: 1rem;
   border-top-right-radius: 1rem;
   padding-top: 32px;
+  overflow-y: auto;
 }
 
-.profile-info .container {
-  min-height: 264px;
+.profile-info > .container:first-of-type {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: calc(100dvh - 180px);
+  /* min-height: 264px; */
 }
 
 .profile-field-rectangle {
@@ -1705,8 +1756,8 @@ input.withdrawal-input {
 
 .profile-actions {
   width: 100%;
-  bottom: 100px;
-  position: fixed;
+  margin-top: auto;
+  margin-bottom: 90px;
 }
 
 .profile-action-button {

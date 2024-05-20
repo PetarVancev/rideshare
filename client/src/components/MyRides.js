@@ -24,7 +24,6 @@ const MyRides = () => {
 
   useEffect(() => {
     if (isLoggedIn()) {
-      setRideData(null);
       fetchRideData();
     }
   }, [location.search, category, setReviewModalOpen, complaintModalOpen]);
@@ -53,6 +52,7 @@ const MyRides = () => {
   };
 
   function handleCategoryChange(selectedCategory) {
+    setRideData(null);
     setCategory(selectedCategory);
   }
 

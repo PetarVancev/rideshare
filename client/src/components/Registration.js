@@ -15,6 +15,7 @@ const Registration = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userType, setUserType] = useState("passenger");
+  const [showPassword, setShowPassword] = useState(false);
 
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -50,6 +51,10 @@ const Registration = () => {
 
   const handleUserTypeChange = (e) => {
     setUserType(e.target.value);
+  };
+
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -110,14 +115,29 @@ const Registration = () => {
             </Form.Group>
 
             <Form.Group controlId="formBasicPassword">
-              <Form.Control
-                type="password"
-                placeholder="Лозинка"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="auth-text-input"
-              />
+              <div className="input-group">
+                <Form.Control
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Лозинка"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="auth-text-input"
+                />
+                <div className="input-group-append">
+                  <button
+                    type="button"
+                    className="show-password"
+                    onClick={toggleShowPassword}
+                  >
+                    {showPassword ? (
+                      <i class="fa-regular fa-eye"></i>
+                    ) : (
+                      <i class="fa-regular fa-eye-slash"></i>
+                    )}
+                  </button>
+                </div>
+              </div>
             </Form.Group>
 
             <Form.Group controlId="formBasicUserType">

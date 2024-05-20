@@ -79,7 +79,7 @@ const NavBar = ({ type }) => {
       >
         <div className="text-end">
           <button
-            className="close-button mt-5 mb-4"
+            className="close-button mt-5 mb-4 text-center p-0"
             onClick={() => setSideBarOpen(false)}
           >
             X
