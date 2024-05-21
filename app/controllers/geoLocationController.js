@@ -6,7 +6,9 @@ async function getLocation(locationId) {
       SELECT 
         l.id,
         l.name,
-        l.parent_location_id
+        l.parent_location_id,
+        l.location_lat,
+        l.location_lon
       FROM 
         locations AS l
       WHERE 
@@ -41,7 +43,7 @@ async function locationsLookup(req, res) {
 
 async function getLocationApi(req, res) {
   try {
-    const locationId = req.query.locationId; // Assuming searchString is passed as a query parameter
+    const locationId = req.query.locationId;
     const location = await getLocation(locationId);
 
     if (location.length > 0) {

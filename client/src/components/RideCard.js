@@ -6,38 +6,56 @@ const RideCard = ({ ride, seats }) => {
   const navigate = useNavigate();
 
   const departureDateTime = new Date(ride.date_time);
-  const departureHours = departureDateTime
-    .getHours()
-    .toString()
-    .padStart(2, "0");
-  const departureMinutes = departureDateTime
-    .getMinutes()
-    .toString()
-    .padStart(2, "0");
-  const departureTime = `${departureHours}:${departureMinutes}`;
+  const departureDate = departureDateTime.toLocaleDateString("en-GB");
+  const departureTime = departureDateTime.toLocaleTimeString("en-GB", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 
-  let arrivalTime = "";
-  let rideDuration = "";
+  let arrivalDateTime = new Date(departureDateTime); // Initialize with departure datetime
+  let arrivalDate = ""; // Initialize arrival date string
+  let arrivalTime = ""; // Initialize arrival time string
+  let rideDuration = ""; // Initialize ride duration string
 
   if (ride.ride_duration) {
     const [rideDurationHours, rideDurationMinutes] = ride.ride_duration
       .split(":")
       .map(Number);
-    const arrivalDateTime = new Date(departureDateTime);
-    arrivalDateTime.setHours(departureDateTime.getHours() + rideDurationHours);
-    arrivalDateTime.setMinutes(
-      departureDateTime.getMinutes() + rideDurationMinutes
-    );
-    const arrivalHours = arrivalDateTime.getHours().toString().padStart(2, "0");
-    const arrivalMinutes = arrivalDateTime
-      .getMinutes()
-      .toString()
-      .padStart(2, "0");
-    arrivalTime = `${arrivalHours}:${arrivalMinutes}`;
+
+    // Calculate total minutes for ride duration
+    const totalRideMinutes = rideDurationHours * 60 + rideDurationMinutes;
+
+    // Calculate total minutes for arrival time
+    let totalArrivalMinutes =
+      departureDateTime.getHours() * 60 +
+      departureDateTime.getMinutes() +
+      totalRideMinutes;
+
+    // Adjust date if arrival time exceeds 24 hours
+    if (totalArrivalMinutes >= 24 * 60) {
+      arrivalDateTime.setDate(arrivalDateTime.getDate() + 1);
+      totalArrivalMinutes -= 24 * 60;
+    }
+
+    // Set arrival time
+    arrivalDateTime.setHours(Math.floor(totalArrivalMinutes / 60));
+    arrivalDateTime.setMinutes(totalArrivalMinutes % 60);
+
+    // Format arrival date
+    arrivalDate = arrivalDateTime.toLocaleDateString("en-GB");
+
+    // Format arrival time
+    arrivalTime = arrivalDateTime.toLocaleTimeString("en-GB", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+    // Format ride duration
     rideDuration = `${rideDurationHours
       .toString()
       .padStart(2, "0")}:${rideDurationMinutes.toString().padStart(2, "0")}`;
   }
+
   return (
     <Card className="ride-result-card">
       <Card.Header className="d-flex justify-content-between">
@@ -78,7 +96,7 @@ const RideCard = ({ ride, seats }) => {
             </div>
             <div className="travel-time">
               <h4 className="body-bold-xs">Време на патување</h4>
-              <span className="body-bold-xs">{rideDuration}</span>
+              <span className="body-bold-xs blue-text">{rideDuration}</span>
             </div>
           </div>
         </div>

@@ -9,13 +9,18 @@ const BottomBar = () => {
   const location = useLocation();
 
   const navigateTo = (path) => {
+    window.scrollTo(0, 0);
     navigate(path);
   };
 
   return (
     <div className="bottom-bar">
       <div
-        className={`icon ${location.pathname === "/" ? "selected" : ""}`}
+        className={`icon ${
+          location.pathname === "/" || location.pathname.startsWith("/results")
+            ? "selected"
+            : ""
+        }`}
         onClick={() => navigateTo("/")}
       >
         <svg

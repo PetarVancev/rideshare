@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   Form,
   Button,
@@ -8,6 +8,7 @@ import {
   Col,
   Collapse,
 } from "react-bootstrap";
+import { GoogleMap, DistanceMatrixService } from "@react-google-maps/api";
 import axios from "axios";
 
 import { useAuth } from "./AuthContext";
@@ -19,11 +20,12 @@ import BackButton from "./BackButton";
 import SubmissionSuccess from "./SubmissionSuccess";
 
 const backendUrl = process.env.REACT_APP_BACKEND_URL;
+const mapsApiKey = process.env.REACT_APP_MAPS_API_KEY;
 
 const PostRide = () => {
   const { token, logoutUser } = useAuth();
 
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(2);
   const [fromName, setFromName] = useState("");
   const [fromId, setFromId] = useState("");
   const [flexibleDeparture, setFlexibleDeparture] = useState(false);
@@ -34,8 +36,8 @@ const PostRide = () => {
   const [toName, setToName] = useState("");
   const [toId, setToId] = useState("");
   const [flexibleArrival, setFlexibleArrival] = useState(false);
-  const [arrivalHours, setArrivalHours] = useState("00");
-  const [arrivalMinutes, setArrivalMinutes] = useState("00");
+  const [travelHours, setTravelHours] = useState("00");
+  const [travelMinutes, setTravelMinutes] = useState("00");
 
   const [seats, setSeats] = useState(1);
   const [carModel, setCarModel] = useState("");
@@ -71,22 +73,60 @@ const PostRide = () => {
     }
   };
 
-  const calculateRideDuration = (departureDateTime, arrivalDateTime) => {
-    if (isNaN(departureDateTime) || isNaN(arrivalDateTime)) {
-      return "00:00:00";
+  const getTravelTime = async () => {
+    try {
+      const fromResponse = await fetch(
+        `${backendUrl}/locations/get-location?locationId=${fromId}`
+      );
+      const toResponse = await fetch(
+        `${backendUrl}/locations/get-location?locationId=${toId}`
+      );
+
+      const fromCord = await fromResponse.json();
+      const toCord = await toResponse.json();
+
+      const service = new window.google.maps.DistanceMatrixService();
+
+      service.getDistanceMatrix(
+        {
+          origins: [
+            new window.google.maps.LatLng(
+              fromCord.location_lat,
+              fromCord.location_lon
+            ),
+          ],
+          destinations: [
+            new window.google.maps.LatLng(
+              toCord.location_lat,
+              toCord.location_lon
+            ),
+          ],
+          travelMode: "DRIVING",
+        },
+        (response, status) => {
+          if (status === "OK") {
+            const durationText = response.rows[0].elements[0].duration.text;
+            const [hours, minutes] = durationText
+              .split(" ")
+              .filter((part) => !isNaN(parseInt(part))); // Extract hours and minutes
+
+            setTravelHours(hours);
+            setTravelMinutes(minutes);
+          } else {
+            console.error("Error:", status);
+          }
+        }
+      );
+    } catch (error) {
+      console.error("Error fetching location details:", error);
     }
-
-    const durationMs = arrivalDateTime.getTime() - departureDateTime.getTime();
-
-    const hours = Math.floor(durationMs / (1000 * 60 * 60));
-    const minutes = Math.floor((durationMs % (1000 * 60 * 60)) / (1000 * 60));
-
-    const formattedDuration = `${hours.toString().padStart(2, "0")}:${minutes
-      .toString()
-      .padStart(2, "0")}:00`;
-
-    return formattedDuration;
   };
+
+  useEffect(() => {
+    if (fromId && toId) {
+      getTravelTime();
+    }
+  }, [fromId, toId]);
 
   const handleSubmit1 = (e) => {
     e.preventDefault();
@@ -151,15 +191,10 @@ const PostRide = () => {
   const postRide = async () => {
     try {
       const departureDateTimeString = `${departureDate} ${departureHours}:${departureMinutes}`;
-      const arrivalDateTimeString = `${departureDate} ${arrivalHours}:${arrivalMinutes}`;
 
-      const departureDateTime = new Date(departureDateTimeString);
-      const arrivalDateTime = new Date(arrivalDateTimeString);
-
-      const rideDuration = calculateRideDuration(
-        departureDateTime,
-        arrivalDateTime
-      );
+      const rideDuration = `${travelHours
+        .toString()
+        .padStart(2, "0")}:${travelMinutes.toString().padStart(2, "0")}:00`;
       if (carModel == "") {
         setCarModel(null);
       }
@@ -306,7 +341,7 @@ const PostRide = () => {
                       onChange={(e) => setDepartureDate(e.target.value)}
                     />
                   </div>
-                  <h4 className="heading-xxs">Одберете време на поаѓање</h4>
+                  <h4 className="heading-xxs">Внесете време на поаѓање</h4>
                   <div className="d-flex justify-content-center time-input">
                     <div className="d-flex flex-column align-items-center me-2">
                       <input
@@ -420,13 +455,13 @@ const PostRide = () => {
                   </div>
                 </section>
                 <section>
-                  <h4 className="heading-xxs">Одберете време на пристигање</h4>
+                  <h4 className="heading-xxs">Внесете време на патување</h4>
                   <div className="d-flex justify-content-center time-input">
                     <div className="d-flex flex-column align-items-center me-2">
                       <input
                         className="heading-s"
                         type="text"
-                        value={arrivalHours}
+                        value={travelHours}
                         onChange={(event) => {
                           let inputValue = event.target.value;
                           // Limit the length of input to 2 characters
@@ -437,7 +472,7 @@ const PostRide = () => {
                             inputValue >= 0 &&
                             inputValue <= 24
                           ) {
-                            setArrivalHours(inputValue);
+                            setTravelHours(inputValue);
                           }
                         }}
                       />
@@ -450,7 +485,7 @@ const PostRide = () => {
                       <input
                         className="heading-s"
                         type="text"
-                        value={arrivalMinutes}
+                        value={travelMinutes}
                         onChange={(event) => {
                           let inputValue = event.target.value;
                           // Limit the length of input to 2 characters
@@ -461,7 +496,7 @@ const PostRide = () => {
                             inputValue >= 0 &&
                             inputValue <= 59
                           ) {
-                            setArrivalMinutes(inputValue);
+                            setTravelMinutes(inputValue);
                           }
                         }}
                       />

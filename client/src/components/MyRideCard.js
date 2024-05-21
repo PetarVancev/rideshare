@@ -53,32 +53,50 @@ const MyRideCard = ({
 
   const departureDateTime = new Date(ride.date_time);
   const departureDate = departureDateTime.toLocaleDateString("en-GB");
-  const departureHours = departureDateTime
-    .getHours()
-    .toString()
-    .padStart(2, "0");
-  const departureMinutes = departureDateTime
-    .getMinutes()
-    .toString()
-    .padStart(2, "0");
-  const departureTime = `${departureHours}:${departureMinutes}`;
-  let arrivalTime = "";
-  let rideDuration = "";
+  const departureTime = departureDateTime.toLocaleTimeString("en-GB", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  let arrivalDateTime = new Date(departureDateTime); // Initialize with departure datetime
+  let arrivalDate = ""; // Initialize arrival date string
+  let arrivalTime = ""; // Initialize arrival time string
+  let rideDuration = ""; // Initialize ride duration string
+
   if (ride.ride_duration) {
     const [rideDurationHours, rideDurationMinutes] = ride.ride_duration
       .split(":")
       .map(Number);
-    const arrivalDateTime = new Date(departureDateTime);
-    arrivalDateTime.setHours(departureDateTime.getHours() + rideDurationHours);
-    arrivalDateTime.setMinutes(
-      departureDateTime.getMinutes() + rideDurationMinutes
-    );
-    const arrivalHours = arrivalDateTime.getHours().toString().padStart(2, "0");
-    const arrivalMinutes = arrivalDateTime
-      .getMinutes()
-      .toString()
-      .padStart(2, "0");
-    arrivalTime = `${arrivalHours}:${arrivalMinutes}`;
+
+    // Calculate total minutes for ride duration
+    const totalRideMinutes = rideDurationHours * 60 + rideDurationMinutes;
+
+    // Calculate total minutes for arrival time
+    let totalArrivalMinutes =
+      departureDateTime.getHours() * 60 +
+      departureDateTime.getMinutes() +
+      totalRideMinutes;
+
+    // Adjust date if arrival time exceeds 24 hours
+    if (totalArrivalMinutes >= 24 * 60) {
+      arrivalDateTime.setDate(arrivalDateTime.getDate() + 1);
+      totalArrivalMinutes -= 24 * 60;
+    }
+
+    // Set arrival time
+    arrivalDateTime.setHours(Math.floor(totalArrivalMinutes / 60));
+    arrivalDateTime.setMinutes(totalArrivalMinutes % 60);
+
+    // Format arrival date
+    arrivalDate = arrivalDateTime.toLocaleDateString("en-GB");
+
+    // Format arrival time
+    arrivalTime = arrivalDateTime.toLocaleTimeString("en-GB", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+    // Format ride duration
     rideDuration = `${rideDurationHours
       .toString()
       .padStart(2, "0")}:${rideDurationMinutes.toString().padStart(2, "0")}`;
