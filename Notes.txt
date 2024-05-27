@@ -1,1 +1,0 @@
-Ride duration in db is set as Time, so it cant accept rides longer than 24h

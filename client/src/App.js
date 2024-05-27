@@ -1,5 +1,10 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Outlet,
+} from "react-router-dom";
 
 // Styles
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -20,6 +25,7 @@ import Reviews from "./components/Reviews";
 import Contact from "./components/Contact";
 import AboutUs from "./components/AboutUs";
 import PrivacyPolicy from "./components/PrivacyPolicy";
+import SubmissionSuccess from "./components/SubmissionSuccess";
 
 import DriverRoute from "./components/DriverRoute";
 import PrivateRoute from "./components/PrivateRoute";
@@ -52,10 +58,38 @@ function App() {
             path="/post-ride"
             element={<DriverRoute element={<PostRide />} />}
           />
-          <Route
-            path="/wallet"
-            element={<PrivateRoute element={<Wallet />} />}
-          />
+
+          <Route path="/wallet" element={<Outlet />}>
+            <Route index element={<PrivateRoute element={<Wallet />} />} />
+            <Route
+              path="deposit-success"
+              element={
+                <SubmissionSuccess
+                  statusMessage={"Успешно е надополнета вашата сметка"}
+                  nextStepsMessage={
+                    "*Вашата моментална состојба можете да ја погледнете во делот паричник"
+                  }
+                  buttonText={"Паричник"}
+                  goTo={"/wallet"}
+                />
+              }
+            />
+            <Route
+              path="deposit-failed"
+              element={
+                <SubmissionSuccess
+                  statusMessage={
+                    "Дојде до грешка при надополнување на вашата сметка"
+                  }
+                  nextStepsMessage={
+                    "Ве молиме обидете се повторно подоцна и доколку сеуште има проблем контактирајте не"
+                  }
+                  buttonText={"Паричник"}
+                  goTo={"/wallet"}
+                />
+              }
+            />
+          </Route>
           <Route
             path="/my-profile"
             element={<PrivateRoute element={<MyProfile />} />}

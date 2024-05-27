@@ -250,7 +250,7 @@ const Wallet = () => {
 
   const handleDeposit = async () => {
     try {
-      let url = `${backendUrl}/wallet/deposit`;
+      let url = `${backendUrl}/wallet/start-deposit`;
       const response = await axios.post(
         url,
         { amount: depositAmount },
@@ -260,9 +260,22 @@ const Wallet = () => {
           },
         }
       );
-      setSuccessMessage("Успешно ја надополнивте вашата сметка");
-      setNextStepsMessage("");
-      setShowSuccess(true);
+      const paymentData = response.data;
+      const form = document.createElement("form");
+      form.method = "POST";
+      form.action =
+        "https://torus-stage-halkbankmacedonia.asseco-see.com.tr/fim/est3Dgate";
+      for (const key in paymentData) {
+        if (paymentData.hasOwnProperty(key)) {
+          const input = document.createElement("input");
+          input.type = "hidden";
+          input.name = key;
+          input.value = paymentData[key];
+          form.appendChild(input);
+        }
+      }
+      document.body.appendChild(form);
+      form.submit();
     } catch (error) {
       if (error.response && error.response.status === 401) {
         logoutUser();

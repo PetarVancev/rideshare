@@ -265,7 +265,7 @@ const MyRideCard = ({
               href={`sms:${driver.phone_num}`}
               className="d-flex justify-content-between additional-actions"
             >
-              <span className="body-bold-s">Пиши му на димитар</span>
+              <span className="body-bold-s">Пиши му на {driver.name}</span>
               <img src="images/message-icon.svg" />
             </a>
             {departureDateTime < currentDateTime && (

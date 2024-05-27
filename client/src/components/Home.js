@@ -22,20 +22,24 @@ const Home = () => {
         <NavBar type="blue" />
         <BottomBar />
         <Container className="home-container d-flex flex-column align-items-center">
-          <div className="mt-5">
-            <h2 className="heading-s white-text">
-              Која е твојата следна дестинација?
-            </h2>
-            <p className="body-xs white-text">
-              Најди го твојот најевтин и најбрз превоз до посакуваната
-              дестинација
-            </p>
-            <img
-              src="images/cta-underline-green.svg"
-              className="cta-underline"
-            />
-          </div>
-          <SearchRideCard initials={initials} />
+          <Row className="mt-5 home-search-row">
+            <Col xs={12} xl={6} className="home-cta">
+              <h2 className="heading-s white-text">
+                Која е твојата следна дестинација?
+              </h2>
+              <p className="body-xs white-text">
+                Најди го твојот најевтин и најбрз превоз до посакуваната
+                дестинација
+              </p>
+              <img
+                src="images/cta-underline-green.svg"
+                className="cta-underline"
+              />
+            </Col>
+            <Col xs={12} xl={5}>
+              <SearchRideCard initials={initials} />
+            </Col>
+          </Row>
         </Container>
       </div>
       <Container className="home-container1">

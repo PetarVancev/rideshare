@@ -26,7 +26,7 @@ const SubmissionSuccess = ({
     >
       <div className="submission-message">
         <img
-          src="images/success-icon.svg"
+          src="/images/success-icon.svg"
           className="status-img"
           alt="Success Icon"
         />

@@ -1,7 +1,9 @@
 const jwt = require("jsonwebtoken");
 const dbCon = require("../db");
 
-async function deposit(req, res) {
+const paymentController = require("./paymentController.js");
+
+async function startDeposit(req, res) {
   // Set denomination amount here
   const denomination = 300;
 
@@ -10,8 +12,6 @@ async function deposit(req, res) {
   if (!token) {
     return res.status(401).json({ error: "Unauthorized: Token missing" });
   }
-
-  let connection; // Declare the connection variable
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -29,6 +29,49 @@ async function deposit(req, res) {
     if (userType != "passenger") {
       return res.status(403).json({ error: "Only passengers can deposit" });
     }
+
+    // Append user id to callback url as query
+    req.body.okurl = `${process.env.BACKEND_URL}/wallet/deposit?userId=${passengerId}`;
+    req.body.failUrl = `${process.env.BACKEND_URL}/wallet/payment-failed`;
+    req.body.callbackUrl = "";
+    const response = await paymentController.processPayment(req.body);
+    return res.status(200).json(response);
+  } catch (error) {
+    if (
+      error.name === "JsonWebTokenError" ||
+      error.name === "TokenExpiredError"
+    ) {
+      return res
+        .status(401)
+        .json({ error: "Unauthorized: Invalid or expired token" });
+    } else {
+      console.error("Error when starting deposit", error);
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
+  }
+}
+
+async function deposit(req, res) {
+  let connection; // Declare the connection variable
+
+  if (!paymentController.isValidPayment(req.body)) {
+    console.log("Payment hash invalid");
+    return res.redirect(
+      303,
+      `${process.env.CLIENT_URL}/wallet/deposit-failed?error=401`
+    );
+  }
+
+  if (req.body.Response != "Approved") {
+    console.log("Payment not approved");
+    return res.redirect(
+      303,
+      `${process.env.CLIENT_URL}/wallet/deposit-failed?error=402`
+    );
+  }
+  try {
+    const amount = req.body.amount;
+    const passengerId = req.query.userId;
 
     // Acquire a connection from the pool
     connection = await dbCon.getConnection();
@@ -48,7 +91,7 @@ async function deposit(req, res) {
     }
 
     const currentBalance = balanceRows[0].balance;
-    const newBalance = currentBalance + amount;
+    const newBalance = parseInt(currentBalance) + parseInt(amount);
 
     const updateBalanceQuery =
       "UPDATE passenger_accounts SET balance = ? WHERE id = ?";
@@ -69,26 +112,20 @@ async function deposit(req, res) {
     // Commit the transaction
     await connection.commit();
 
-    return res.status(201).json({
-      message: "Deposit succesfull",
-      newBalance: newBalance,
-    });
+    return res.redirect(
+      303,
+      `${process.env.CLIENT_URL}/wallet/deposit-success`
+    );
   } catch (error) {
     // Rollback the transaction if an error occurs
     if (connection) {
       await connection.rollback();
-    }
-
-    if (
-      error.name === "JsonWebTokenError" ||
-      error.name === "TokenExpiredError"
-    ) {
-      return res
-        .status(401)
-        .json({ error: "Unauthorized: Invalid or expired token" });
     } else {
       console.error("Error when depositing:", error);
-      return res.status(500).json({ error: "Internal Server Error" });
+      return res.redirect(
+        303,
+        `${process.env.CLIENT_URL}/wallet/deposit-failed?error=500`
+      );
     }
   } finally {
     // Release the connection back to the pool
@@ -139,4 +176,4 @@ async function getDeposits(req, res) {
   }
 }
 
-module.exports = { deposit, getDeposits };
+module.exports = { deposit, startDeposit, getDeposits };

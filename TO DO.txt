@@ -7,7 +7,6 @@ Invoice system
 Complaints dashboard !!
 
 Fee model same on client and backend and decide
-Time problem if arrive next day
 Store average review in account table instead of calculating every time??
 
 Backend
@@ -23,8 +22,5 @@ Driver can click arrived only if time<departuretime-10 min ??
 Refactoring
 Make seperate components for modals in wallet
 
-Desktop version
-Journey indicator set width
-Make responsive
 
 

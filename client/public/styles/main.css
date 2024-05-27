@@ -556,6 +556,11 @@ input.form-control.outline-input {
   margin-bottom: 48px;
 }
 
+.home-search-row {
+  width: 100%;
+  justify-content: space-between;
+}
+
 .card-payment-info {
   margin-top: auto;
   /* background-color: #022c66;
@@ -582,10 +587,34 @@ footer {
   margin-bottom: 10px;
 }
 
-@media only screen and (min-width: 769px) {
-  .home-container .search-ride-card {
-    margin-top: 20vh;
+@media only screen and (min-width: 1200px) {
+  .home-container .home-search-row > div {
+    margin-top: 100px;
     margin-bottom: 10px;
+  }
+
+  .home-container .search-ride-card {
+    margin-top: 0;
+  }
+
+  .home-container .card-body {
+    margin-top: 0;
+    margin-bottom: 10px;
+    padding-bottom: 30px;
+    padding-top: 20px;
+  }
+
+  .home-container button.search-button {
+    padding-top: 20px !important;
+    padding-bottom: 20px !important;
+  }
+
+  .home-cta h2 {
+    font-size: 35px;
+  }
+
+  .home-cta p {
+    font-size: 16px;
   }
 }
 
@@ -1217,6 +1246,12 @@ textarea.post-input {
   min-width: calc(100vw - 40px);
 }
 
+@media only screen and (min-width: 575px) {
+  .post-input[type="date"] {
+    min-width: 100%;
+  }
+}
+
 .post-input::-webkit-date-and-time-value {
   text-align: center;
 }
@@ -1621,7 +1656,7 @@ input.withdrawal-input {
 
 @media only screen and (min-width: 769px) {
   .row.withdraw-actions {
-    left: 12px;
+    width: initial;
   }
 }
 

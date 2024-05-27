@@ -25,7 +25,7 @@ const mapsApiKey = process.env.REACT_APP_MAPS_API_KEY;
 const PostRide = () => {
   const { token, logoutUser } = useAuth();
 
-  const [step, setStep] = useState(2);
+  const [step, setStep] = useState(1);
   const [fromName, setFromName] = useState("");
   const [fromId, setFromId] = useState("");
   const [flexibleDeparture, setFlexibleDeparture] = useState(false);
@@ -106,11 +106,27 @@ const PostRide = () => {
         (response, status) => {
           if (status === "OK") {
             const durationText = response.rows[0].elements[0].duration.text;
-            const [hours, minutes] = durationText
-              .split(" ")
-              .filter((part) => !isNaN(parseInt(part))); // Extract hours and minutes
+            const durationParts = durationText.split(" ");
 
-            setTravelHours(hours);
+            let hours = 0;
+            let minutes = 0;
+
+            for (let i = 0; i < durationParts.length; i += 2) {
+              const value = parseInt(durationParts[i], 10);
+              const unit = durationParts[i + 1];
+
+              if (unit.includes("hour")) {
+                hours = value;
+              } else if (unit.includes("min")) {
+                minutes = value;
+              }
+            }
+
+            if (hours > 0) {
+              setTravelHours(hours);
+            } else {
+              setTravelHours(0);
+            }
             setTravelMinutes(minutes);
           } else {
             console.error("Error:", status);
