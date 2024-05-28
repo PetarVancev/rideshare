@@ -82,7 +82,6 @@ const LocationPickerModal = ({
             onSet(currentPosition);
           } else {
             console.log("Current position is outside the bounds.");
-            // You can handle this case as per your application's requirements
           }
         },
         (error) => {

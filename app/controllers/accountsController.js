@@ -26,7 +26,9 @@ async function changePhone(req, res) {
   const token = req.headers.authorization;
 
   if (!token) {
-    return res.status(401).json({ error: "Unauthorized: Token missing" });
+    return res
+      .status(401)
+      .json({ error: "Неавторизирано: Недостига токен за најава" });
   }
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -52,18 +54,18 @@ async function changePhone(req, res) {
     await dbCon.query(updateSql, [newPhone, userId]);
     return res
       .status(200)
-      .json({ message: "Phone number updated successfully" });
+      .json({ message: "Успешно е променет телефонскиот број" });
   } catch (error) {
     if (
       error.name === "JsonWebTokenError" ||
       error.name === "TokenExpiredError"
     ) {
-      return res
-        .status(401)
-        .json({ error: "Unauthorized: Invalid or expired token" });
+      return res.status(401).json({
+        error: "Неавторизирано: Токенот за најава е невалиден",
+      });
     } else {
       console.error("Error when changing phone", error);
-      return res.status(500).json({ error: "Internal Server Error" });
+      return res.status(500).json({ error: "Дојде до грешка во серверот" });
     }
   }
 }

@@ -42,7 +42,9 @@ async function sendComplaint(req, res) {
   const token = req.headers.authorization;
 
   if (!token) {
-    return res.status(401).json({ error: "Unauthorized: Token missing" });
+    return res
+      .status(401)
+      .json({ error: "Неавторизирано: Недостига токен за најава" });
   }
 
   try {
@@ -59,7 +61,7 @@ async function sendComplaint(req, res) {
     if (userType !== "passenger") {
       return res
         .status(403)
-        .json({ error: "Only passengers can write complaints" });
+        .json({ error: "Само патниците можат да пишуваат жалби" });
     }
 
     const reservationStatusResults = await getReservationStatus(
@@ -69,7 +71,7 @@ async function sendComplaint(req, res) {
 
     if (reservationStatusResults.length === 0) {
       return res.status(403).json({
-        error: "Passenger does not have a reservation for the provided ride",
+        error: "Патникот нема резервација за ова возење",
       });
     }
 
@@ -90,8 +92,11 @@ async function sendComplaint(req, res) {
     );
 
     if (hasComplaint) {
+      // return res.status(409).json({
+      //   error: "You have already written a complaint for this ride",
+      // });
       return res.status(409).json({
-        error: "You have already written a complaint for this ride",
+        error: "Веќе имате напишано жалба за ова возење",
       });
     }
 
@@ -103,7 +108,8 @@ async function sendComplaint(req, res) {
 
     await connection.commit();
 
-    return res.status(200).json({ message: "Complaint sent successfully" });
+    // return res.status(200).json({ message: "Complaint sent successfully" });
+    return res.status(200).json({ message: "Жалбата е успешно испратена" });
   } catch (error) {
     if (connection) {
       await connection.rollback();
@@ -113,12 +119,16 @@ async function sendComplaint(req, res) {
       error.name === "JsonWebTokenError" ||
       error.name === "TokenExpiredError"
     ) {
-      return res
-        .status(401)
-        .json({ error: "Unauthorized: Invalid or expired token" });
+      // return res
+      //   .status(401)
+      //   .json({ error: "Unauthorized: Invalid or expired token" });
+      return res.status(401).json({
+        error: "Неавторизирано: Токенот за најава е невалиден",
+      });
     } else {
       console.error("Error when sending complaint:", error);
-      return res.status(500).json({ error: "Internal Server Error" });
+      return res.status(500).json({ error: "Дојде до грешка во серверот" });
+      // return res.status(500).json({ error: "Internal Server Error" });
     }
   } finally {
     if (connection) {
@@ -134,7 +144,7 @@ async function getAllComplaints(req, res) {
     res.status(200).json(complaints);
   } catch (error) {
     console.error("Error while fetching complaints:", error);
-    res.status(500).json({ error: "Failed to fetch complaints" });
+    res.status(500).json({ error: "Грешка при превземањето на жалбите" });
   }
 }
 

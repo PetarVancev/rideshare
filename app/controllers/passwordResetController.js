@@ -34,14 +34,16 @@ async function requestPasswordReset(userType, req, res) {
 
   try {
     if (!email) {
-      return res.status(400).json({ error: "Email is required" });
+      // return res.status(400).json({ error: "Email is required" });
+      return res.status(400).json({ error: "Потребно е да внесите е-пошта" });
     }
 
     const user = await findUserByEmail(userType, email);
 
     // Check if the user exists
     if (!user) {
-      return res.status(401).json({ message: "Invalid email" });
+      // return res.status(401).json({ message: "Invalid email" });
+      return res.status(401).json({ message: "Невалидна е-пошта" });
     }
 
     const token = crypto.randomBytes(20).toString("hex");
@@ -183,7 +185,11 @@ async function resetPassword(userType, req, res) {
     const resetTokenUser = await getResetTokenUser(resetToken);
 
     if (!(resetTokenUser.length > 0)) {
-      return res.status(400).json({ error: "Invalid reset token" });
+      // return res.status(400).json({ error: "Invalid reset token" });
+      return res.status(400).json({
+        error:
+          "Неисправен линк за промена на лозинка, повторно побарајте промена на лозинка",
+      });
     }
 
     //TO DO, can make migarte salt rounds in env as it is used in other controllers

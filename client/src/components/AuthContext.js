@@ -41,7 +41,7 @@ export const AuthProvider = ({ children }) => {
       if (error.response && error.response.data) {
         return { error: error.response.data.message };
       } else {
-        return { error: "An unexpected error occurred. Please try again." };
+        return { error: "Дојде до грешка, обидете се подоцна" };
       }
     }
   };
@@ -74,7 +74,7 @@ export const AuthProvider = ({ children }) => {
         };
       } else {
         return {
-          error: "An unexpected error occurred. Please try again.",
+          error: "Дојде до грешка, обидете се подоцна",
         };
       }
     }

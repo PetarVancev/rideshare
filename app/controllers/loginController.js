@@ -29,14 +29,16 @@ async function loginUser(userType, req, res) {
 
     // Check if the user exists
     if (!user) {
-      return res.status(401).json({ message: "Invalid email" });
+      // return res.status(401).json({ message: "Invalid email" });
+      return res.status(401).json({ message: "Невалидна е-пошта" });
     }
 
     // Compare passwords
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
-      return res.status(401).json({ message: "Invalid password" });
+      // return res.status(401).json({ message: "Invalid password" });
+      return res.status(401).json({ message: "Погрешна лозинка" });
     }
 
     // If email and password are valid, create a JWT token
@@ -52,14 +54,18 @@ async function loginUser(userType, req, res) {
     res.status(200).json({ token });
   } catch (error) {
     console.error("Error during login:", error);
-    res.status(500).json({ message: "Internal Server Error" });
+    // res.status(500).json({ message: "Internal Server Error" });
+    return res.status(500).json({ error: "Дојде до грешка во серверот" });
   }
 }
 
 async function getUserFromToken(req, res) {
   const token = req.headers.authorization;
   if (!token) {
-    return res.status(401).json({ error: "Unauthorized: Token missing" });
+    // return res.status(401).json({ error: "Unauthorized: Token missing" });
+    return res
+      .status(401)
+      .json({ error: "Неавторизирано: Недостига токен за најава" });
   }
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -80,12 +86,16 @@ async function getUserFromToken(req, res) {
       error.name === "JsonWebTokenError" ||
       error.name === "TokenExpiredError"
     ) {
-      return res
-        .status(401)
-        .json({ error: "Unauthorized: Invalid or expired token" });
+      // return res
+      //   .status(401)
+      //   .json({ error: "Unauthorized: Invalid or expired token" });
+      return res.status(401).json({
+        error: "Неавторизирано: Токенот за најава е невалиден",
+      });
     } else {
       console.error("Error when withdrawing:", error);
-      return res.status(500).json({ error: "Internal Server Error" });
+      // return res.status(500).json({ error: "Internal Server Error" });
+      return res.status(500).json({ error: "Дојде до грешка во серверот" });
     }
   }
 }

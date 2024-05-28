@@ -71,7 +71,7 @@ async function requestWithdraw(req, res) {
 
     if (currentBalance < amount) {
       await connection.rollback();
-      return res.status(402).json({ message: "Insufficient balance" });
+      return res.status(402).json({ message: "Немате доволно средства" });
     }
 
     const newBalance = currentBalance - amount;

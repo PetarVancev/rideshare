@@ -43,12 +43,20 @@ async function registerUser(userType, req, res) {
 
     // Check if email already exists
     if (await userEmailExists(email, userType)) {
-      return res.status(409).json({ message: "Email already exists" });
+      // return res.status(409).json({
+      //   message: "Email already exists",
+      // });
+      return res.status(409).json({
+        message: "E-пошта веќе има профил за избраниот вид на корисник",
+      });
     }
 
     // Check if phone_num already exists
     if (await userPhoneExists(phone_num, userType)) {
-      return res.status(409).json({ message: "Phone number already exists" });
+      // return res.status(409).json({ message: "Phone number already exist" });
+      return res
+        .status(409)
+        .json({ message: "Телефонскиот број веќе има профил" });
     }
 
     // Encrypt the password

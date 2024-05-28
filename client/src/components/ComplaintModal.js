@@ -50,68 +50,62 @@ const ComplaintModal = ({ handleClose, open, reservationId }) => {
   };
 
   return (
-    <Container className={`write-review-modal ${open ? "" : "hide"}`}>
-      <h3 className="heading-xxs text-center gray-text mt-4 mb-5">
-        {success
-          ? "Успешно исpативте жалба"
-          : "Жал ни е што не се реализира превозот"}
-      </h3>
-      {success ? (
-        <div className="text-center">
-          <img
-            src="images/status-icon.svg"
-            className="complaint-success-icon"
-          />
-          <h2 className="mt-3 body-bold-xl">
-            Нашиот тим ќе го разгледа вашиот одговор и ќе бидете контактирани во
-            рок од 3 работни дена!
-          </h2>
-          <Row className="submission-bottom-bar modal-bottom-bar">
-            <Col xs={12}>
-              <Button
-                className="col-12 mt-4 dark-button body-bold-medium"
-                onClick={handleClose}
-              >
-                Затвори
-              </Button>
-            </Col>
-          </Row>
-        </div>
-      ) : (
-        <form onSubmit={handleSubmit}>
-          <h3 className="heading-xxs mt-4 mb-4">
-            Објаснете зошто не се реализира превозот
-          </h3>
-          <textarea
-            className="review-text-input"
-            value={complaintText}
-            onChange={handleTextAreaChange}
-            required
-          ></textarea>
-          <div className="d-flex justify-content-between gray-text body-bold-s">
-            {complaintText.length}/300
+    <div className={`write-review-modal ${open ? "" : "hide"}`}>
+      <Container>
+        <h3 className="heading-xxs text-center gray-text mt-4 mb-5">
+          {success
+            ? "Успешно исpативте жалба"
+            : "Жал ни е што не се реализира превозот"}
+        </h3>
+        {success ? (
+          <div className="text-center">
+            <img
+              src="images/status-icon.svg"
+              className="complaint-success-icon"
+            />
+            <h2 className="mt-3 body-bold-xl">
+              Нашиот тим ќе го разгледа вашиот одговор и ќе бидете контактирани
+              во рок од 3 работни дена!
+            </h2>
+            <Row className="submission-bottom-bar modal-bottom-bar">
+              <Col xs={12}>
+                <Button
+                  className="col-12 mt-4 dark-button body-bold-medium"
+                  onClick={handleClose}
+                >
+                  Затвори
+                </Button>
+              </Col>
+            </Row>
           </div>
-          <Row className="submission-bottom-bar modal-bottom-bar">
-            <Col xs={6}>
-              <Button
-                className="col-12 mt-4 dark-button body-bold-medium dark-outline-button"
-                onClick={handleClose}
-              >
-                Затвори
-              </Button>
-            </Col>
-            <Col xs={6}>
-              <Button
-                type="submit"
-                className="col-12 mt-4 dark-button body-bold-medium"
-              >
-                Испрати
-              </Button>
-            </Col>
-          </Row>
-        </form>
-      )}
-    </Container>
+        ) : (
+          <form onSubmit={handleSubmit}>
+            <h3 className="heading-xxs mt-4 mb-4">
+              Објаснете зошто не се реализира превозот
+            </h3>
+            <textarea
+              className="review-text-input"
+              value={complaintText}
+              onChange={handleTextAreaChange}
+              required
+            ></textarea>
+            <div className="d-flex justify-content-between gray-text body-bold-s">
+              {complaintText.length}/300
+            </div>
+            <Row className="submission-bottom-bar modal-bottom-bar justify-content-center">
+              <Col xs={6}>
+                <Button
+                  type="submit"
+                  className="col-12 mt-4 dark-button body-bold-medium"
+                >
+                  Испрати
+                </Button>
+              </Col>
+            </Row>
+          </form>
+        )}
+      </Container>
+    </div>
   );
 };
 

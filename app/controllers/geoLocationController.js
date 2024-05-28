@@ -31,13 +31,14 @@ async function locationsLookup(req, res) {
       [geoName + "%"]
     );
     if (results.length == 0) {
-      res.status(404).json({ message: "No matching location" });
+      res.status(404).json({ message: "Локацијата не постои" });
     } else {
       res.json(results);
     }
   } catch (error) {
     console.error("Error getting autocomplete suggestions:", error);
-    res.status(500).json({ message: "Internal server error" });
+    // res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({ error: "Дојде до грешка во серверот" });
   }
 }
 
@@ -49,11 +50,13 @@ async function getLocationApi(req, res) {
     if (location.length > 0) {
       res.status(200).json(location[0]);
     } else {
-      res.status(404).json({ message: "No matching location" });
+      // res.status(404).json({ message: "No matching location" });
+      res.status(404).json({ message: "Локацијата не постои" });
     }
   } catch (error) {
     console.error("Error when getting location:", error);
-    res.status(500).json({ error: "Internal server error" });
+    // res.status(500).json({ error: "Internal server error" });
+    return res.status(500).json({ error: "Дојде до грешка во серверот" });
   }
 }
 

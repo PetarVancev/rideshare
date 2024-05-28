@@ -10,7 +10,10 @@ async function startDeposit(req, res) {
   const token = req.headers.authorization;
 
   if (!token) {
-    return res.status(401).json({ error: "Unauthorized: Token missing" });
+    // return res.status(401).json({ error: "Unauthorized: Token missing" });
+    return res
+      .status(401)
+      .json({ error: "Неавторизирано: Недостига токен за најава" });
   }
 
   try {
@@ -18,8 +21,11 @@ async function startDeposit(req, res) {
     const amount = req.body.amount;
 
     if (amount % denomination != 0) {
+      // return res.status(403).json({
+      //   error: "You can only deposit in denominations of " + denomination,
+      // });
       return res.status(403).json({
-        error: "You can only deposit in denominations of " + denomination,
+        error: "Можите да надополните само производи на " + denomination,
       });
     }
 
@@ -27,7 +33,10 @@ async function startDeposit(req, res) {
     const passengerId = decoded.userId;
 
     if (userType != "passenger") {
-      return res.status(403).json({ error: "Only passengers can deposit" });
+      // return res.status(403).json({ error: "Only passengers can deposit" });
+      return res
+        .status(403)
+        .json({ error: "Само патниците можат да надополнуваат средства" });
     }
 
     // Append user id to callback url as query
@@ -41,12 +50,16 @@ async function startDeposit(req, res) {
       error.name === "JsonWebTokenError" ||
       error.name === "TokenExpiredError"
     ) {
-      return res
-        .status(401)
-        .json({ error: "Unauthorized: Invalid or expired token" });
+      // return res
+      //   .status(401)
+      //   .json({ error: "Unauthorized: Invalid or expired token" });
+      return res.status(401).json({
+        error: "Неавторизирано: Токенот за најава е невалиден",
+      });
     } else {
       console.error("Error when starting deposit", error);
-      return res.status(500).json({ error: "Internal Server Error" });
+      // return res.status(500).json({ error: "Internal Server Error" });
+      return res.status(500).json({ error: "Дојде до грешка во серверот" });
     }
   }
 }
@@ -55,7 +68,6 @@ async function deposit(req, res) {
   let connection; // Declare the connection variable
 
   if (!paymentController.isValidPayment(req.body)) {
-    console.log("Payment hash invalid");
     return res.redirect(
       303,
       `${process.env.CLIENT_URL}/wallet/deposit-failed?error=401`
@@ -63,7 +75,6 @@ async function deposit(req, res) {
   }
 
   if (req.body.Response != "Approved") {
-    console.log("Payment not approved");
     return res.redirect(
       303,
       `${process.env.CLIENT_URL}/wallet/deposit-failed?error=402`
@@ -87,7 +98,8 @@ async function deposit(req, res) {
 
     if (balanceRows.length === 0) {
       await connection.rollback();
-      return res.status(404).json({ error: "User not found" });
+      // return res.status(404).json({ error: "User not found" });
+      return res.status(404).json({ error: "Корисникот не постои" });
     }
 
     const currentBalance = balanceRows[0].balance;
@@ -139,7 +151,10 @@ async function getDeposits(req, res) {
   const token = req.headers.authorization;
 
   if (!token) {
-    return res.status(401).json({ error: "Unauthorized: Token missing" });
+    // return res.status(401).json({ error: "Unauthorized: Token missing" });
+    return res
+      .status(401)
+      .json({ error: "Неавторизирано: Недостига токен за најава" });
   }
 
   try {
@@ -149,7 +164,10 @@ async function getDeposits(req, res) {
     const userId = decoded.userId;
 
     if (userType != "passenger") {
-      return res.status(403).json({ error: "Only passengers have deposits" });
+      // return res.status(403).json({ error: "Only passengers have deposits" });
+      return res
+        .status(403)
+        .json({ error: "Само патниците имаат надополнувања" });
     }
 
     const query =
@@ -157,7 +175,8 @@ async function getDeposits(req, res) {
     const [deposits] = await dbCon.query(query, [userId]);
 
     if (deposits.length === 0) {
-      return res.status(404).json({ error: "No withdrawals found" });
+      // return res.status(404).json({ error: "No withdrawals found" });
+      return res.status(404).json({ error: "Сеуште немате надополнувања" });
     }
 
     return res.status(200).json(deposits);
@@ -166,12 +185,16 @@ async function getDeposits(req, res) {
       error.name === "JsonWebTokenError" ||
       error.name === "TokenExpiredError"
     ) {
-      return res
-        .status(401)
-        .json({ error: "Unauthorized: Invalid or expired token" });
+      // return res
+      //   .status(401)
+      //   .json({ error: "Unauthorized: Invalid or expired token" });
+      return res.status(401).json({
+        error: "Неавторизирано: Токенот за најава е невалиден",
+      });
     } else {
       console.error("Error when withdrawing:", error);
-      return res.status(500).json({ error: "Internal Server Error" });
+      // return res.status(500).json({ error: "Internal Server Error" });
+      return res.status(500).json({ error: "Дојде до грешка во серверот" });
     }
   }
 }

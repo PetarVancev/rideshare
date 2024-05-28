@@ -218,13 +218,15 @@ async function deleteReservationProposal(connection, reservation) {
   `;
   const [statusRows] = await connection.query(statusQuery, [id]);
   if (statusRows.length === 0) {
-    throw new Error("Reservation not found");
+    // throw new Error("Reservation not found");
+    throw new Error("Резервацијата не постои");
   }
   const { status } = statusRows[0];
 
   // Check if status is 'P'
   if (status !== "P") {
-    throw new Error("The reservation is not a proposal");
+    // throw new Error("The reservation is not a proposal");
+    throw new Error("Резервацијата не е предлог");
   }
 
   // Refund to passenger
@@ -305,7 +307,10 @@ async function handleReservation(req, res) {
   const token = req.headers.authorization;
 
   if (!token) {
-    return res.status(401).json({ error: "Unauthorized: Token missing" });
+    // return res.status(401).json({ error: "Unauthorized: Token missing" });
+    return res
+      .status(401)
+      .json({ error: "Неавторизирано: Недостига токен за најава" });
   }
 
   let connection;
@@ -323,9 +328,10 @@ async function handleReservation(req, res) {
     let customDropOff = req.body.custom_drop_off;
 
     if (seatsNeeded < 1) {
-      return res
-        .status(403)
-        .json({ error: "You can't reserve less than 1 seat" });
+      // return res
+      //   .status(403)
+      //   .json({ error: "You can't reserve less than 1 seat" });
+      return res.status(403).json({ error: "Резервирајте минимум 1 место" });
     }
 
     if (userType !== "passenger") {
@@ -346,9 +352,10 @@ async function handleReservation(req, res) {
 
     if (ride.free_seats < seatsNeeded) {
       await connection.rollback();
-      return res
-        .status(403)
-        .json({ error: "Not enough seats", freeSeats: ride.free_seats });
+      return res.status(403).json({
+        error: "Возењето нема доволно места, освежете ја страната",
+        freeSeats: ride.free_seats,
+      });
     }
 
     let pickUpLocation, dropOffLocation;
@@ -373,7 +380,7 @@ async function handleReservation(req, res) {
           await connection.rollback();
           return res
             .status(400)
-            .json({ error: "pick up coordinates are not valid" });
+            .json({ error: "Pick up coordinates are not valid" });
         }
         pickUpLocation = customPickUp;
       } else {
@@ -396,7 +403,7 @@ async function handleReservation(req, res) {
           await connection.rollback();
           return res
             .status(400)
-            .json({ error: "drop off coordinates are not valid" });
+            .json({ error: "Drop off coordinates are not valid" });
         }
         dropOffLocation = customDropOff;
       } else {
@@ -416,8 +423,11 @@ async function handleReservation(req, res) {
 
     if (newBalance < 0) {
       await connection.rollback();
+      // return res.status(402).json({
+      //   error: `Insufficient balance, you need ${-newBalance} more funds`,
+      // });
       return res.status(402).json({
-        error: `Insufficient balance, you need ${-newBalance} more funds`,
+        error: `Немате доволно средства, ви требаат уште ${-newBalance}ден`,
       });
     }
 
@@ -675,7 +685,10 @@ async function declineReservationProposal(req, res) {
   const token = req.headers.authorization;
 
   if (!token) {
-    return res.status(401).json({ error: "Unauthorized: Token missing" });
+    // return res.status(401).json({ error: "Unauthorized: Token missing" });
+    return res
+      .status(401)
+      .json({ error: "Неавторизирано: Недостига токен за најава" });
   }
 
   try {
@@ -719,7 +732,10 @@ async function acceptReservationProposal(req, res) {
   const token = req.headers.authorization;
 
   if (!token) {
-    return res.status(401).json({ error: "Unauthorized: Token missing" });
+    // return res.status(401).json({ error: "Unauthorized: Token missing" });
+    return res
+      .status(401)
+      .json({ error: "Неавторизирано: Недостига токен за најава" });
   }
 
   try {
@@ -786,7 +802,10 @@ async function confirmDriverAtPickup(req, res) {
     const token = req.headers.authorization;
 
     if (!token) {
-      return res.status(401).json({ error: "Unauthorized: Token missing" });
+      // return res.status(401).json({ error: "Unauthorized: Token missing" });
+      return res
+        .status(401)
+        .json({ error: "Неавторизирано: Недостига токен за најава" });
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -800,9 +819,7 @@ async function confirmDriverAtPickup(req, res) {
     const driverLongitude = req.body.longitude;
 
     if (reservationId && rideId) {
-      return res
-        .status(400)
-        .json({ error: "Provide either reservationId or rideId, not both" });
+      return res.status(400).json({ error: "Provide reservationId or rideId" });
     }
 
     if (userType !== "driver") {
@@ -813,9 +830,13 @@ async function confirmDriverAtPickup(req, res) {
 
     const isValidLocation = isValidCoordinates(driverLatitude, driverLongitude);
     if (!isValidLocation) {
+      // return res.status(403).json({
+      //   error:
+      //     "You must provide valid location to confirm that you are at pick-up",
+      // });
       return res.status(403).json({
         error:
-          "You must provide valid location to confirm that you are at pick-up",
+          "Вашата локација не е валидна, дозволете пристап до вашата локација",
       });
     }
 
@@ -871,7 +892,10 @@ async function deleteProposedReservation(req, res) {
   const token = req.headers.authorization;
 
   if (!token) {
-    return res.status(401).json({ error: "Unauthorized: Token missing" });
+    // return res.status(401).json({ error: "Unauthorized: Token missing" });
+    return res
+      .status(401)
+      .json({ error: "Неавторизирано: Недостига токен за најава" });
   }
 
   try {
@@ -917,43 +941,6 @@ async function deleteProposedReservation(req, res) {
     }
   }
 }
-
-// async function confirmDriverAtPickup(req, res) {
-//   try {
-//     const token = req.headers.authorization;
-
-//     if (!token) {
-//       return res.status(401).json({ error: "Unauthorized: Token missing" });
-//     }
-
-//     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-//     const userType = decoded.userType;
-//     const driverId = decoded.userId;
-
-//     const reservationId = req.query.reservationId;
-//     const driverLatitude = req.body.latitude;
-//     const driverLongitude = req.body.longitude;
-
-//     if (userType !== "driver") {
-//       return res
-//         .status(403)
-//         .json({ error: "Only drivers can confirm arrival at pick-up" });
-//     }
-
-//     const isValidLocation = isValidCoordinates(driverLatitude, driverLongitude);
-//     if (!isValidLocation) {
-//       return res.status(403).json({
-//         error:
-//           "You must provide valid location to confirm that you are at pick-up",
-//       });
-//     }
-//     // Check if the driver is associated with the reservation
-//   } catch (error) {
-//     console.error("Error when updating driver location and status:", error);
-//     return res.status(500).json({ error: "Internal Server Error" });
-//   }
-// }
 
 module.exports = {
   handleReservation,

@@ -1366,6 +1366,12 @@ textarea:focus-visible {
   color: #4ac777 !important;
 }
 
+.submission-message h2.red-text {
+  margin-top: 20px;
+  margin-bottom: 24px;
+  color: #ed4337 !important;
+}
+
 .submission-message hr {
   margin: 0 auto 24px auto;
   width: 90%;
@@ -1936,8 +1942,8 @@ button.container {
 }
 
 .complaint-success-icon {
-  width: 20%;
-  margin-top: 40%;
+  width: 80px;
+  margin-top: 150px;
 }
 
 /* Location Picker modal */

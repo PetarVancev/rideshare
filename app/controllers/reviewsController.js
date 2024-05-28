@@ -52,7 +52,10 @@ async function postReview(req, res) {
   const token = req.headers.authorization;
 
   if (!token) {
-    return res.status(401).json({ error: "Unauthorized: Token missing" });
+    // return res.status(401).json({ error: "Unauthorized: Token missing" });
+    return res
+      .status(401)
+      .json({ error: "Неавторизирано: Недостига токен за најава" });
   }
 
   try {
@@ -83,9 +86,12 @@ async function postReview(req, res) {
     // Check if the user already has a review for the ride
     const existingReview = await getMyReview(userId, rideId);
     if (existingReview) {
+      // return res
+      //   .status(403)
+      //   .json({ error: "You have already posted a review for this ride" });
       return res
         .status(403)
-        .json({ error: "You have already posted a review for this ride" });
+        .json({ error: "Веќе имате испратено рецензија за ова возење" });
     }
 
     // Post the review

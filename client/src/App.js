@@ -71,6 +71,7 @@ function App() {
                   }
                   buttonText={"Паричник"}
                   goTo={"/wallet"}
+                  hasNavBar={true}
                 />
               }
             />
@@ -86,6 +87,8 @@ function App() {
                   }
                   buttonText={"Паричник"}
                   goTo={"/wallet"}
+                  hasNavBar={true}
+                  isError={true}
                 />
               }
             />

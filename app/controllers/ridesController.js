@@ -57,7 +57,10 @@ async function postRide(req, res) {
   const token = req.headers.authorization;
 
   if (!token) {
-    return res.status(401).json({ error: "Unauthorized: Token missing" });
+    // return res.status(401).json({ error: "Unauthorized: Token missing" });
+    return res
+      .status(401)
+      .json({ error: "Неавторизирано: Недостига токен за најава" });
   }
 
   try {
@@ -74,8 +77,12 @@ async function postRide(req, res) {
       return res.status(403).json({ error: "Only drivers can post" });
     }
     if (requestedDateTime <= currentDateTime) {
+      // return res.status(400).json({
+      //   error: "Invalid date_time: Date must be after current datetime",
+      // });
       return res.status(400).json({
-        error: "Invalid date_time: Date must be after current datetime",
+        error:
+          "Невалидно време на поагање: Времето мора да биде после сегашното време",
       });
     }
 
@@ -189,7 +196,10 @@ async function deleteRide(req, res) {
   const token = req.headers.authorization;
 
   if (!token) {
-    return res.status(401).json({ error: "Unauthorized: Token missing" });
+    // return res.status(401).json({ error: "Unauthorized: Token missing" });
+    return res
+      .status(401)
+      .json({ error: "Неавторизирано: Недостига токен за најава" });
   }
 
   try {

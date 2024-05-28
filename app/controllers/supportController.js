@@ -25,9 +25,12 @@ const sendContactForm = async (req, res) => {
     const info = await transporter.sendMail(mailOptions);
     return res.status(200).json({ message: `Email sent: ${info.response}` });
   } catch (error) {
+    // return res
+    //   .status(500)
+    //   .json({ error: `Error sending email: ${error.toString()}` });
     return res
       .status(500)
-      .json({ error: `Error sending email: ${error.toString()}` });
+      .json({ error: `Грешка при испраќањето на пораката` });
   }
 };
 
