@@ -18,7 +18,9 @@ async function isDriverAssociatedWithRide(driverId, rideId) {
 async function getRide(connection, rideId) {
   try {
     const rideSql = `
-      SELECT rides.*, from_location.name AS from_name, to_location.name AS to_name
+      SELECT rides.*,
+      from_location.name AS from_name, 
+      to_location.name AS to_name
       FROM rides
       INNER JOIN locations AS from_location ON rides.from_loc_id = from_location.id
       INNER JOIN locations AS to_location ON rides.to_loc_id = to_location.id
@@ -101,8 +103,8 @@ async function postRide(req, res) {
     }
 
     // Your SQL query to insert into rides table
-    const sql = `INSERT INTO rides (driver_id, from_loc_id, to_loc_id, date_time,ride_duration, type,flexible_departure, flexible_arrival, total_seats, price, additional_info, car_model, car_color) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+    const sql = `INSERT INTO rides (driver_id, from_loc_id, to_loc_id, date_time,ride_duration, type,flexible_departure, flexible_arrival, total_seats, price, additional_info, car_model, car_color, cash_payment) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
     // Execute the SQL query
     await dbCon.query(sql, [
       driverId,
@@ -118,6 +120,7 @@ async function postRide(req, res) {
       req.body.additional_info,
       req.body.car_model,
       req.body.car_color,
+      req.body.cash_payment,
     ]);
 
     return res.status(201).json({ message: "Ride posted successfully" });
@@ -296,7 +299,10 @@ async function searchForRides(req, res) {
         r.free_seats, 
         r.price, 
         r.car_model, 
-        r.car_color, 
+        r.car_color,
+        r.flexible_arrival,
+        r.flexible_departure, 
+        r.cash_payment,
         d.name AS driver_name,
         d.id AS driver_id, 
         from_loc.name AS from_location_name, 
@@ -365,13 +371,16 @@ async function getRideInfo(req, res) {
         r.car_model, 
         r.car_color,
         r.additional_info,
+        r.cash_payment,
         d.name AS driver_name, 
         from_loc.name AS from_location_name, 
         from_loc.location_lat as from_location_lat,
         from_loc.location_lon as from_location_lon,
+        from_loc.parent_location_id AS from_location_parent,
         to_loc.name AS to_location_name,
         to_loc.location_lat as to_location_lat,
         to_loc.location_lon as to_location_lon,
+        to_loc.parent_location_id AS to_location_parent,
         ROUND((
             (SELECT AVG(dr.time_correctness_score) FROM ride_reviews AS dr WHERE dr.driver_id = r.driver_id) +
             (SELECT AVG(dr.safety_score) FROM ride_reviews AS dr WHERE dr.driver_id = r.driver_id) +
@@ -421,17 +430,20 @@ async function getRideInfo(req, res) {
       car_model: ride[0].car_model,
       car_color: ride[0].car_color,
       additional_info: ride[0].additional_info,
+      cash_payment: ride[0].cash_payment,
       driver_name: ride[0].driver_name,
       from_location_name: ride[0].from_location_name,
       from_location_cord: {
         lat: ride[0].from_location_lat,
         lng: ride[0].from_location_lon,
       },
+      from_location_parent: ride[0].from_location_parent,
       to_location_name: ride[0].to_location_name,
       to_location_cord: {
         lat: ride[0].to_location_lat,
         lng: ride[0].to_location_lon,
       },
+      to_location_parent: ride[0].to_location_parent,
       average_rating: ride[0].average_rating ? ride[0].average_rating : 0.0,
       driver_reviews: driverReviews,
     };

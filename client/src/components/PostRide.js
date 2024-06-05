@@ -8,7 +8,6 @@ import {
   Col,
   Collapse,
 } from "react-bootstrap";
-import { GoogleMap, DistanceMatrixService } from "@react-google-maps/api";
 import axios from "axios";
 
 import { useAuth } from "./AuthContext";
@@ -45,6 +44,24 @@ const PostRide = () => {
 
   const [ridePrice, setRidePrice] = useState(300);
   const [feeBreakdownOpen, setFeeBreakdownOpen] = useState(false);
+  const [paymentType, setPaymentType] = useState("card");
+  let taxForState;
+  let transactionFee;
+  let fee;
+  let carrierServiceFee;
+  let totalPrice;
+  if (paymentType == "card") {
+    taxForState = parseInt(ridePrice * 0.1);
+    transactionFee = Math.max(1, Math.ceil(ridePrice * 0.025));
+    fee = parseInt(ridePrice * 0.2);
+    carrierServiceFee = parseInt(fee - taxForState - transactionFee);
+  } else {
+    fee = 40;
+    transactionFee = Math.max(1, Math.ceil(fee * 0.025));
+    carrierServiceFee = parseInt(fee - transactionFee);
+  }
+  totalPrice = parseInt(ridePrice) + fee;
+  const [cashNoticeOpen, setCashNoticeOpen] = useState(false);
 
   const [rideNotice, setRideNotice] = useState("");
   const [policyCheck, setPolicyCheck] = useState(false);
@@ -56,6 +73,14 @@ const PostRide = () => {
   const successMessage = "Успешно објавивте превоз";
   const nextStepsMessage =
     "*Вашата резервација можете да ја погледнете во делот активни патувања";
+
+  useEffect(() => {
+    if (cashNoticeOpen) {
+      document.body.classList.add("no-scroll");
+    } else {
+      document.body.classList.remove("no-scroll");
+    }
+  }, [cashNoticeOpen]);
 
   const currentDateTime = new Date();
   const currentDate = currentDateTime.toISOString().split("T")[0];
@@ -217,6 +242,8 @@ const PostRide = () => {
       if (carColor == "") {
         setCarColor(null);
       }
+
+      const cashPayment = paymentType === "cash";
       const response = await axios.post(
         `${backendUrl}/rides/create`,
         {
@@ -227,10 +254,11 @@ const PostRide = () => {
           flexible_departure: flexibleDeparture,
           flexible_arrival: flexibleArrival,
           total_seats: seats,
-          price: parseInt(ridePrice * 1.25),
+          price: totalPrice,
           additional_info: rideNotice,
           car_model: carModel,
           car_color: carColor,
+          cash_payment: cashPayment,
         },
         {
           headers: {
@@ -583,6 +611,71 @@ const PostRide = () => {
             {step == 4 && (
               <form onSubmit={handleSubmit4}>
                 <section className="mb-3">
+                  <div
+                    className={`cash-payment-notice-container ${
+                      cashNoticeOpen ? "open" : ""
+                    }`}
+                  >
+                    <div className="cash-payment-notice-modal body-bold-s">
+                      <img
+                        src="/images/x-round-icon.svg"
+                        className="close-modal"
+                        onClick={() => setCashNoticeOpen(false)}
+                      />
+                      Доколку го изберете овој начин на плаќање, сте согласени
+                      дека патникот ќе ви плати во автомобил за време на
+                      патувањето и rideshare не е должен да исплати никаква сума
+                      доколку не се појави патникот
+                    </div>
+                  </div>
+                  <div className="d-flex payment-types-container">
+                    <div
+                      className={`${paymentType === "cash" ? "selected" : ""}`}
+                      onClick={() => setPaymentType("cash")}
+                    >
+                      <div className="body-s">
+                        <h5 className="text-center">Плаќање во кеш</h5>
+                        патникот ќе ви плати во авомобил
+                        <svg
+                          className="cash-payment-notice-icon"
+                          src="/images/status-icon.svg"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setCashNoticeOpen(true);
+                          }}
+                          width="24"
+                          height="24"
+                          viewBox="0 0 22 22"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M11 10C11.5523 10 12 10.4477 12 11V15C12 15.5523 11.5523 16 11 16C10.4477 16 10 15.5523 10 15V11C10 10.4477 10.4477 10 11 10Z"
+                            fill={paymentType == "cash" ? "#FFFFFF" : "#022C66"}
+                          />
+                          <path
+                            d="M11 6C10.4477 6 10 6.44772 10 7C10 7.55228 10.4477 8 11 8H11.01C11.5623 8 12.01 7.55228 12.01 7C12.01 6.44772 11.5623 6 11.01 6H11Z"
+                            fill={paymentType == "cash" ? "#FFFFFF" : "#022C66"}
+                          />
+                          <path
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                            d="M0 11C0 4.92487 4.92487 0 11 0C17.0751 0 22 4.92487 22 11C22 17.0751 17.0751 22 11 22C4.92487 22 0 17.0751 0 11ZM11 2C6.02944 2 2 6.02944 2 11C2 15.9706 6.02944 20 11 20C15.9706 20 20 15.9706 20 11C20 6.02944 15.9706 2 11 2Z"
+                            fill={paymentType == "cash" ? "#FFFFFF" : "#022C66"}
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                    <div
+                      className={`${paymentType === "card" ? "selected" : ""}`}
+                      onClick={() => setPaymentType("card")}
+                    >
+                      <div className="body-s">
+                        <h5 className="text-center">Плаќање онлајн</h5>
+                        патникот ќе ви плати онлајн
+                      </div>
+                    </div>
+                  </div>
                   <div className="mb-2">
                     <h4 className="heading-xxs">Сума надоместок за превозот</h4>
                     <div className="input-container2 mb-3">
@@ -624,7 +717,7 @@ const PostRide = () => {
                           className="post-input currency-box d-flex justify-content-end
                     align-items-center gray-text"
                         >
-                          {parseInt(ridePrice * 0.25)}
+                          {fee}
                         </div>
                       </div>
                     </Col>
@@ -632,19 +725,20 @@ const PostRide = () => {
                       <div id="fee-breakdown-collapsible">
                         <div className="px-3">
                           <div className="d-flex justify-content-between">
-                            <p>10% Данок за државата</p>
-                            <span>мкд {parseInt(ridePrice * 0.1)}</span>
+                            {paymentType == "card" && (
+                              <>
+                                <p>10% Данок за државата</p>
+                                <span>мкд {taxForState}</span>
+                              </>
+                            )}
                           </div>
                           <div className="d-flex justify-content-between">
                             <p>Надоместок за трансакција</p>
-                            <span>мкд 6</span>
+                            <span>мкд {transactionFee}</span>
                           </div>
                           <div className="d-flex justify-content-between">
                             <p>Такса за услуги за превозник</p>
-                            <span>
-                              мкд
-                              {parseInt(ridePrice * 0.25 - ridePrice * 0.1 - 6)}
-                            </span>
+                            <span>мкд {carrierServiceFee}</span>
                           </div>
                         </div>
                       </div>
@@ -665,7 +759,7 @@ const PostRide = () => {
                           className="post-input currency-box d-flex justify-content-end
                     align-items-center green-text"
                         >
-                          {parseInt(ridePrice * 1.25)}
+                          {totalPrice}
                         </div>
                       </div>
                     </Col>

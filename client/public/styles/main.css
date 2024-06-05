@@ -181,6 +181,9 @@ input:focus-visible {
 
 .no-scroll {
   overflow: hidden !important;
+  padding: 0;
+  margin: 0;
+  max-height: 100vh;
 }
 
 .blue-background {
@@ -830,6 +833,20 @@ button.search-button {
   border-bottom: 1px solid #667e9e;
 }
 
+.ride-icons {
+  font-size: 0.875rem;
+  font-weight: 600 !important;
+  color: #667e9e;
+}
+
+.ride-icons img {
+  height: 24px;
+}
+
+.ride-icons div {
+  margin-top: 6px;
+}
+
 button.reserve-button {
   line-height: 150%;
   letter-spacing: 1px;
@@ -884,7 +901,9 @@ button.reserve-button {
 }
 
 .card.my-ride-card .journey-indicator {
+  margin: auto;
   padding: 0;
+  max-width: 90%;
 }
 
 .card.my-ride-card .destination-info h4 {
@@ -1055,6 +1074,10 @@ button.reserve-button {
   background-color: white;
   margin: 0 !important;
   box-shadow: 0px -4px 6px rgba(0, 0, 0, 0.1); /* Shadow effect with negative y-axis offset */
+}
+
+.cash-reservation-online-fee {
+  font-size: 14px;
 }
 
 /* Post a ride */
@@ -1319,6 +1342,85 @@ textarea.post-input {
 
 .price-info {
   width: 100%;
+}
+
+.payment-types-container {
+  margin-top: 10px;
+  margin-bottom: 24px;
+  justify-content: space-between;
+}
+
+.payment-types-container > div {
+  max-width: 500px;
+  width: 48%;
+  border-radius: 0.375rem;
+  background-color: #edf0f7;
+}
+
+.payment-types-container > div.selected {
+  color: white !important;
+  width: 48%;
+  border-radius: 0.375rem;
+  background-color: #022c66;
+}
+
+.payment-types-container > div.selected h5 {
+  color: white !important;
+}
+
+.payment-types-container > div.selected path {
+  fill: white;
+}
+
+.payment-types-container > div > div {
+  padding: 14px 10px;
+  position: relative;
+}
+
+.payment-types-container div h5 {
+  font-size: 18px;
+}
+
+.cash-payment-notice-icon {
+  position: absolute;
+  right: 10px;
+  bottom: 5px;
+  height: 24px;
+}
+
+.cash-payment-notice-container {
+  display: none;
+  top: 0;
+  left: 0;
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(2, 44, 102, 0.5);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  z-index: 999;
+}
+
+.cash-payment-notice-container.open {
+  display: flex;
+}
+
+.cash-payment-notice-modal {
+  width: 80%;
+  max-width: 450px;
+  background-color: white;
+  padding: 80px 20px 20px 20px;
+  border-radius: 0.375rem;
+  position: relative;
+}
+
+.cash-payment-notice-modal .close-modal {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  width: 40px;
 }
 
 .post-ride-container textarea {
@@ -2255,6 +2357,22 @@ button.container {
 
 .privacy-policy-container p {
   margin-bottom: 24px;
+}
+
+/* How to use */
+
+.how-to-use-container img {
+  width: 100%;
+  max-width: 800px;
+}
+
+.how-to-use-container h3 {
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.how-to-use-container p:not(.heading-subtext) {
+  padding: 0px 15px;
 }
 
 /* Global optimizations */

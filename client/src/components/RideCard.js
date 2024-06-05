@@ -6,7 +6,6 @@ const RideCard = ({ ride, seats }) => {
   const navigate = useNavigate();
 
   const departureDateTime = new Date(ride.date_time);
-  const departureDate = departureDateTime.toLocaleDateString("en-GB");
   const departureTime = departureDateTime.toLocaleTimeString("en-GB", {
     hour: "2-digit",
     minute: "2-digit",
@@ -88,16 +87,58 @@ const RideCard = ({ ride, seats }) => {
             </div>
           </div>
         </div>
-        <div className="time-info">
-          <div className="d-flex justify-content-start border-bot">
-            <div className="departure-info">
-              <h4 className="body-bold-xs">Поаѓање</h4>
-              <span className="body-bold-xs">{departureTime}</span>
+        <div>
+          <div className="time-info">
+            <div className="d-flex justify-content-center border-bot">
+              <div className="departure-info">
+                <h4 className="body-bold-xs">Поаѓање</h4>
+                <span className="body-bold-xs">{departureTime}</span>
+              </div>
+              <div className="travel-time">
+                <h4 className="body-bold-xs">Време на патување</h4>
+                <span className="body-bold-xs blue-text">{rideDuration}</span>
+              </div>
             </div>
-            <div className="travel-time">
-              <h4 className="body-bold-xs">Време на патување</h4>
-              <span className="body-bold-xs blue-text">{rideDuration}</span>
-            </div>
+          </div>
+          <div className="ride-icons">
+            {ride.cash_payment ? (
+              <div>
+                <img
+                  src="/images/dollar-icon-gray.svg"
+                  className="me-1"
+                  alt="Cash Icon"
+                />
+                Плаќање во кеш
+              </div>
+            ) : (
+              <div>
+                <img
+                  src="/images/card-icon-gray.svg"
+                  className="me-1"
+                  alt="Card Icon"
+                />
+                Плаќање онлајн со картица
+              </div>
+            )}
+            {ride.flexible_departure || ride.flexible_arrival ? (
+              <div>
+                <img
+                  src="/images/accept-location-icon-gray.svg"
+                  className="me-1"
+                  alt="Location Icon"
+                />
+                Прифаќам предлог локација
+              </div>
+            ) : null}
+            {/* {ride.flexible_arrival && (
+              <div>
+                <img
+                  src="/images/accept-location-icon-gray.svg"
+                  className="me-1"
+                />
+                Прифаќа предлози за пристигање
+              </div>
+            )} */}
           </div>
         </div>
       </Card.Body>

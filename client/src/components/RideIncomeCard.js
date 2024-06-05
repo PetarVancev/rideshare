@@ -62,6 +62,7 @@ const RideIncomeCard = ({ data, userType }) => {
   }
 
   if (data) {
+    console.log(data);
     return (
       <Card className="income-card mb-4">
         <Card.Body className={userType === "driver" ? "pb-0" : ""}>
@@ -85,13 +86,17 @@ const RideIncomeCard = ({ data, userType }) => {
           <div className="ride-income">
             <div className="d-flex justify-content-between total-ride-income align-items-center">
               <span className="body-bold-s">
-                {userType == "driver" ? "Приливи" : "Платено"}
+                {userType == "driver"
+                  ? `Приливи${data.cash_payment ? " во кеш" : ""}`
+                  : `Платено${data.cash_payment ? " во кеш" : ""}`}
               </span>
               <span className="green-text btn-text-m">
                 ден
                 {userType == "driver"
                   ? totalRideIncome
-                  : parseInt(data.amount / 0.75)}
+                  : data.cash_payment
+                  ? data.amount
+                  : data.price}
               </span>
             </div>
             <div className="income-breakdown">

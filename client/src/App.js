@@ -25,6 +25,7 @@ import Reviews from "./components/Reviews";
 import Contact from "./components/Contact";
 import AboutUs from "./components/AboutUs";
 import PrivacyPolicy from "./components/PrivacyPolicy";
+import HowToUse from "./components/HowToUse";
 import SubmissionSuccess from "./components/SubmissionSuccess";
 
 import DriverRoute from "./components/DriverRoute";
@@ -50,6 +51,7 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/about-us" element={<AboutUs />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/how-to-use" element={<HowToUse />} />
           <Route
             path="/my-rides"
             element={<PrivateRoute element={<MyRides />} />}

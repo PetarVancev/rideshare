@@ -201,6 +201,7 @@ const RideInfo = () => {
         }
         setReserved(true);
       } catch (error) {
+        console.log(error);
         if (error.response && error.response.status === 401) {
           logoutUser();
         }
@@ -245,6 +246,7 @@ const RideInfo = () => {
                 ? departureSuggestCord
                 : ride.from_location_cord
             }
+            isChildLocation={ride.from_location_parent}
             handleClose={() => setDepartureSuggestOpen(false)}
             onSet={(location) => {
               setDepartureSuggestCord(location);
@@ -259,6 +261,7 @@ const RideInfo = () => {
                 ? arrivalSuggestCord
                 : ride.to_location_cord
             }
+            isChildLocation={ride.to_location_parent}
             handleClose={() => setArrivalSuggestOpen(false)}
             onSet={(location) => {
               setArrivalSuggestCord(location);
@@ -413,12 +416,23 @@ const RideInfo = () => {
               <Row className="reserve-bottom-bar">
                 <Col>
                   <strong className="body-bold-l">
-                    {ride.price * seats} мкд
+                    {ride.price * seats}мкд{" "}
+                    {ride.cash_payment ? (
+                      <span className="cash-reservation-online-fee">
+                        - {40 * seats} онлајн
+                      </span>
+                    ) : null}
                   </strong>
                   <p className="body-xs">Вкупно за {seats} места</p>
                   <p
                     className={`body-bold-xs ${
-                      ride.price * seats > balance ? "red-text" : ""
+                      !ride.cash_payment
+                        ? ride.price * seats > balance
+                          ? "red-text"
+                          : ""
+                        : 40 * seats > balance
+                        ? "red-text"
+                        : ""
                     }`}
                   >
                     Состојба: {balance} мкд

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import { GoogleMap, MarkerF } from "@react-google-maps/api";
+import { toast } from "react-toastify";
+
 import BackButton from "./BackButton";
 
 const LocationPickerModal = ({
@@ -9,7 +11,9 @@ const LocationPickerModal = ({
   defaultPosition,
   onSet,
   title,
+  isChildLocation,
 }) => {
+  console.log(isChildLocation);
   const defaultLat = parseFloat(defaultPosition.lat);
   const defaultLng = parseFloat(defaultPosition.lng);
 
@@ -26,6 +30,8 @@ const LocationPickerModal = ({
   let boundaryMeters = 3000; // 7 km
   if (defaultLat == 41.9961 && defaultLng == 21.4317) {
     boundaryMeters = 6000;
+  } else if (isChildLocation) {
+    boundaryMeters = 1100;
   }
 
   const latLngBounds = {
@@ -81,7 +87,16 @@ const LocationPickerModal = ({
             setMarkerPosition(currentPosition);
             onSet(currentPosition);
           } else {
-            console.log("Current position is outside the bounds.");
+            toast.dismiss();
+            toast.error(
+              "Локацијата не се соовпаѓа со местото на тргање/пристигнување",
+              {
+                position: "top-center",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeButton: true,
+              }
+            );
           }
         },
         (error) => {

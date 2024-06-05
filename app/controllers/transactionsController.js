@@ -66,7 +66,7 @@ async function getPassengerTransactions(req, res) {
     const userType = decoded.userType;
 
     let query = `
-    SELECT transactions.*,fromLocation.name AS from_location_name, toLocation.name AS to_location_name,rides.date_time,rides.ride_duration
+    SELECT transactions.*,fromLocation.name AS from_location_name, toLocation.name AS to_location_name,rides.date_time,rides.ride_duration, rides.price, rides.cash_payment
     FROM transactions
     INNER JOIN rides ON transactions.ride_id = rides.id
     INNER JOIN locations AS fromLocation ON rides.from_loc_id = fromLocation.id
@@ -105,10 +105,12 @@ async function payToDriver(
   fromPassenger,
   toDriver,
   rideId,
-  amount
+  amount,
+  cash_payment
 ) {
-  const percentWeCharge = 0.25;
+  const percentWeCharge = 0.2;
   try {
+    const status = getReservationStatus(connection, reservationId);
     const getDriverBalanceQuery =
       "SELECT balance FROM driver_accounts WHERE id = ?";
     const [driver] = await connection.query(getDriverBalanceQuery, [toDriver]);
@@ -117,13 +119,19 @@ async function payToDriver(
       throw new Error("Driver not found");
     }
 
-    amount = amount * (1 - percentWeCharge);
+    if (!cash_payment) {
+      amount = amount * (1 - percentWeCharge);
+    } else {
+      amount = amount + 40;
+    }
     const currentBalance = driver[0].balance;
     const newBalance = currentBalance + amount;
 
-    const updateDriverBalanceQuery =
-      "UPDATE driver_accounts SET balance = ? WHERE id = ?";
-    await connection.query(updateDriverBalanceQuery, [newBalance, toDriver]);
+    if (!cash_payment) {
+      const updateDriverBalanceQuery =
+        "UPDATE driver_accounts SET balance = ? WHERE id = ?";
+      await connection.query(updateDriverBalanceQuery, [newBalance, toDriver]);
+    }
 
     const currentDateTime = new Date()
       .toISOString()

@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const dbCon = require("../db");
+const ridesController = require("./ridesController");
 
 async function getReservationStatus(passengerId, reservationId) {
   const checkReservationQuery =

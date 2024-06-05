@@ -44,6 +44,7 @@ const processPayment = async (paymentData) => {
   paymentData.BillToCompany = "company";
   paymentData.refreshtime = 5;
   paymentData.rnd = new Date().toISOString();
+  paymentData.encoding = "UTF-8";
 
   const hash = generateHash(paymentData, storekey);
 

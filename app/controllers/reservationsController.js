@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
+const nodeSchedule = require("node-schedule");
 const dbCon = require("../db");
 
 const emailTemplates = require("../emailTemplates");
@@ -41,6 +42,37 @@ async function updateReservationStatus(connection, reservationId, status) {
   const updateReservationQuery =
     "UPDATE reservations SET status = ? WHERE id = ?";
   await connection.query(updateReservationQuery, [status, reservationId]);
+}
+
+async function closeReservation(
+  connection,
+  reservationId,
+  passengerId,
+  ride,
+  num_seats
+) {
+  try {
+    await updateReservationStatus(connection, reservationId, "C");
+
+    const amount = price * num_seats;
+
+    // If it's not a cash payment, pay the driver
+    if (!ride.cash_payment) {
+      await transactionsController.payToDriver(
+        connection,
+        passengerId, // Assuming passengerId is ride.passenger_id
+        ride.driver_id,
+        ride.id,
+        amount,
+        ride.cash_payment
+      );
+    }
+
+    return true;
+  } catch (error) {
+    console.error("Error when closing reservation:", error);
+    throw error; // Propagate the error
+  }
 }
 
 async function getRideAndDriverDetails(connection, reservationId) {
@@ -111,7 +143,7 @@ async function insertReservation(
 ) {
   const insertReservationQuery =
     "INSERT INTO reservations (ride_id, passenger_id, num_seats, status, pick_up_lat, pick_up_lon, drop_off_lat, drop_off_lon, custom_pick_up, custom_drop_off) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-  await connection.query(insertReservationQuery, [
+  const [result] = await connection.query(insertReservationQuery, [
     rideId,
     passengerId,
     seatsNeeded,
@@ -123,6 +155,8 @@ async function insertReservation(
     custom_pick_up,
     custom_drop_off,
   ]);
+
+  return result.insertId;
 }
 
 async function isDriverAssociatedWithReservation(driverId, reservationId) {
@@ -209,7 +243,13 @@ function hasMinimumDecimalPlaces(str, minDecimals) {
 
 async function deleteReservationProposal(connection, reservation) {
   const { id, passenger_id, num_seats, ride_price } = reservation;
-  const refundAmount = num_seats * ride_price;
+  const ride = await ridesController.getRide(dbCon, reservation.ride_id);
+  let refundAmount;
+  if (ride.cash_payment) {
+    refundAmount = num_seats * 40;
+  } else {
+    refundAmount = num_seats * ride_price;
+  }
 
   const statusQuery = `
     SELECT status
@@ -238,8 +278,6 @@ async function deleteReservationProposal(connection, reservation) {
     WHERE id = ?
   `;
   await connection.query(deleteQuery, [id]);
-
-  const ride = await ridesController.getRide(dbCon, reservation.ride_id);
 
   const passengerEmail = await accountsController.getUserEmail(
     reservation.passenger_id,
@@ -419,7 +457,20 @@ async function handleReservation(req, res) {
     }
 
     const currentBalance = passenger.balance;
-    const newBalance = currentBalance - ride.price * seatsNeeded;
+    let newBalance;
+    if (ride.cash_payment) {
+      newBalance = currentBalance - 40 * seatsNeeded;
+      await transactionsController.payToDriver(
+        connection,
+        passengerId,
+        ride.driver_id,
+        ride.id,
+        ride.amount,
+        ride.cash_payment
+      );
+    } else {
+      newBalance = currentBalance - ride.price * seatsNeeded;
+    }
 
     if (newBalance < 0) {
       await connection.rollback();
@@ -432,20 +483,10 @@ async function handleReservation(req, res) {
     }
 
     await updateBalance(connection, passengerId, newBalance);
-    await updateFreeSeats(connection, rideId, ride.free_seats - seatsNeeded);
 
     const reservationType = customPickUp || customDropOff ? "P" : "R";
 
-    if (reservationType == "R") {
-      await removeExcessReservations(
-        connection,
-        ride.id,
-        seatsNeeded,
-        ride.price
-      );
-    }
-
-    await insertReservation(
+    const reservationId = await insertReservation(
       connection,
       rideId,
       passengerId,
@@ -459,6 +500,27 @@ async function handleReservation(req, res) {
       !!customDropOff
     );
 
+    if (reservationType === "R") {
+      await updateFreeSeats(connection, rideId, ride.free_seats - seatsNeeded);
+      await removeExcessReservations(
+        connection,
+        ride.id,
+        seatsNeeded,
+        ride.price
+      );
+      const rideDateTime = new Date(ride.date_time);
+      const OneDayLater = new Date(rideDateTime);
+      OneDayLater.setDate(rideDateTime.getDate() + 1);
+      nodeSchedule.scheduleJob(OneDayLater, () =>
+        closeReservation(
+          connection,
+          reservationId,
+          passengerId,
+          ride,
+          seatsNeeded
+        )
+      );
+    }
     await connection.commit();
 
     const driverEmail = await accountsController.getUserEmail(
@@ -475,6 +537,10 @@ async function handleReservation(req, res) {
       };
 
       await transporter.sendMail(mailOptions);
+
+      nodeSchedule.scheduleJob(new Date(ride.date_time), () =>
+        deleteReservationProposal(dbCon, reservationId)
+      );
     }
 
     const message =
@@ -539,8 +605,6 @@ async function confirmArrival(req, res) {
       });
     }
 
-    await updateReservationStatus(connection, reservationId, "C");
-
     const rideAndDriver = await getRideAndDriverDetails(
       connection,
       reservationId
@@ -551,16 +615,16 @@ async function confirmArrival(req, res) {
       return res.status(404).json({ error: "Reservation not found" });
     }
 
-    const { driver_id, ride_id, price, num_seats } = rideAndDriver;
+    const { num_seats } = rideAndDriver;
 
-    const amount = price * num_seats;
+    const ride = await ridesController.getRide(connection, ride_id);
 
-    await transactionsController.payToDriver(
+    await closeReservation(
       connection,
+      reservationId,
       passengerId,
-      driver_id,
-      ride_id,
-      amount
+      ride,
+      num_seats
     );
 
     await connection.commit();

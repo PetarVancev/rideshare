@@ -24,13 +24,6 @@ const NavBar = ({ type }) => {
     logoColor = "-white";
   }
 
-  const handleClick = () => {
-    if (isLoggedIn() && userType == "driver") {
-      navigate("/post-ride");
-    } else {
-      navigate("/login");
-    }
-  };
   return (
     <>
       <Navbar bg="white" variant="light" expand={false} className={colorClass}>
@@ -44,7 +37,7 @@ const NavBar = ({ type }) => {
             />
           </Navbar.Brand>
           <Nav className="ml-auto">
-            <Nav.Link>
+            {/* <Nav.Link>
               <svg
                 width="26"
                 height="27"
@@ -67,7 +60,7 @@ const NavBar = ({ type }) => {
                   fill={iconsColor}
                 />
               </svg>
-            </Nav.Link>
+            </Nav.Link> */}
           </Nav>
         </Container>
       </Navbar>
@@ -90,9 +83,9 @@ const NavBar = ({ type }) => {
           <a href="/about-us">
             <img src="images/group-icon-white.svg" /> За нас
           </a>
-          {/* <a>
+          <a href="/how-to-use">
             <img src="images/book-icon.svg" /> Како да ја користите rideshare
-          </a> */}
+          </a>
           {/* <a>
             <img src="images/question-icon.svg" /> Често поставувани прашања
           </a> */}

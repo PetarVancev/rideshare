@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const fs = require("fs");
 const dbCon = require("../db");
 
 const paymentController = require("./paymentController.js");
@@ -20,12 +21,12 @@ async function startDeposit(req, res) {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const amount = req.body.amount;
 
-    if (amount % denomination != 0) {
+    if (amount != 50 && amount % denomination != 0) {
       // return res.status(403).json({
       //   error: "You can only deposit in denominations of " + denomination,
       // });
       return res.status(403).json({
-        error: "Можите да надополните само производи на " + denomination,
+        error: "Можите да надополните само 50 или производи на " + denomination,
       });
     }
 
@@ -129,7 +130,23 @@ async function deposit(req, res) {
       `${process.env.CLIENT_URL}/wallet/deposit-success`
     );
   } catch (error) {
-    // Rollback the transaction if an error occurs
+    // Write a log if there is a problem with a deposit
+    const logMessage = `${new Date().toISOString()} - ${error}\n`;
+    fs.appendFile("../deposit_errors_logs.txt", logMessage, (err) => {
+      if (err) {
+        // If the file doesn't exist, create it and write the error
+        if (err.code === "ENOENT") {
+          fs.writeFile("deposit_error_logs", logMessage, (err) => {
+            if (err) {
+              console.error("Error creating error log file:", err);
+            }
+          });
+        } else {
+          console.error("Error writing to error log:", err);
+        }
+      }
+    });
+
     if (connection) {
       await connection.rollback();
     } else {

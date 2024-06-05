@@ -31,7 +31,7 @@ const Wallet = () => {
   const [nextStepsMessage, setNextStepsMessage] = useState("");
   const [error, setError] = useState(null);
 
-  const [depositAmount, setDepositAmount] = useState(300);
+  const [depositAmount, setDepositAmount] = useState(50);
 
   const handleDepositChange = (value) => {
     value = parseInt(value, 10);
@@ -42,8 +42,9 @@ const Wallet = () => {
 
   const depositValues = [];
   let denomination = 300;
+  depositValues.push(50);
   if (userType == "passenger") {
-    for (let i = 0; i < 8; i++) {
+    for (let i = 1; i < 8; i++) {
       depositValues.push(denomination);
 
       denomination += 300;
@@ -263,8 +264,7 @@ const Wallet = () => {
       const paymentData = response.data;
       const form = document.createElement("form");
       form.method = "POST";
-      form.action =
-        "https://torus-stage-halkbankmacedonia.asseco-see.com.tr/fim/est3Dgate";
+      form.action = "https://epay.halkbank.mk/fim/est3Dgate";
       for (const key in paymentData) {
         if (paymentData.hasOwnProperty(key)) {
           const input = document.createElement("input");
@@ -471,7 +471,7 @@ const Wallet = () => {
                 className="withdrawal-input"
                 type="text"
                 value={depositAmount}
-                onChange={(event) => handleDepositChange(event.target.value)}
+                readOnly
               />
             </div>
           </div>
