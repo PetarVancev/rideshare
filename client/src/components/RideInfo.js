@@ -366,7 +366,7 @@ const RideInfo = () => {
               )}
               <span>
                 <img src="images/group-icon.svg" />
-                <h4>{`Најмногу ${ride.total_seats - 2} на задните седишта`}</h4>
+                <h4>{`Најмногу ${ride.total_seats - 1} на задните седишта`}</h4>
               </span>
               {ride.car_color && (
                 <span className="mb-0">

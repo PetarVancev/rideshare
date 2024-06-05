@@ -3,7 +3,6 @@ Can't post a ride if no driver license info provided???
 Both
 
 Saved
-Invoice system
 Complaints dashboard !!
 
 Fee model same on client and backend and decide
@@ -21,7 +20,4 @@ Driver can click arrived only if time<departuretime-10 min ??
 
 Refactoring
 Make seperate components for modals in wallet
-
-Da se prajcaa parite na vozaco posle 24h ako ne se pobuni patniko
-
 

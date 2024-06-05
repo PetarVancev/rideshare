@@ -110,7 +110,6 @@ async function payToDriver(
 ) {
   const percentWeCharge = 0.2;
   try {
-    const status = getReservationStatus(connection, reservationId);
     const getDriverBalanceQuery =
       "SELECT balance FROM driver_accounts WHERE id = ?";
     const [driver] = await connection.query(getDriverBalanceQuery, [toDriver]);
@@ -120,9 +119,9 @@ async function payToDriver(
     }
 
     if (!cash_payment) {
-      amount = amount * (1 - percentWeCharge);
+      amount = amount / (1 + percentWeCharge);
     } else {
-      amount = amount + 40;
+      amount = amount - 40;
     }
     const currentBalance = driver[0].balance;
     const newBalance = currentBalance + amount;

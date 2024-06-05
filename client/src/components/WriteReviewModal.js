@@ -51,12 +51,20 @@ const WriteReviewModal = ({ handleClose, open, rideId }) => {
       if (error.response && error.response.status === 401) {
         logoutUser();
       }
+
+      const handleToastClose = () => {
+        if (error.response && error.response.status === 403) {
+          handleClose();
+        }
+      };
+
       toast.dismiss();
       toast.error(error.response.data.error, {
         position: "top-center",
         autoClose: 2000,
         hideProgressBar: false,
         closeButton: true,
+        onClose: handleToastClose,
       });
     }
   };

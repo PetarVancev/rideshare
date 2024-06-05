@@ -72,7 +72,7 @@ const MyRides = () => {
       <BottomBar />
       <WriteReviewModal
         open={reviewModalOpen}
-        handleClose={() => setReviewModalOpen(false)}
+        handleClose={() => window.location.reload()}
         rideId={modalEntryId}
       />
       <ComplaintModal

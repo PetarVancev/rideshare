@@ -54,7 +54,7 @@ async function closeReservation(
   try {
     await updateReservationStatus(connection, reservationId, "C");
 
-    const amount = price * num_seats;
+    const amount = ride.price * num_seats;
 
     // If it's not a cash payment, pay the driver
     if (!ride.cash_payment) {
@@ -305,7 +305,7 @@ async function removeExcessReservations(
   ridePrice
 ) {
   const excessReservationsQuery = `
-    SELECT id, passenger_id, num_seats
+    SELECT id, passenger_id, num_seats, ride_id
     FROM reservations
     WHERE ride_id = ? AND num_seats > ?
   `;
@@ -465,7 +465,7 @@ async function handleReservation(req, res) {
         passengerId,
         ride.driver_id,
         ride.id,
-        ride.amount,
+        ride.price,
         ride.cash_payment
       );
     } else {
@@ -615,7 +615,7 @@ async function confirmArrival(req, res) {
       return res.status(404).json({ error: "Reservation not found" });
     }
 
-    const { num_seats } = rideAndDriver;
+    const { num_seats, ride_id } = rideAndDriver;
 
     const ride = await ridesController.getRide(connection, ride_id);
 
