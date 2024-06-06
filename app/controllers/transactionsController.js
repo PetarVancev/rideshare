@@ -144,6 +144,7 @@ async function payToDriver(
       rideId,
       amount,
       currentDateTime,
+      cash_payment,
     ]);
   } catch (error) {
     throw new Error(

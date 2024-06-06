@@ -38,6 +38,17 @@ async function checkReservationOwnership(
   return result[0].count > 0;
 }
 
+async function getReservationStatus(connection, reservationId) {
+  const getStatusQuery = "SELECT status FROM reservations WHERE id = ?";
+  const [rows] = await connection.query(getStatusQuery, [reservationId]);
+
+  if (rows.length === 0) {
+    throw new Error("Reservation not found");
+  }
+
+  return rows[0].status;
+}
+
 async function updateReservationStatus(connection, reservationId, status) {
   const updateReservationQuery =
     "UPDATE reservations SET status = ? WHERE id = ?";
@@ -52,6 +63,10 @@ async function closeReservation(
   num_seats
 ) {
   try {
+    const status = await getReservationStatus(connection, reservationId);
+    if (status === "C") {
+      return;
+    }
     await updateReservationStatus(connection, reservationId, "C");
 
     const amount = ride.price * num_seats;
@@ -838,6 +853,21 @@ async function acceptReservationProposal(req, res) {
     );
 
     const ride = await ridesController.getRide(dbCon, proposal.ride_id);
+
+    await updateFreeSeats(dbCon, ride.id, ride.free_seats - proposal.num_seats);
+
+    const rideDateTime = new Date(ride.date_time);
+    const OneDayLater = new Date(rideDateTime);
+    OneDayLater.setDate(rideDateTime.getDate() + 1);
+    nodeSchedule.scheduleJob(OneDayLater, () =>
+      closeReservation(
+        dbCon,
+        proposalId,
+        proposal.passenger_id,
+        ride,
+        proposal.num_seats
+      )
+    );
 
     const passengerEmail = await accountsController.getUserEmail(
       proposal.passenger_id,
