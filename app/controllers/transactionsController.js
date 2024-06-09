@@ -137,7 +137,7 @@ async function payToDriver(
       .slice(0, 19)
       .replace("T", " ");
     const insertTransactionQuery =
-      "INSERT INTO transactions (from_passenger_id, to_driver_id, ride_id, amount, date_time) VALUES (?, ?, ?, ?, ?)";
+      "INSERT INTO transactions (from_passenger_id, to_driver_id, ride_id, amount, date_time, cash_payment) VALUES (?, ?, ?, ?, ?, ?)";
     await connection.query(insertTransactionQuery, [
       fromPassenger,
       toDriver,

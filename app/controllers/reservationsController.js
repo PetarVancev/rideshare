@@ -651,11 +651,14 @@ async function confirmArrival(req, res) {
   } catch (error) {
     if (connection) {
       await connection.rollback();
-      connection.release();
     }
 
     console.error("Error when confirming arrival:", error);
     return res.status(500).json({ error: "Internal Server Error" });
+  } finally {
+    if (connection) {
+      connection.release();
+    }
   }
 }
 

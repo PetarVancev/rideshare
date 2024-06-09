@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { AutoComplete } from "primereact/autocomplete";
 import axios from "axios";
 
@@ -11,6 +11,9 @@ const LocationAutocomplete = ({
 }) => {
   const [value, setValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
+  const [focused, setFocused] = useState(false);
+  const [selected, setSelected] = useState(false);
+  const blurTimeout = useRef(null);
 
   const searchLocations = async (event) => {
     const value = event.query;
@@ -29,24 +32,54 @@ const LocationAutocomplete = ({
     return <div>{suggestion.name}</div>;
   };
 
+  const handleSelect = (e) => {
+    setValue(e.value.name);
+    setSelected(true);
+    if (onSelect) {
+      onSelect(e.value.id, e.value.name);
+    }
+    clearTimeout(blurTimeout.current); // Clear timeout if any selection is made
+  };
+
+  const handleChange = (e) => {
+    setValue(e.target.value);
+    setSelected(false);
+    if (onChange) {
+      onChange(e.target.value);
+    }
+  };
+
+  const handleBlur = () => {
+    blurTimeout.current = setTimeout(() => {
+      if (!selected) {
+        setValue("");
+        if (onChange) {
+          onChange("");
+        }
+      }
+      setFocused(false);
+    }, 1); // Adding a slight delay
+  };
+
+  const handleFocus = () => {
+    clearTimeout(blurTimeout.current); // Clear the timeout if the input gains focus again
+    setFocused(true);
+  };
+
   return (
     <AutoComplete
-      value={name}
+      value={value}
       suggestions={suggestions}
       completeMethod={searchLocations}
-      onChange={(e) => {
-        if (onChange) {
-          onChange(e.target.value);
-        }
-      }}
+      onChange={handleChange}
       itemTemplate={suggestionTemplate}
-      onSelect={(e) => {
-        onSelect(e.value.id, e.value.name);
-      }}
+      onSelect={handleSelect}
       placeholder={placeholder}
       panelClassName="autocomplete-dropdown"
       maxResults={10}
       inputClassName={className}
+      onBlur={handleBlur}
+      onFocus={handleFocus}
     />
   );
 };

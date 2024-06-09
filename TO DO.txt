@@ -4,13 +4,10 @@ Both
 
 Saved
 Complaints dashboard !!
-
-Fee model same on client and backend and decide
 Store average review in account table instead of calculating every time??
 
 Backend
 
-Cron jobs for proposals ??
 Store bank_acc_num in withdrawal table also???
 
 Client
@@ -20,4 +17,9 @@ Driver can click arrived only if time<departuretime-10 min ??
 
 Refactoring
 Make seperate components for modals in wallet
+
+
+Store average review in account table instead of calculating every time??
+Filters and sort on client side
+Add sitemap
 

@@ -110,7 +110,7 @@ async function deposit(req, res) {
       "UPDATE passenger_accounts SET balance = ? WHERE id = ?";
     await connection.query(updateBalanceQuery, [newBalance, passengerId]);
 
-    const withdrawalDateTime = new Date()
+    const depositDateTime = new Date()
       .toISOString()
       .slice(0, 19)
       .replace("T", " ");
@@ -119,7 +119,7 @@ async function deposit(req, res) {
     await connection.query(insertDepositQuery, [
       passengerId,
       amount,
-      withdrawalDateTime,
+      depositDateTime,
     ]);
 
     // Commit the transaction

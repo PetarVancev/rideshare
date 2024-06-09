@@ -499,7 +499,7 @@ const PostRide = () => {
                   </div>
                 </section>
                 <section>
-                  <h4 className="heading-xxs">Внесете време на патување</h4>
+                  <h4 className="heading-xxs">Внесете траење на патувањето</h4>
                   <div className="d-flex justify-content-center time-input">
                     <div className="d-flex flex-column align-items-center me-2">
                       <input

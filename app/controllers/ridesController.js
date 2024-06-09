@@ -323,6 +323,8 @@ async function searchForRides(req, res) {
         DATE(r.date_time) = ?
         AND 
         r.free_seats >= ?
+        AND 
+        r.date_time > NOW()
         ${timeRangeCondition} 
         ${orderByClause};
     `;

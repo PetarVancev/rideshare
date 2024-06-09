@@ -37,7 +37,7 @@ const SearchRideCard = ({ initials }) => {
   };
 
   return (
-    <Card className="search-ride-card">
+    <Card className="search-ride-card mx-auto">
       <Form onSubmit={handleSubmit}>
         <Card.Body>
           <Form.Group controlId="fromLocation">

@@ -296,6 +296,7 @@ const RideInfo = () => {
               </div>
             </div>
             <div className="pt-0">
+              <h4 className="text-center mt-4 body-bold-l">Потребни места</h4>
               <div className="d-flex justify-content-center mt-4 mb-4 ">
                 <button
                   className="seats-change-button heading-s"

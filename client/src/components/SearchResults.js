@@ -63,7 +63,9 @@ const SearchResults = () => {
         setRides(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
-        setError("Error fetching data");
+        setError(
+          "Грешка при пребарувањето. Напомена: Локациите морате да ги изберете од опциите што се појавуваат."
+        );
       } finally {
         setLoading(false); // Set loading to false once fetching is done
       }
