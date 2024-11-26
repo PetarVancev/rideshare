@@ -471,34 +471,6 @@ async function handleReservation(req, res) {
       return res.status(404).json({ error: "Passenger not found" });
     }
 
-    const currentBalance = passenger.balance;
-    let newBalance;
-    if (ride.cash_payment) {
-      newBalance = currentBalance - 40 * seatsNeeded;
-      await transactionsController.payToDriver(
-        connection,
-        passengerId,
-        ride.driver_id,
-        ride.id,
-        ride.price,
-        ride.cash_payment
-      );
-    } else {
-      newBalance = currentBalance - ride.price * seatsNeeded;
-    }
-
-    if (newBalance < 0) {
-      await connection.rollback();
-      // return res.status(402).json({
-      //   error: `Insufficient balance, you need ${-newBalance} more funds`,
-      // });
-      return res.status(402).json({
-        error: `Немате доволно средства, ви требаат уште ${-newBalance}ден`,
-      });
-    }
-
-    await updateBalance(connection, passengerId, newBalance);
-
     const reservationType = customPickUp || customDropOff ? "P" : "R";
 
     const reservationId = await insertReservation(

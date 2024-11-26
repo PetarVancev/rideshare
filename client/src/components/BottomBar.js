@@ -104,7 +104,7 @@ const BottomBar = () => {
           </svg>
           <span>Допаднати</span>
         </div> */}
-      <div
+      {/* <div
         className={`icon ${location.pathname === "/wallet" ? "selected" : ""}`}
         onClick={() => navigateTo("/wallet")}
       >
@@ -122,7 +122,7 @@ const BottomBar = () => {
           />
         </svg>
         <span>Паричник</span>
-      </div>
+      </div> */}
       <div
         className={`icon ${
           location.pathname === "/my-profile" ||

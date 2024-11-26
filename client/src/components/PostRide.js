@@ -44,7 +44,7 @@ const PostRide = () => {
 
   const [ridePrice, setRidePrice] = useState(300);
   const [feeBreakdownOpen, setFeeBreakdownOpen] = useState(false);
-  const [paymentType, setPaymentType] = useState("card");
+  const [paymentType, setPaymentType] = useState("cash");
   let taxForState;
   let transactionFee;
   let fee;
@@ -254,7 +254,7 @@ const PostRide = () => {
           flexible_departure: flexibleDeparture,
           flexible_arrival: flexibleArrival,
           total_seats: seats,
-          price: totalPrice,
+          price: ridePrice,
           additional_info: rideNotice,
           car_model: carModel,
           car_color: carColor,
@@ -628,7 +628,7 @@ const PostRide = () => {
                       доколку не се појави патникот
                     </div>
                   </div>
-                  <div className="d-flex payment-types-container">
+                  <div className="d-flex payment-types-container justify-content-center">
                     <div
                       className={`${paymentType === "cash" ? "selected" : ""}`}
                       onClick={() => setPaymentType("cash")}
@@ -636,43 +636,6 @@ const PostRide = () => {
                       <div className="body-s">
                         <h5 className="text-center">Плаќање во кеш</h5>
                         патникот ќе ви плати во авомобил
-                        <svg
-                          className="cash-payment-notice-icon"
-                          src="/images/status-icon.svg"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setCashNoticeOpen(true);
-                          }}
-                          width="24"
-                          height="24"
-                          viewBox="0 0 22 22"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M11 10C11.5523 10 12 10.4477 12 11V15C12 15.5523 11.5523 16 11 16C10.4477 16 10 15.5523 10 15V11C10 10.4477 10.4477 10 11 10Z"
-                            fill={paymentType == "cash" ? "#FFFFFF" : "#022C66"}
-                          />
-                          <path
-                            d="M11 6C10.4477 6 10 6.44772 10 7C10 7.55228 10.4477 8 11 8H11.01C11.5623 8 12.01 7.55228 12.01 7C12.01 6.44772 11.5623 6 11.01 6H11Z"
-                            fill={paymentType == "cash" ? "#FFFFFF" : "#022C66"}
-                          />
-                          <path
-                            fill-rule="evenodd"
-                            clip-rule="evenodd"
-                            d="M0 11C0 4.92487 4.92487 0 11 0C17.0751 0 22 4.92487 22 11C22 17.0751 17.0751 22 11 22C4.92487 22 0 17.0751 0 11ZM11 2C6.02944 2 2 6.02944 2 11C2 15.9706 6.02944 20 11 20C15.9706 20 20 15.9706 20 11C20 6.02944 15.9706 2 11 2Z"
-                            fill={paymentType == "cash" ? "#FFFFFF" : "#022C66"}
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                    <div
-                      className={`${paymentType === "card" ? "selected" : ""}`}
-                      onClick={() => setPaymentType("card")}
-                    >
-                      <div className="body-s">
-                        <h5 className="text-center">Плаќање онлајн</h5>
-                        патникот ќе ви плати онлајн
                       </div>
                     </div>
                   </div>
@@ -690,80 +653,7 @@ const PostRide = () => {
                         onChange={(e) => setRidePrice(e.target.value)}
                       />
                     </div>
-                    <p>* Износот што ќе го добиете по таксите</p>
                   </div>
-                  <Row className="d-flex">
-                    <Col xs={12} className="d-flex justify-content-between">
-                      <h4 className="heading-xxs">Данок и такса за услуги</h4>
-                      <span
-                        onClick={() => setFeeBreakdownOpen(!feeBreakdownOpen)}
-                        aria-controls="fee-breakdown-collapsible"
-                        aria-expanded={feeBreakdownOpen}
-                        className="collapse-button"
-                      >
-                        {feeBreakdownOpen ? (
-                          <i class="fa-solid fa-angle-up"></i>
-                        ) : (
-                          <i class="fa-solid fa-angle-down"></i>
-                        )}{" "}
-                      </span>
-                    </Col>
-                    <Col className="d-flex align-items-center" xs={12}>
-                      <div class="input-container2 mb-3 price-info">
-                        <div class="left-corner-div heading-xs d-flex justify-content-center align-items-center">
-                          ден
-                        </div>
-                        <div
-                          className="post-input currency-box d-flex justify-content-end
-                    align-items-center gray-text"
-                        >
-                          {fee}
-                        </div>
-                      </div>
-                    </Col>
-                    <Collapse in={feeBreakdownOpen}>
-                      <div id="fee-breakdown-collapsible">
-                        <div className="px-3">
-                          <div className="d-flex justify-content-between">
-                            {paymentType == "card" && (
-                              <>
-                                <p>10% Данок за државата</p>
-                                <span>мкд {taxForState}</span>
-                              </>
-                            )}
-                          </div>
-                          <div className="d-flex justify-content-between">
-                            <p>Надоместок за трансакција</p>
-                            <span>мкд {transactionFee}</span>
-                          </div>
-                          <div className="d-flex justify-content-between">
-                            <p>Такса за услуги за превозник</p>
-                            <span>мкд {carrierServiceFee}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </Collapse>
-                  </Row>
-                  <Row className="d-flex">
-                    <Col xs={12}>
-                      <h4 className="heading-xxs">
-                        Сума која ќе биде прикажана на патниците
-                      </h4>
-                    </Col>
-                    <Col className="d-flex align-items-center" xs={12}>
-                      <div className="input-container2 mb-3 price-info">
-                        <div class="left-corner-div heading-xs d-flex justify-content-center align-items-center">
-                          ден
-                        </div>
-                        <div
-                          className="post-input currency-box d-flex justify-content-end
-                    align-items-center green-text"
-                        >
-                          {totalPrice}
-                        </div>
-                      </div>
-                    </Col>
-                  </Row>
                 </section>
                 <Button
                   className="col-12 mt-4 dark-button body-bold-medium"

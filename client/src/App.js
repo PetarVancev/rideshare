@@ -61,7 +61,7 @@ function App() {
             element={<DriverRoute element={<PostRide />} />}
           />
 
-          <Route path="/wallet" element={<Outlet />}>
+          {/* <Route path="/wallet" element={<Outlet />}>
             <Route index element={<PrivateRoute element={<Wallet />} />} />
             <Route
               path="deposit-success"
@@ -94,7 +94,7 @@ function App() {
                 />
               }
             />
-          </Route>
+          </Route> */}
           <Route
             path="/my-profile"
             element={<PrivateRoute element={<MyProfile />} />}

@@ -417,27 +417,9 @@ const RideInfo = () => {
               <Row className="reserve-bottom-bar">
                 <Col>
                   <strong className="body-bold-l">
-                    {ride.price * seats}мкд{" "}
-                    {ride.cash_payment ? (
-                      <span className="cash-reservation-online-fee">
-                        - {40 * seats} онлајн
-                      </span>
-                    ) : null}
+                    {ride.price * seats}мкд
                   </strong>
                   <p className="body-xs">Вкупно за {seats} места</p>
-                  <p
-                    className={`body-bold-xs ${
-                      !ride.cash_payment
-                        ? ride.price * seats > balance
-                          ? "red-text"
-                          : ""
-                        : 40 * seats > balance
-                        ? "red-text"
-                        : ""
-                    }`}
-                  >
-                    Состојба: {balance} мкд
-                  </p>
                 </Col>
                 <Col>
                   <button
