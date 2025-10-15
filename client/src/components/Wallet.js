@@ -46,7 +46,6 @@ const Wallet = () => {
   if (userType == "passenger") {
     for (let i = 1; i < 8; i++) {
       depositValues.push(denomination);
-
       denomination += 300;
     }
   }
@@ -100,14 +99,11 @@ const Wallet = () => {
   const getWallet = async () => {
     try {
       let url = `${backendUrl}/wallet/get-wallet`;
-      const response = await axios.get(
-        url, // Using userType directly here
-        {
-          headers: {
-            Authorization: `${token}`,
-          },
-        }
-      );
+      const response = await axios.get(url, {
+        headers: {
+          Authorization: `${token}`,
+        },
+      });
       return response.data[0];
     } catch (error) {
       if (error.response && error.response.status === 401) {
@@ -123,14 +119,11 @@ const Wallet = () => {
       if (userType == "driver") {
         url = `${backendUrl}/rides/get-my?status=C`;
       }
-      const response = await axios.get(
-        url, // Using userType directly here
-        {
-          headers: {
-            Authorization: `${token}`,
-          },
-        }
-      );
+      const response = await axios.get(url, {
+        headers: {
+          Authorization: `${token}`,
+        },
+      });
       return response.data;
     } catch (error) {
       console.error("Error fetching ride data:", error);
@@ -230,9 +223,9 @@ const Wallet = () => {
           },
         }
       );
-      setSuccessMessage("Успешно ги префрливте вашите пари");
+      setSuccessMessage("Your money has been successfully transferred");
       setNextStepsMessage(
-        "*Вашите пари ќе ви бидат на располагање следниот ден откако сте ги префрлиле"
+        "*Your funds will be available the next day after transfer"
       );
       setShowSuccess(true);
     } catch (error) {
@@ -292,11 +285,8 @@ const Wallet = () => {
 
   const handleWithAmountChange = (event) => {
     let inputValue = event.target.value;
-
     inputValue = inputValue.replace(/^0+/, "");
-
     const newWithdrawAmount = parseInt(inputValue);
-
     if (!isNaN(newWithdrawAmount)) {
       if (newWithdrawAmount <= balance) {
         setWithdrawAmount(newWithdrawAmount);
@@ -309,7 +299,7 @@ const Wallet = () => {
   const handleBankAccountChange = async (e) => {
     e.preventDefault();
     if (bankAcc != bankAccConfirm) {
-      setError("Внесете ја истата трансакциска сметка во двете полиња");
+      setError("Enter the same bank account in both fields");
     } else {
       try {
         let url = `${backendUrl}/wallet/change-bank-acc`;
@@ -344,7 +334,7 @@ const Wallet = () => {
         className={`wallet-success-message ${showSuccess && "show"}`}
         statusMessage={successMessage}
         nextStepsMessage={nextStepsMessage}
-        buttonText="Паричник"
+        buttonText="Wallet"
         customButtonAction={() => {
           setShowSuccess(false);
         }}
@@ -356,19 +346,19 @@ const Wallet = () => {
       >
         <Container>
           <h2 className="heading-xs mt-5 text-center mb-5">
-            <img src="images/bank-icon.svg" /> Префрли во банка
+            <img src="images/bank-icon.svg" /> Transfer to Bank
           </h2>
           <div className="bottom-border-gray">
-            <h4 className=" heading-xxs">Трансакциска сметка</h4>
+            <h4 className=" heading-xxs">Bank Account</h4>
             <div className="bank-acc-number d-flex align-items-center">
               {bankAcc}
             </div>
           </div>
           <div className="amount-container mt-4">
-            <h4 className="heading-xxs">Сума која ќе биде префрлена</h4>
+            <h4 className="heading-xxs">Amount to Transfer</h4>
             <div class="input-container2">
               <div class="left-corner-div heading-xs d-flex justify-content-center align-items-center">
-                ден
+                MKD
               </div>
               <input
                 className="withdrawal-input"
@@ -384,12 +374,12 @@ const Wallet = () => {
                 variant="outline-primary"
                 onClick={() => setCurrModal(null)}
               >
-                Откажи
+                Cancel
               </Button>
             </Col>
             <Col xs={6} className="text-end">
               <Button variant="outline-success" onClick={requestWithdraw}>
-                Префрли
+                Transfer
               </Button>
             </Col>
           </Row>
@@ -402,17 +392,17 @@ const Wallet = () => {
         <Container>
           <h2 className="heading-xs mt-5 text-center mb-5">
             <img src="images/card-icon.svg" className="me-1" />
-            Трансакциска
+            Bank Account
           </h2>
           <div className="bank-acc-input-container">
-            <h4 className="heading-xxs">Внесете трансакциска сметка</h4>
+            <h4 className="heading-xxs">Enter Bank Account</h4>
             <input
               className="withdrawal-input bank-input mb-4"
               type="number"
               value={bankAcc}
               onChange={(event) => setBankAcc(event.target.value)}
             />
-            <h4 className="heading-xxs">Повторете ја трансакциската сметка</h4>
+            <h4 className="heading-xxs">Confirm Bank Account</h4>
             <input
               className="withdrawal-input bank-input "
               type="number"
@@ -421,7 +411,7 @@ const Wallet = () => {
             />
           </div>
           <p className="body-bold-s blue-text mt-2">
-            На горе наведената сметка ќе ги примате плаќањата
+            Payments will be sent to the above account
           </p>
           {error && (
             <Alert className="mt-2" variant="danger">
@@ -437,7 +427,7 @@ const Wallet = () => {
                   setError(null);
                 }}
               >
-                Откажи
+                Cancel
               </Button>
             </Col>
             <Col xs={6} className="text-end">
@@ -445,12 +435,13 @@ const Wallet = () => {
                 variant="outline-success"
                 onClick={handleBankAccountChange}
               >
-                Зачувај
+                Save
               </Button>
             </Col>
           </Row>
         </Container>
       </div>
+
       {/* Deposit modal */}
       <div
         className={`withdraw-container deposit-container ${
@@ -459,13 +450,13 @@ const Wallet = () => {
       >
         <Container>
           <h2 className="heading-xs mt-5 text-center mb-5">
-            <img src="images/plus-icon.svg" /> Надополни средства
+            <img src="images/plus-icon.svg" /> Add Funds
           </h2>
           <div className="amount-container">
-            <h4 className="heading-xxs">Сума која ќе биде надополнета</h4>
+            <h4 className="heading-xxs">Amount to Add</h4>
             <div class="input-container2">
               <div class="left-corner-div heading-xs d-flex justify-content-center align-items-center">
-                ден
+                MKD
               </div>
               <input
                 className="withdrawal-input"
@@ -476,9 +467,7 @@ const Wallet = () => {
             </div>
           </div>
           <Row className="deposit-values-container text-center">
-            <h4 className="heading-xxs text-start">
-              Одберете износ за надополнување
-            </h4>
+            <h4 className="heading-xxs text-start">Select Amount to Add</h4>
             {depositValues.map((value, index) => (
               <Col
                 key={index}
@@ -489,7 +478,7 @@ const Wallet = () => {
                 onClick={() => handleDepositChange(value)}
               >
                 <div className="heading-xs deposit-amount">{value}</div>
-                ден
+                MKD
               </Col>
             ))}
           </Row>
@@ -499,20 +488,20 @@ const Wallet = () => {
                 variant="outline-primary"
                 onClick={() => setCurrModal(null)}
               >
-                Откажи
+                Cancel
               </Button>
             </Col>
             <Col xs={6} className="text-end">
               <Button variant="outline-success" onClick={handleDeposit}>
-                Надополни
+                Add Funds
               </Button>
             </Col>
             <div className="text-center card-payment-info mt-2">
               <img src="images/visa-secure-icon.png" className="me-2" />
               <img src="images/mastercard-secure-icon.png" className="ms-2" />
               <p className="text-center body-xs blue-text">
-                Сите ваши трансакции се сигурни со нашата заштита, а истото важи
-                и за податоците што ги внесувате при резервирање.
+                All your transactions are secure, including the data entered
+                during booking.
               </p>
             </div>
           </Row>
@@ -527,9 +516,9 @@ const Wallet = () => {
         <Row className="balance-row">
           <Col xs={8}>
             <p className="green-text heading-xs">
-              ден <strong className="heading-m">{balance}</strong>
+              MKD <strong className="heading-m">{balance}</strong>
             </p>
-            <span className="sub-text body-s">Расположливи средства</span>
+            <span className="sub-text body-s">Available Balance</span>
           </Col>
         </Row>
         <Row className="wallet-actions-row text-center">
@@ -543,13 +532,13 @@ const Wallet = () => {
                 <div>
                   <img src="images/bank-icon.svg" />
                 </div>
-                Префрли во банка
+                Transfer to Bank
               </Col>
               <Col xs={6} onClick={() => setCurrModal("bank")}>
                 <div>
                   <img src="images/card-icon.svg" />
                 </div>
-                Трансакциска
+                Bank Account
               </Col>
             </>
           ) : (
@@ -558,13 +547,13 @@ const Wallet = () => {
               xs={12}
               onClick={() => setCurrModal("deposit")}
             >
-              <img src="images/plus-icon.svg" /> Надополни средства
+              <img src="images/plus-icon.svg" /> Add Funds
             </Col>
           )}
         </Row>
         <Row className="mt-4">
           <Col xs={12}>
-            <h3 className="heading-s text-blue">Последни трансакции</h3>
+            <h3 className="heading-s text-blue">Recent Transactions</h3>
           </Col>
           <Col xs={6}>
             <button
@@ -576,7 +565,7 @@ const Wallet = () => {
                 setSelectedTransactionType("income");
               }}
             >
-              {userType == "driver" ? "Последни приливи" : "Платени превози"}
+              {userType == "driver" ? "Recent Incomes" : "Paid Rides"}
             </button>
           </Col>
           <Col xs={6}>
@@ -589,7 +578,7 @@ const Wallet = () => {
                 setSelectedTransactionType("bank");
               }}
             >
-              {userType == "driver" ? "Префрлања во банка" : "Надополнувања"}
+              {userType == "driver" ? "Bank Transfers" : "Top-ups"}
             </button>
           </Col>
         </Row>
@@ -621,7 +610,7 @@ const Wallet = () => {
                         </span>
                       </div>
                       <div className="withdrawal-amount d-flex align-items-center justify-content-center btn-text-l">
-                        <span>ден{entity.amount}</span>
+                        <span>MKD {entity.amount}</span>
                       </div>
                     </div>
                   </Card.Body>

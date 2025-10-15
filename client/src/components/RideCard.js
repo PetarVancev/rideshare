@@ -63,7 +63,7 @@ const RideCard = ({ ride, seats }) => {
           <a className="body-xs">{ride.driver_average_review}/5</a>
         </div>
         <div className="ride-price-box body-bold-medium">
-          {ride.price * seats + "мкд"}
+          {ride.price * seats + "mkd"}
         </div>
       </Card.Header>
       <Card.Body className="d-flex justify-content-between">
@@ -91,11 +91,11 @@ const RideCard = ({ ride, seats }) => {
           <div className="time-info">
             <div className="d-flex justify-content-center border-bot">
               <div className="departure-info">
-                <h4 className="body-bold-xs">Поаѓање</h4>
+                <h4 className="body-bold-xs">Departure</h4>
                 <span className="body-bold-xs">{departureTime}</span>
               </div>
               <div className="travel-time">
-                <h4 className="body-bold-xs">Време на патување</h4>
+                <h4 className="body-bold-xs">Travel Time</h4>
                 <span className="body-bold-xs blue-text">{rideDuration}</span>
               </div>
             </div>
@@ -108,7 +108,7 @@ const RideCard = ({ ride, seats }) => {
                   className="me-1"
                   alt="Cash Icon"
                 />
-                Плаќање во кеш
+                Cash payment
               </div>
             ) : (
               <div>
@@ -117,7 +117,7 @@ const RideCard = ({ ride, seats }) => {
                   className="me-1"
                   alt="Card Icon"
                 />
-                Плаќање онлајн со картица
+                Online card payment
               </div>
             )}
             {ride.flexible_departure || ride.flexible_arrival ? (
@@ -127,7 +127,7 @@ const RideCard = ({ ride, seats }) => {
                   className="me-1"
                   alt="Location Icon"
                 />
-                Прифаќам предлог локација
+                I accept a suggested location
               </div>
             ) : null}
             {/* {ride.flexible_arrival && (
@@ -136,20 +136,20 @@ const RideCard = ({ ride, seats }) => {
                   src="/images/accept-location-icon-gray.svg"
                   className="me-1"
                 />
-                Прифаќа предлози за пристигање
+                Accepts suggestions for arrival
               </div>
             )} */}
           </div>
         </div>
       </Card.Body>
-      {/* <Button>Зачувај</Button> */}
+      {/* <Button>Save</Button> */}
       <Button
         className="dark-button col-12 mt-4 reserve-button"
         onClick={() => {
           navigate(`/ride-info?rideId=${ride.id}&seats=${seats}`);
         }}
       >
-        Повеќе
+        More
       </Button>
     </Card>
   );

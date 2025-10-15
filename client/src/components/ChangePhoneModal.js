@@ -18,7 +18,7 @@ const ChangePhoneModal = ({ close, isOpen, intialPhone }) => {
       close();
     }
     if (phone.length < 9) {
-      setError("Телефонскиот број не е валиден.");
+      setError("Phone number not valid.");
       return;
     }
     try {
@@ -77,7 +77,7 @@ const ChangePhoneModal = ({ close, isOpen, intialPhone }) => {
                 stroke-linejoin="round"
               />
             </svg>
-            Промена на телефонски број
+            Change phone number
           </h2>
         </div>
         <div className="d-flex profile-field-rectangle">
@@ -128,7 +128,7 @@ const ChangePhoneModal = ({ close, isOpen, intialPhone }) => {
           className="dark-button body-bold-medium save-profile-changes mx-auto container"
           onClick={changePhone}
         >
-          Зачувај
+          Save
         </Button>
       </div>
     </div>

@@ -54,8 +54,8 @@ const ComplaintModal = ({ handleClose, open, reservationId }) => {
       <Container>
         <h3 className="heading-xxs text-center gray-text mt-4 mb-5">
           {success
-            ? "Успешно исpативте жалба"
-            : "Жал ни е што не се реализира превозот"}
+            ? "You have successfully sent a complaint"
+            : "We are sorry that the ride did not take place"}
         </h3>
         {success ? (
           <div className="text-center">
@@ -64,8 +64,8 @@ const ComplaintModal = ({ handleClose, open, reservationId }) => {
               className="complaint-success-icon"
             />
             <h2 className="mt-3 body-bold-xl">
-              Нашиот тим ќе го разгледа вашиот одговор и ќе бидете контактирани
-              во рок од 3 работни дена!
+              Our team will review your response and you will be contacted
+              within 3 working days!
             </h2>
             <Row className="submission-bottom-bar modal-bottom-bar">
               <Col xs={12}>
@@ -73,7 +73,7 @@ const ComplaintModal = ({ handleClose, open, reservationId }) => {
                   className="col-12 mt-4 dark-button body-bold-medium"
                   onClick={handleClose}
                 >
-                  Затвори
+                  Close
                 </Button>
               </Col>
             </Row>
@@ -81,7 +81,7 @@ const ComplaintModal = ({ handleClose, open, reservationId }) => {
         ) : (
           <form onSubmit={handleSubmit}>
             <h3 className="heading-xxs mt-4 mb-4">
-              Објаснете зошто не се реализира превозот
+              Explain why the ride did not take place
             </h3>
             <textarea
               className="review-text-input"
@@ -98,7 +98,7 @@ const ComplaintModal = ({ handleClose, open, reservationId }) => {
                   type="submit"
                   className="col-12 mt-4 dark-button body-bold-medium"
                 >
-                  Испрати
+                  Send
                 </Button>
               </Col>
             </Row>

@@ -19,10 +19,8 @@ const Reviews = () => {
   useEffect(() => {
     const fetchReviewsData = async () => {
       try {
-        let url = `${backendUrl}/reviews/get-all?driverId=${driverId}`;
-        const response = await axios.get(
-          url // Using userType directly here
-        );
+        const url = `${backendUrl}/reviews/get-all?driverId=${driverId}`;
+        const response = await axios.get(url);
         setReviewsData(response.data);
         console.log(reviewsData);
       } catch (error) {
@@ -31,7 +29,7 @@ const Reviews = () => {
     };
 
     fetchReviewsData();
-  }, []);
+  }, [driverId]);
 
   return (
     <>
@@ -47,24 +45,22 @@ const Reviews = () => {
                 {reviewsData.averageScore}/5
               </div>
               {reviewsData.reviews && (
-                <h4>{reviewsData.reviews.length} Рецензии</h4>
+                <h4>{reviewsData.reviews.length} Reviews</h4>
               )}
             </div>
           </div>
         </Container>
       </div>
       <Container className="reviews-container">
-        <Container className="reviews-container">
-          {reviewsData.reviews && reviewsData.reviews.length > 0 ? (
-            reviewsData.reviews.map((reviewData) => (
-              <ReviewBox key={reviewData.id} reviewData={reviewData} />
-            ))
-          ) : (
-            <p className="text-center rides-count body-bold-xs mt-4">
-              Возачот сеуште нема рецензии
-            </p>
-          )}
-        </Container>
+        {reviewsData.reviews && reviewsData.reviews.length > 0 ? (
+          reviewsData.reviews.map((reviewData) => (
+            <ReviewBox key={reviewData.id} reviewData={reviewData} />
+          ))
+        ) : (
+          <p className="text-center rides-count body-bold-xs mt-4">
+            The driver has no reviews yet
+          </p>
+        )}
       </Container>
     </>
   );

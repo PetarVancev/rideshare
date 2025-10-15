@@ -27,7 +27,7 @@ const PasswordResetRequest = () => {
         }
       );
       setSuccessMessage(
-        "Успешно е испратено барањето за промена на лозинка, проверете ја вашата е-пошта. Доколку не добивте ништо обидете се повторно по 1 минута"
+        "Password reset request has been successfully sent. Please check your email. If you did not receive anything, try again after 1 minute."
       );
       setError("");
       setTimeout(() => {
@@ -59,12 +59,12 @@ const PasswordResetRequest = () => {
       <Container>
         <BackButton />
         <div className="auth-container">
-          <h2>Промена на лозинка</h2>
+          <h2>Password Reset</h2>
           <Form onSubmit={handleSubmit} className="auth-forms">
             <Form.Group controlId="formBasicEmail">
               <Form.Control
                 type="email"
-                placeholder="Вашата е-пошта"
+                placeholder="Your Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -72,12 +72,12 @@ const PasswordResetRequest = () => {
               />
             </Form.Group>
             <Form.Group controlId="formBasicUserType">
-              <Form.Label>Тип на корисник:</Form.Label>
+              <Form.Label>User Type:</Form.Label>
               <Container>
                 <Row>
                   <Col xs={6} className="ml-5">
                     <Form.Check
-                      label="Патник"
+                      label="Passenger"
                       type="radio"
                       id="passengerRadio"
                       name="userType"
@@ -88,7 +88,7 @@ const PasswordResetRequest = () => {
                   </Col>
                   <Col xs={6}>
                     <Form.Check
-                      label="Возач"
+                      label="Driver"
                       type="radio"
                       id="driverRadio"
                       name="userType"
@@ -107,7 +107,7 @@ const PasswordResetRequest = () => {
               onClick={handleSubmit}
               disabled={isButtonDisabled}
             >
-              {isButtonDisabled ? "Почекајте..." : "Продолжи"}
+              {isButtonDisabled ? "Please wait..." : "Continue"}
             </Button>
             {error && <Alert variant="danger">{error}</Alert>}
             {successMessage && (

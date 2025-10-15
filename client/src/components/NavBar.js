@@ -79,18 +79,18 @@ const NavBar = ({ type }) => {
           </button>
         </div>
         <div>
-          <h4 className="white-text mb-3 heading-s">МЕНИ</h4>
+          <h4 className="white-text mb-3 heading-s">MENU</h4>
           <a href="/about-us">
-            <img src="images/group-icon-white.svg" /> За нас
+            <img src="images/group-icon-white.svg" /> About Us
           </a>
           <a href="/how-to-use">
-            <img src="images/book-icon.svg" /> Како да ја користите rideshare
+            <img src="images/book-icon.svg" /> How to use rideshare
           </a>
           {/* <a>
-            <img src="images/question-icon.svg" /> Често поставувани прашања
+            <img src="images/question-icon.svg" /> Frequently Asked Questions
           </a> */}
           <a href="/contact">
-            <img src="images/message-bubble-icon.svg" /> Контакт
+            <img src="images/message-bubble-icon.svg" /> Contact
           </a>
         </div>
         <div className="mt-auto">
@@ -101,7 +101,7 @@ const NavBar = ({ type }) => {
           >
             Facebook
           </a>
-          <a href="/privacy-policy">Политика и правила на користење</a>
+          <a href="/privacy-policy">Policy and terms of use</a>
           <div className="text-center mb-5 mt-4">
             <img src="images/logo-white.svg" />
           </div>

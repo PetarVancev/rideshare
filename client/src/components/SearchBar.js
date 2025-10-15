@@ -28,7 +28,7 @@ const SearchBar = ({ options, initialSortBy, initialTimeRange }) => {
 
   const applyFilters = (e) => {
     let url = `/results?from=${options.fromId}&to=${options.toId}&date=${options.date}&seats=${options.seats}`;
-    if (sortBy && sortBy != "time") {
+    if (sortBy && sortBy !== "time") {
       url += `&sortBy=${sortBy}`;
     }
     if (departureTime) {
@@ -46,16 +46,15 @@ const SearchBar = ({ options, initialSortBy, initialTimeRange }) => {
             <div className="d-flex title align-items-center">
               <button onClick={() => setModal(0)}>X</button>
               <div>
-                <h2 className="heading-s mb-0 white-text">Направи измена</h2>
-                <p className="mb-0 white-text">
-                  Од каде, до каде, кога и колку
-                </p>
+                <h2 className="heading-s mb-0 white-text">Make Changes</h2>
+                <p className="mb-0 white-text">From, To, Date and Seats</p>
               </div>
             </div>
             <SearchRideCard initials={options} />
           </div>
         </Container>
       </div>
+
       <div className={`search-filters-modal ${modal === 2 ? "open" : ""}`}>
         <Container>
           <div className="pt-4 pb-4 bottom-border">
@@ -65,14 +64,15 @@ const SearchBar = ({ options, initialSortBy, initialTimeRange }) => {
             >
               X
             </button>
-            <h3 className="text-center heading-xs mb-0">Филтри</h3>
+            <h3 className="text-center heading-xs mb-0">Filters</h3>
           </div>
+
           <div className="pt-4 pb-4 bottom-border">
-            <h3 className="text-left heading-xs mb-3">Подредете по</h3>
+            <h3 className="text-left heading-xs mb-3">Sort By</h3>
             <div className="mb-2">
               <label className="d-flex justify-content-between">
                 <span>
-                  <img src="images/clock-icon-blue.svg" /> Најрано поаѓање
+                  <img src="images/clock-icon-blue.svg" /> Earliest Departure
                 </span>
                 <input
                   type="radio"
@@ -86,7 +86,7 @@ const SearchBar = ({ options, initialSortBy, initialTimeRange }) => {
             <div className="mb-2">
               <label className="d-flex justify-content-between">
                 <span>
-                  <img src="images/bar-chart-icon.svg" /> Најниска цена
+                  <img src="images/bar-chart-icon.svg" /> Lowest Price
                 </span>
                 <input
                   type="radio"
@@ -100,8 +100,7 @@ const SearchBar = ({ options, initialSortBy, initialTimeRange }) => {
             {/* <div className="mb-2">
               <label className="d-flex justify-content-between">
                 <span>
-                  <img src="images/accept-location-icon.svg" /> Прифаќа предлог
-                  локација
+                  <img src="images/accept-location-icon.svg" /> Accept Suggested Location
                 </span>
                 <input
                   type="radio"
@@ -113,12 +112,13 @@ const SearchBar = ({ options, initialSortBy, initialTimeRange }) => {
               </label>
             </div> */}
           </div>
+
           <div className="pt-4 pb-4 bottom-border">
-            <h3 className="text-left heading-xs mb-3">Плаќање</h3>
+            <h3 className="text-left heading-xs mb-3">Payment</h3>
             <div className="mb-2">
               <label className="d-flex justify-content-between">
                 <span>
-                  <img src="images/card-icon-blue.svg" /> Со картица
+                  <img src="images/card-icon-blue.svg" /> Card
                 </span>
                 <input
                   type="radio"
@@ -132,7 +132,7 @@ const SearchBar = ({ options, initialSortBy, initialTimeRange }) => {
             <div className="mb-2">
               <label className="d-flex justify-content-between">
                 <span>
-                  <img src="images/dollar-icon.svg" /> Во кеш
+                  <img src="images/dollar-icon.svg" /> Cash
                 </span>
                 <input
                   type="radio"
@@ -144,8 +144,9 @@ const SearchBar = ({ options, initialSortBy, initialTimeRange }) => {
               </label>
             </div>
           </div>
+
           <div className="pt-4 pb-4 margin-bottom">
-            <h3 className="text-left heading-xs mb-3">Поагање</h3>
+            <h3 className="text-left heading-xs mb-3">Departure Time</h3>
             <div className="mb-2">
               <label className="d-flex justify-content-between">
                 <span>00:00 - 06:00</span>
@@ -159,7 +160,7 @@ const SearchBar = ({ options, initialSortBy, initialTimeRange }) => {
               </label>
             </div>
             {[...Array(5)].map((_, index) => {
-              const startTime = index * 3 + 6; // Starting from 06:00 for subsequent options
+              const startTime = index * 3 + 6;
               const formattedStartTime = `${
                 startTime < 10 ? "0" : ""
               }${startTime}:00`;
@@ -200,22 +201,24 @@ const SearchBar = ({ options, initialSortBy, initialTimeRange }) => {
             </div>
           </div>
         </Container>
+
         <div className="container-fluid">
           <div className="filter-actions-wrapper">
             <Row className="filter-actions-row">
               <Col xs={6} className="reset-filters ps-0" onClick={resetFilters}>
-                Ресетирај филтри
+                Reset Filters
               </Col>
               <Button
                 className="col-6 dark-button body-bold-medium"
                 onClick={applyFilters}
               >
-                Прикажи
+                Show Results
               </Button>
             </Row>
           </div>
         </div>
       </div>
+
       <Container>
         <Row className="d-flex search-bar-container mt-4">
           <Col
@@ -229,7 +232,7 @@ const SearchBar = ({ options, initialSortBy, initialTimeRange }) => {
                 {options.fromLocName} - {options.toLocName}
               </p>
               <p>
-                {options.date} | {options.seats} место
+                {options.date} | {options.seats} seats
               </p>
             </div>
           </Col>

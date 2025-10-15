@@ -28,13 +28,13 @@ const PasswordResetForm = () => {
     const passwordRegex = /^(?=.*[A-ZА-Ш]).{8,}$/i;
     if (!passwordRegex.test(password)) {
       setError(
-        "Лозинката мора да има најмалку 8 карактери и една голема буква"
+        "The password must have at least 8 characters and one uppercase letter"
       );
       return;
     }
 
     if (password !== confirmPassword) {
-      setError("Лозинките не се совпаѓаат");
+      setError("Passwords do not match");
       return;
     }
 
@@ -48,7 +48,7 @@ const PasswordResetForm = () => {
       );
       setError("");
       setSuccessMessage(
-        "Успешно е променета вашата лозинка. Ќе бидете пренасочени на страната за најава"
+        "Your password has been successfully changed. You will be redirected to the login page"
       );
       setTimeout(() => {
         navigate("/login");
@@ -70,13 +70,13 @@ const PasswordResetForm = () => {
       <Container>
         <BackButton />
         <div className="auth-container">
-          <h2>Промена на лозинка</h2>
+          <h2>Change Password</h2>
           <Form onSubmit={handleSubmit} className="auth-forms">
             <Form.Group controlId="formBasicPassword">
               <div className="input-group">
                 <Form.Control
                   type={showPassword ? "text" : "password"}
-                  placeholder="Лозинка"
+                  placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
@@ -100,7 +100,7 @@ const PasswordResetForm = () => {
             <Form.Group controlId="formBasicPassword">
               <Form.Control
                 type={showPassword ? "text" : "password"}
-                placeholder="Повторете ја лозинката"
+                placeholder="Repeat password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
@@ -109,7 +109,7 @@ const PasswordResetForm = () => {
             </Form.Group>
 
             <Button className="dark-button col-12 mt-4" type="submit">
-              Промени лозинка
+              Change Password
             </Button>
             {error && <Alert variant="danger">{error}</Alert>}
             {successMessage && (

@@ -9,22 +9,19 @@ const mapsApiKey = process.env.REACT_APP_MAPS_API_KEY;
 
 const ProposalCard = ({ proposal, token }) => {
   const { logoutUser } = useAuth();
+
   const declineProposal = async () => {
     try {
       const url =
         backendUrl +
         `/reservations/driver/decline-proposal?reservationId=${proposal.id}`;
-      const response = await axios.post(url, null, {
-        headers: {
-          Authorization: `${token}`,
-        },
+      await axios.post(url, null, {
+        headers: { Authorization: `${token}` },
       });
       toast.dismiss();
       window.location.reload();
     } catch (error) {
-      if (error.response && error.response.status === 401) {
-        logoutUser();
-      }
+      if (error.response && error.response.status === 401) logoutUser();
       toast.dismiss();
       toast.error(error.response.data.error, {
         position: "top-center",
@@ -41,17 +38,13 @@ const ProposalCard = ({ proposal, token }) => {
       const url =
         backendUrl +
         `/reservations/driver/accept-proposal?reservationId=${proposal.id}`;
-      const response = await axios.post(url, null, {
-        headers: {
-          Authorization: `${token}`,
-        },
+      await axios.post(url, null, {
+        headers: { Authorization: `${token}` },
       });
       toast.dismiss();
       window.location.reload();
     } catch (error) {
-      if (error.response && error.response.status === 401) {
-        logoutUser();
-      }
+      if (error.response && error.response.status === 401) logoutUser();
       toast.dismiss();
       toast.error(error.response.data.error, {
         position: "top-center",
@@ -72,14 +65,14 @@ const ProposalCard = ({ proposal, token }) => {
         {!!!proposal.custom_pick_up && (
           <h1 className="body-bold-s text-center blue-text mt-3 mb-3">
             <img src="images/direction-icon.svg" className="me-2" />
-            Нема предложено локација на Подигање
+            No pick-up location suggested
           </h1>
         )}
         {!!proposal.custom_pick_up && (
           <div>
             <h1 className="body-bold-s text-center blue-text mb-3">
               <img src="images/direction-icon.svg" className="me-2" />
-              Локација на подигање
+              Pick-up location
             </h1>
             <iframe
               className="mb-3"
@@ -96,7 +89,7 @@ const ProposalCard = ({ proposal, token }) => {
           <div>
             <h1 className="body-bold-s text-center blue-text mt-3 mb-3">
               <img src="images/direction-icon.svg" className="me-2" />
-              Локација на оставање
+              Drop-off location
             </h1>
             <iframe
               className="mb-3"
@@ -109,23 +102,22 @@ const ProposalCard = ({ proposal, token }) => {
             ></iframe>
           </div>
         )}
-
         {!!!proposal.custom_drop_off && (
           <h1 className="body-bold-s text-center blue-text mt-3 mb-3">
             <img src="images/direction-icon.svg" className="me-2" />
-            Нема предложено локација на оставање
+            No drop-off location suggested
           </h1>
         )}
         <div className="d-flex justify-content-center">
           <Button variant="outline-danger" onClick={declineProposal}>
-            Одбиј
+            Decline
           </Button>
           <Button
             variant="success"
             className="accept-proposal"
             onClick={acceptProposal}
           >
-            Прифати
+            Accept
           </Button>
         </div>
       </Card.Body>

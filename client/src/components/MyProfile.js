@@ -73,22 +73,16 @@ const MyProfile = () => {
                         d="M8 14C6.67392 14 5.40215 14.5268 4.46447 15.4645C3.52678 16.4021 3 17.6739 3 19V21C3 21.5523 3.44772 22 4 22C4.55228 22 5 21.5523 5 21V19C5 18.2043 5.31607 17.4413 5.87868 16.8787C6.44129 16.3161 7.20435 16 8 16H16C16.7956 16 17.5587 16.3161 18.1213 16.8787C18.6839 17.4413 19 18.2044 19 19V21C19 21.5523 19.4477 22 20 22C20.5523 22 21 21.5523 21 21V19C21 17.6739 20.4732 16.4021 19.5355 15.4645C18.5979 14.5268 17.3261 14 16 14H8Z"
                       ></path>
                     </svg>
-                    Име
+                    Name
                   </div>
                   <span>{user.name}</span>
                 </div>
                 <div className="d-flex justify-content-between profile-field-rectangle">
                   <div className="d-flex">
-                    <img src="images/email-icon.svg" className="me-2" /> Е-Пошта
+                    <img src="images/email-icon.svg" className="me-2" /> Email
                   </div>
                   <span>{user.email}</span>
                 </div>
-                {/* <div className="d-flex justify-content-between profile-field-rectangle">
-                <div className="d-flex">
-                  <img src="images/lock-icon.svg" className="me-2" /> Лозинка
-                </div>
-                <img src="images/right-arrow.svg" />
-              </div> */}
                 <div
                   className="d-flex justify-content-between profile-field-rectangle"
                   onClick={() => setChangePhoneOpen(true)}
@@ -109,7 +103,7 @@ const MyProfile = () => {
                         stroke-linejoin="round"
                       />
                     </svg>
-                    Телефон
+                    Phone
                   </div>
                   <span>
                     {user.phone_num}
@@ -119,9 +113,11 @@ const MyProfile = () => {
                 <div className="d-flex justify-content-between profile-field-rectangle">
                   <div className="d-flex">
                     <img src="images/status-icon.svg" className="me-2" />
-                    Статус на профил
+                    Profile status
                   </div>
-                  <span>{userType === "passenger" ? "Патник" : "Возач"}</span>
+                  <span>
+                    {userType === "passenger" ? "Passenger" : "Driver"}
+                  </span>
                 </div>
                 <div className="d-flex justify-content-between profile-actions text-center">
                   <button
@@ -129,7 +125,7 @@ const MyProfile = () => {
                     onClick={logoutUser}
                   >
                     <img src="images/log-out-icon.svg" className="me-2" />
-                    Одјави се
+                    Log out
                   </button>
                 </div>
               </Container>

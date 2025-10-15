@@ -41,7 +41,7 @@ const SubmissionSuccess = ({
             {statusMessage}
           </h2>
           <hr />
-          <p>Ви благодариме што ја користевте нашата апликација</p>
+          <p>Thank you for using our application</p>
         </div>
         <div className="submission-bottom-bar">
           <p className="">{nextStepsMessage}</p>

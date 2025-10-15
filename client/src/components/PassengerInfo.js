@@ -37,21 +37,18 @@ const PassengerInfo = ({ key, reservation, location, token, isBeforeNow }) => {
         },
         (error) => {
           toast.dismiss();
-          toast.error(
-            "Ве молиме овозможете пристап до локација и пробајте повторно",
-            {
-              position: "top-center",
-              autoClose: 2000,
-              hideProgressBar: false,
-              closeButton: true,
-            }
-          );
+          toast.error("Please allow access to location and try again", {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeButton: true,
+          });
         }
       );
     } else {
       toast.dismiss();
       toast.error(
-        "Вашиот пребарувач не дозволува пристап до вашата локација, пробајте преку Google Chrome",
+        "Your browser does not allow access to your location, try using Google Chrome",
         {
           position: "top-center",
           autoClose: 2000,
@@ -96,7 +93,7 @@ const PassengerInfo = ({ key, reservation, location, token, isBeforeNow }) => {
                   fill="#4ac777"
                 />
               </svg>
-              Локација
+              Location
             </a>
           )}
           <a
@@ -104,7 +101,7 @@ const PassengerInfo = ({ key, reservation, location, token, isBeforeNow }) => {
             className="body-s ms-4 blue-text"
           >
             <img src="images/phone-icon.svg" />
-            Јави се
+            Call
           </a>
         </div>
       </div>
@@ -116,8 +113,8 @@ const PassengerInfo = ({ key, reservation, location, token, isBeforeNow }) => {
             disabled={reservation.driver_arrived === 1}
           >
             {reservation.driver_arrived === 1
-              ? "Стигање потврдено"
-              : "Стигнав на локацијата"}
+              ? "Arrival Confirmed"
+              : "I Arrived at the Location"}
           </Button>
         </div>
       )}

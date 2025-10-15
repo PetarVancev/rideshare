@@ -64,7 +64,7 @@ const SearchResults = () => {
       } catch (error) {
         console.error("Error fetching data:", error);
         setError(
-          "Грешка при пребарувањето. Напомена: Локациите морате да ги изберете од опциите што се појавуваат."
+          "Search error. Note: You must select locations from the options that appear."
         );
       } finally {
         setLoading(false); // Set loading to false once fetching is done
@@ -86,7 +86,7 @@ const SearchResults = () => {
         />
         {loading ? (
           <p className="text-center body-bold-xs rides-count mt-3">
-            Почекајте...
+            Please wait...
           </p>
         ) : error ? (
           <p className="text-center body-bold-xs rides-count mt-3">{error}</p>
@@ -94,8 +94,8 @@ const SearchResults = () => {
           <>
             <p className="text-center rides-count body-bold-xs mt-3">
               {rides.length > 0
-                ? `${rides.length} превозници`
-                : "Нема превозници за избраните критериуми"}
+                ? `${rides.length} carriers`
+                : "No carriers for the selected criteria"}
             </p>
             {rides.map((ride) => (
               <RideCard key={ride.id} ride={ride} seats={seats} />

@@ -32,16 +32,12 @@ const Contact = () => {
 
       if (response.status === 200) {
         formRef.current.reset();
-        toast.success("Вашата порака е успешно испратена.");
+        toast.success("Your message has been successfully sent.");
       } else {
-        toast.error(
-          "Грешка при испраќањето на пораката. Ве молиме обидете се подоцна."
-        );
+        toast.error("Error sending the message. Please try again later.");
       }
     } catch (error) {
-      toast.error(
-        "Грешка при испраќањето на пораката. Ве молиме обидете се подоцна."
-      );
+      toast.error("Error sending the message. Please try again later.");
     }
   };
 
@@ -51,10 +47,10 @@ const Contact = () => {
       <BottomBar />
       <Container className="contact-container">
         <h1 className="heading-s text-center pt-4 pb-4 mb-0 border-bottom">
-          Контакт
+          Contact
         </h1>
         <div className="d-flex justify-content-between border-bottom pb-4 pt-4">
-          <h3 className="body-bold-l mb-0">Генерални прашања</h3>
+          <h3 className="body-bold-l mb-0">General questions</h3>
           <a
             href="mailto:contact@rideshare.mk"
             className="body-s blue-text d-flex align-items-center"
@@ -63,7 +59,7 @@ const Contact = () => {
           </a>
         </div>
         <div className="d-flex justify-content-between border-bottom pb-4 pt-4">
-          <h3 className="body-bold-l mb-0">За плаќања</h3>
+          <h3 className="body-bold-l mb-0">For payments</h3>
           <a
             href="mailto:payments@rideshare.mk"
             className="body-s blue-text d-flex align-items-center"
@@ -72,7 +68,7 @@ const Contact = () => {
           </a>
         </div>
         <div className="d-flex justify-content-between border-bottom pb-4 pt-4">
-          <h3 className="body-bold-l mb-0">Следете не</h3>
+          <h3 className="body-bold-l mb-0">Follow us</h3>
           <div className="d-flex">
             <a
               className="body-s blue-text d-flex align-items-center me-4"
@@ -94,7 +90,7 @@ const Contact = () => {
               <Form.Control
                 type="text"
                 name="name"
-                placeholder="Име"
+                placeholder="Name"
                 className="outline-input"
                 required
               />
@@ -103,7 +99,7 @@ const Contact = () => {
               <Form.Control
                 type="email"
                 name="email"
-                placeholder="Е-пошта"
+                placeholder="Email"
                 className="outline-input"
                 required
               />
@@ -113,14 +109,14 @@ const Contact = () => {
                 as="textarea"
                 name="message"
                 rows={6}
-                placeholder="Порака"
+                placeholder="Message"
                 className="outline-input"
                 required
               />
             </Form.Group>
             <div className="text-end">
               <button className="outline-button" type="submit">
-                Испрати
+                Send
               </button>
             </div>
           </Form>

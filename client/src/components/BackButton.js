@@ -20,7 +20,7 @@ const BackButton = ({ customNav, className }) => {
       onClick={handleClick}
     >
       <FontAwesomeIcon icon={faChevronLeft} size="xs" />
-      &nbsp;&nbsp;Назад
+      &nbsp;&nbsp;Back
     </button>
   );
 };

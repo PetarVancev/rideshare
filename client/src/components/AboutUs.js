@@ -10,43 +10,40 @@ const AboutUs = () => {
       <NavBar type="white" />
       <BottomBar />
       <Container className="blue-text about-us-container">
-        <h1 className="heading-s pt-4 pb-4 mb-0">За нас</h1>
+        <h1 className="heading-s pt-4 pb-4 mb-0">About us</h1>
         <p>
-          Добредојдовте на нашата платформа за споделување на превоз! Ние сме
-          тим кој со страст и посветеност работи на тоа да го направиме
-          патувањето поевтино, поудобно и попријатно за сите. Нашата идеја е да
-          ви овозможиме да ги споделите трошоците за патувањето со други патници
-          кои патуваат во истиот правец, создавајќи еден поекономичен и
-          поодржлив начин на транспорт.
+          Welcome to our ridesharing platform! We are a team that is passionate
+          and dedicated to making travel cheaper, more convenient and more
+          enjoyable for everyone. Our idea is to enable you to share the cost of
+          your trip with other passengers traveling in the same direction,
+          creating a more economical and sustainable way of transportation.
         </p>
         <div className=" pb-4 pt-4">
           <h3 className="heading-xxs mb-3">Мисија</h3>
           <p>
-            Нашата мисија е да ги слушаме и да се грижиме за нашите корисници.
-            Вие сте оние кои ни помагате да растеме и да се подобруваме. Секоја
-            ваша повратна информација, предлог или критика е непроценлива за
-            нас. Ние веруваме дека заедно можеме да изградиме платформа која ќе
-            биде од корист за сите, нудејќи сигурност, удобност и флексибилност
-            во патувањето.Тим
+            Our mission is to listen and care for our users. You are the ones
+            who help us grow and improve. Any feedback, suggestion or criticism
+            from you is invaluable to us. We believe that together we can build
+            a platform that will benefit everyone, offering security,
+            convenience and flexibility in travel.
           </p>
         </div>
         <div className=" pb-4 pt-4">
           <h3 className="heading-xxs mb-3">Тим</h3>
           <p>
-            Зад овој проект стоиме ние, тим од трojца основачи и голем тим на
-            поддржувачи. Особена благодарност им изразуваме на сите наши
-            поддржувачи, кои со својата посветеност и верба во нашата идеја
-            придонесоа да станеме тоа што сме денес. Основачи на оваа платформа
-            се Адријан Зарески и Петар Ванчев, со помош од нашиот советник
-            Џордан Аико Деја. Заедно, вложуваме многу труд и ентузијазам за да
-            ја направиме вашата авантура поедноставна и поевтина. <br />
-            <br /> Ве покануваме да станете дел од нашата заедница и да се
-            уверите во придобивките од споделувањето на превозот. Со вашата
-            поддршка и учество, веруваме дека можеме да постигнеме уште поголеми
-            успеси и да ви понудиме уште подобри услуги. Ви благодариме за
-            вашата доверба и се радуваме на секое ваше ново патување со нас!{" "}
-            <br /> <br />
-            Тимот на rideshare
+            Behind this project are us, a team of three founders and a large
+            team of supporters. We express special gratitude to all our
+            supporters, who, with their dedication and belief in our idea,
+            contributed to making us what we are today. The founders of this
+            platform are Adrian Zareski and Petar Vanchev, with the help of our
+            advisor Jordan Aiko Deja. Together, we put a lot of effort and
+            enthusiasm into making your adventure simpler and cheaper. <br />
+            <br /> We invite you to become part of our community and see for
+            yourself the benefits of ridesharing. With your support and
+            participation, we believe that we can achieve even greater successes
+            and offer you even better services. We thank you for your trust and
+            look forward to your every new journey with us! <br /> <br />
+            Rideshare team
           </p>
         </div>
       </Container>

@@ -38,10 +38,10 @@ const RideInfo = () => {
 
   const [reserved, setReserved] = useState(false);
   const [successMessage, setSuccessMessage] = useState(
-    "Успешно направивте резервација"
+    "You have successfully made a reservation"
   );
   const [nextStepsMessage, setNextStepsMessage] = useState(
-    "*Вашата резервација можете да ја погледнете во делот активни патувања"
+    "*You can view your reservation in the active trips section"
   );
 
   useEffect(() => {
@@ -86,7 +86,7 @@ const RideInfo = () => {
         <BottomBar />
         <Container>
           <p className="text-center rides-count body-bold-xs mt-2">
-            Бараниот превоз не постои
+            The requested ride does not exist
           </p>
         </Container>
       </>
@@ -100,7 +100,7 @@ const RideInfo = () => {
         <BottomBar />
         <Container>
           <p className="text-center rides-count body-bold-xs mt-2">
-            Имате грешка во бројот на седишта
+            You have an error in the number of seats
           </p>
         </Container>
       </>
@@ -194,9 +194,11 @@ const RideInfo = () => {
         );
         toast.dismiss();
         if (isSuggestion) {
-          setSuccessMessage("Успешно испративте барање за резервација");
+          setSuccessMessage(
+            "You have successfully submitted a reservation request"
+          );
           setNextStepsMessage(
-            "*Ќе добиете известување кога вашата резервација ќе биде потврдена."
+            "*You will receive a notification when your reservation is confirmed."
           );
         }
         setReserved(true);
@@ -233,13 +235,13 @@ const RideInfo = () => {
           statusMessage={successMessage}
           nextStepsMessage={nextStepsMessage}
           goTo={"/my-rides"}
-          buttonText={"Патувања"}
+          buttonText={"Trips"}
         />
       ) : (
         <>
           {/* Modals */}
           <LocationPickerModal
-            title="Предложи локација на подигање"
+            title="Suggest pick-up location"
             open={departureSuggestOpen}
             defaultPosition={
               departureSuggestCord !== null
@@ -254,7 +256,7 @@ const RideInfo = () => {
             }}
           />
           <LocationPickerModal
-            title="Предложи локација на оставање"
+            title="Suggest drop-off location"
             open={arrivalSuggestOpen}
             defaultPosition={
               arrivalSuggestCord !== null
@@ -296,7 +298,7 @@ const RideInfo = () => {
               </div>
             </div>
             <div className="pt-0">
-              <h4 className="text-center mt-4 body-bold-l">Потребни места</h4>
+              <h4 className="text-center mt-4 body-bold-l">Required seats</h4>
               <div className="d-flex justify-content-center mt-4 mb-4 ">
                 <button
                   className="seats-change-button heading-s"
@@ -319,8 +321,8 @@ const RideInfo = () => {
                 >
                   <img src="images/direction-icon.svg" className="me-2" />
                   {departureSuggestCord == null
-                    ? "Предложи локација на подигање"
-                    : "Прoмени локација на подигање"}
+                    ? "Suggest pick-up location"
+                    : "Change pick-up location"}
                 </div>
               )}
               {!!ride.flexibleArrival && (
@@ -330,8 +332,8 @@ const RideInfo = () => {
                 >
                   <img src="images/direction-icon.svg" className="me-2" />
                   {arrivalSuggestCord == null
-                    ? "Предложи локација на оставање"
-                    : "Прoмени локација на оставање"}
+                    ? "Suggest drop-off location"
+                    : "Change drop-off location"}
                 </div>
               )}
             </div>
@@ -340,11 +342,11 @@ const RideInfo = () => {
                 <img src="images/danger-icon.svg" />
               </div>
               <span>
-                <h4>Порака за патниците</h4>
+                <h4>Message for passengers</h4>
                 <p>
                   {!!ride.additional_info
                     ? ride.additional_info
-                    : "Превозникот нема наведено информации кои би ви биле потребни."}
+                    : "The carrier has not specified any information you might need."}
                 </p>
               </span>
             </div>
@@ -355,10 +357,10 @@ const RideInfo = () => {
                     <img src="images/group-icon.svg" />
                   </div>
                   <div>
-                    <h4>{`Резервацијата е инстантна. Доколку предложите локација, резервацијаат треба да биде потврдена од превозникот`}</h4>
+                    <h4>{`The reservation is instant. If you suggest a location, the reservation needs to be confirmed by the carrier`}</h4>
                     <p>
-                      Ќе добиете известување кога вашата резервација ќе биде
-                      потврдена
+                      You will receive a notification when your reservation is
+                      confirmed
                     </p>
                   </div>
                 </div>
@@ -367,7 +369,7 @@ const RideInfo = () => {
               )}
               <span>
                 <img src="images/group-icon.svg" />
-                <h4>{`Најмногу ${ride.total_seats - 1} на задните седишта`}</h4>
+                <h4>{`Maximum ${ride.total_seats - 1} in the back seats`}</h4>
               </span>
               {ride.car_color && (
                 <span className="mb-0">
@@ -378,13 +380,13 @@ const RideInfo = () => {
             </div>
             <Row className="reviews-preview d-flex justify-content-between no-border">
               <Col xs={6}>
-                <h4>Искуства</h4>
+                <h4>Experiences</h4>
                 <p className="heading-xxs mx-auto review-average">
                   {ride.average_rating}/5
                 </p>
               </Col>
               <Col xs={6} className="text-end">
-                <span>{ride.driver_reviews.length} Рецензии</span>
+                <span>{ride.driver_reviews.length} Reviews</span>
               </Col>
               <Col xs={12} className="reviews-preview-container">
                 <Swiper
@@ -409,7 +411,7 @@ const RideInfo = () => {
                     navigate(`/reviews?driverId=${ride.driver_id}`)
                   }
                 >
-                  Види ги сите
+                  See all
                 </Button>
               </Col>
             </Row>
@@ -417,9 +419,9 @@ const RideInfo = () => {
               <Row className="reserve-bottom-bar">
                 <Col>
                   <strong className="body-bold-l">
-                    {ride.price * seats}мкд
+                    {ride.price * seats}mkd
                   </strong>
-                  <p className="body-xs">Вкупно за {seats} места</p>
+                  <p className="body-xs">Total for {seats} seats</p>
                 </Col>
                 <Col>
                   <button
@@ -427,8 +429,8 @@ const RideInfo = () => {
                     onClick={handleReserve}
                   >
                     {departureSuggestCord != null || arrivalSuggestCord != null
-                      ? "Предложи"
-                      : "Резервирај"}
+                      ? "Suggest"
+                      : "Reserve"}
                   </button>
                 </Col>
               </Row>

@@ -10,108 +10,105 @@ const HowToUse = () => {
       <NavBar type="white" />
       <BottomBar />
       <Container className="blue-text how-to-use-container">
-        <h1 className="heading-m pt-4 pb-1 mb-0">За возач</h1>
+        <h1 className="heading-m pt-4 pb-1 mb-0">For the Driver</h1>
         <p className="heading-subtext">
-          Објавете од каде до каде патувате и намалете ги трошоците на 0!
+          Post where you are traveling from and to, and reduce your costs to 0!
         </p>
         <div className="text-center pb-4">
           <img src="/images/how-to-use-hero.jpg" />
         </div>
-        <h3 className="heading-xxs">1. Објавете превоз</h3>
+        <h3 className="heading-xxs">1. Post a ride</h3>
         <p>
-          Kликнете на плусот и следете ги чекорите, не заборавајте да ја
-          вклучите опцијата <strong>“Добивај предлог локација”</strong>, доколку
-          би сакале да добивате предлози со конкретни адреси за преземање и
-          пристигање на патниците. (Пример: патникот сака да го преземете од
-          неговиот дом)
+          Click on the plus and follow the steps, don't forget to enable the
+          option <strong>"Receive location suggestion"</strong>, if you would
+          like to receive suggestions with concrete addresses for picking up and
+          dropping off passengers. (Example: the passenger wants you to pick
+          them up from their home)
         </p>
-        <h3 className="heading-xxs">2. Патниците резервираат онлајн</h3>
+        <h3 className="heading-xxs">2. Passengers book online</h3>
         <p>
-          Откако патниците ќе резервираат во делот <strong>“патувања” </strong>
-          ќе може да ги погледнете локациите за подигање и оставање на патниците
-          како и нивниот телефонски број. Исто така тука можете да ги погледнете
-          и прифатите/одбиете предлозите на патниците.
+          After passengers book, in the <strong>"Trips"</strong> section you can
+          view the locations for picking up and dropping off passengers as well
+          as their phone number. You can also view and accept/reject passenger
+          suggestions here.
         </p>
         <h3 className="heading-xxs">
-          3. Потврдете кога ќе пристигнете на локацијата за преземање на
-          патниците.
+          3. Confirm when you arrive at the passenger pickup location.
         </h3>
         <p>
-          Кога ќе пристигнете на локацијата за преземање на патниците/патникот
-          не заборавајте да притиснете на копчето <strong>"Стигнав"</strong> кај
-          соодветниот патник/локација. Овој чекор е особено важен доколку
-          примате плаќања онлајн како да би можеле да ве заштитеме и да ги
-          добиете парите иако патникот не се појави.
+          When you arrive at the pickup location for the passengers/passenger,
+          don't forget to press the <strong>"I've arrived"</strong> button next
+          to the corresponding passenger/location. This step is especially
+          important if you receive payments online so that we can protect you
+          and you can receive the money even if the passenger does not show up.
         </p>
-        <h3 className="heading-xxs">4. Патувате заедно</h3>
+        <h3 className="heading-xxs">4. Travel together</h3>
         <p>
-          Откако најдовте патници, Ви посакуваме среќен пат и милион безгрижни
-          патувања.
+          After you've found passengers, we wish you a happy journey and a
+          million worry-free trips.
         </p>
 
-        <h3 className="heading-xxs">5. Исплата</h3>
+        <h3 className="heading-xxs">5. Payout</h3>
         <p>
-          Можете да изберете патниците да ви платат во автомобил за време на
-          патувањето или пак онлајн преку нашата апликација. Доколку изберете
-          онлајн вашите пари ќе ви бидат на располагање кога патникот ќе потврди
-          дека пристигнал на својата дестинација или во рок од 1-2 работни дена
-          доколку патникот заборавил да потврди дека пристигнал на својата
-          локација или не се појавил воопшто.
+          You can choose to have passengers pay you in the car during the trip
+          or online through our application. If you choose online, your money
+          will be available when the passenger confirms that they have arrived
+          at their destination or within 1-2 business days if the passenger
+          forgot to confirm their arrival at their location or did not show up
+          at all.
         </p>
-        <h1 className="heading-m pt-4 pb-1 mb-0">За патник</h1>
+        <h1 className="heading-m pt-4 pb-1 mb-0">For the Passenger</h1>
         <p className="mb-4 heading-subtext">
-          Внесете од каде до каде патувате и патувајте најудобно за минимален
-          износ!
+          Enter where you are traveling from and to and travel most comfortably
+          for a minimal amount!
         </p>
-        <h3 className="heading-xxs">1. Пребарај превоз</h3>
+        <h3 className="heading-xxs">1. Search for a ride</h3>
         <p>
-          Внесете го градот од каде поаѓате и градот на пристигање како и денот
-          кога ви е потребен превозот. Кликнете побарај. Сега може да го
-          одберете патувањето кое најмногу ви одговара. Не заборавајте да
-          изберете <strong>“ПРЕДЛОГ ЛОКАЦИЈА НА ПОДИГАЊЕ”</strong> и
-          <strong>“ПРЕДЛОГ ЛОКАЦИЈА НА ОСТАВАЊЕ”</strong> доколку имате
-          специфични барања од каде би сакале да ве подигне/остави возачот.
-          Доколку испратите предлог најпрвин возачот треба да го прифати вашиот
-          предлог за да се потврди вашата резервација.
+          Enter the city of departure and the city of arrival as well as the day
+          you need the ride. Click search. Now you can choose the trip that
+          suits you best. Don't forget to select{" "}
+          <strong>"SUGGESTED PICKUP LOCATION"</strong> and{" "}
+          <strong>"SUGGESTED DROPOFF LOCATION"</strong> if you have specific
+          requests for where the driver should pick you up/drop you off. If you
+          send a suggestion, the driver must first accept your suggestion for
+          your reservation to be confirmed.
         </p>
-        <h3 className="heading-xxs">2. Плаќање</h3>
+        <h3 className="heading-xxs">2. Payment</h3>
         <p>
-          Прво треба да го надополните вашиот паричник на апликацијата.
-          Надополнетите средства ги користите за плаќање на резервација или
-          плаќање на возачот. Може да платите за време на патувањето во кеш или
-          онлајн преку нашата апликација во зависност од начинот на плаќање што
-          го одбрал возачот.
+          First, you need to top up your wallet in the application. The
+          topped-up funds are used for paying for the reservation or paying the
+          driver. You can pay during the trip in cash or online through our
+          application, depending on the payment method chosen by the driver.
         </p>
-        <h3 className="heading-xxs">3. Откако резервиравте</h3>
+        <h3 className="heading-xxs">3. After you've booked</h3>
         <p>
-          Откако резервиравте можете да ја погледнете вашата резервација во
-          делот <strong>“патувања”</strong> каде ќе може да му пишите порака на
-          возачот.
+          After you've booked, you can view your reservation in the{" "}
+          <strong>"Trips"</strong> section where you can send a message to the
+          driver.
         </p>
         <h3 className="heading-xxs">
-          4. Потврдете кога ќе пристигнете на вашата дестинација.
+          4. Confirm when you arrive at your destination.
         </h3>
         <p>
-          Кога ќе пристигнете на вашата дестинација не заборавајте да притиснете
-          на копчето <strong>"Стигнав"</strong> кај соодветното патување. Овој
-          чекор е особено важен доколку плаќате онлајн бидејќи парите ќе му
-          бидат префрлени на возачот откако ќе го направите овој чекор или
-          поминат 24ч од вашето пристигање.
+          When you arrive at your destination, don't forget to press the{" "}
+          <strong>"I've arrived"</strong> button next to the corresponding trip.
+          This step is especially important if you are paying online, as the
+          money will be transferred to the driver after you complete this step
+          or after 24 hours have passed since your arrival.
         </p>
-        <h3 className="heading-xxs">5. Патувате заедно</h3>
+        <h3 className="heading-xxs">5. Travel together</h3>
         <p>
-          Откако возачот ве зеде, ви посакуваме среќен пат и милион безгрижни
-          патувања.
+          After the driver has picked you up, we wish you a happy journey and a
+          million worry-free trips.
         </p>
-        <h3 className="heading-xxs">6. Патувањето не се реализира</h3>
+        <h3 className="heading-xxs">6. The trip does not take place</h3>
         <p>
-          Доколку возачот не се појави или патувањето не се реализира, кликнете
-          на копчето <strong>"Превозот не се реализира"</strong>. Каде што ги
-          пишувате причините поради кои возењето не се реализира и доколку
-          причините се оправдани(Пример: возачот не се појавува), парите ќе ви
-          бидат вратени во рок од неколку работни дена. Имате рок од{" "}
-          <strong>24ч</strong> по завршувањето на патувањето да го направите
-          ова.
+          If the driver does not show up or the trip does not take place, click
+          the button <strong>"The ride did not take place"</strong>. Where you
+          write the reasons why the ride did not take place and if the reasons
+          are justified (Example: the driver does not show up), the money will
+          be returned to you within a few business days. You have a deadline of{" "}
+          <strong>24h</strong> after the completion of the trip to do this.
         </p>
       </Container>
     </div>

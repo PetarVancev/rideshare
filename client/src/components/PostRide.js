@@ -70,9 +70,9 @@ const PostRide = () => {
   const errorMessageRef = useRef(null);
 
   const [success, setSuccess] = useState(false);
-  const successMessage = "Успешно објавивте превоз";
+  const successMessage = "You have successfully posted a ride";
   const nextStepsMessage =
-    "*Вашата резервација можете да ја погледнете во делот активни патувања";
+    "*You can view your reservation in the active trips section";
 
   useEffect(() => {
     if (cashNoticeOpen) {
@@ -177,13 +177,13 @@ const PostRide = () => {
     const currentDateTime = new Date();
 
     if (!fromId) {
-      setErrorMessage("Изберете од каде патувате");
+      setErrorMessage("Select your departure location");
       setTimeout(() => {
         errorMessageRef.current.scrollIntoView({ behavior: "smooth" });
       }, 0);
     } else if (selectedDateTime <= currentDateTime) {
       setErrorMessage(
-        "Времето мора да биде покасно од моменталното време " +
+        "The time must be later than the current time " +
           currentDateTime.toLocaleTimeString([], {
             hour: "2-digit",
             minute: "2-digit",
@@ -202,12 +202,14 @@ const PostRide = () => {
   const handleSubmit2 = (e) => {
     e.preventDefault();
     if (!toId) {
-      setErrorMessage("Изберете до каде патувате");
+      setErrorMessage("Select your arrival location");
       setTimeout(() => {
         errorMessageRef.current.scrollIntoView({ behavior: "smooth" });
       }, 0);
     } else if (fromId == toId) {
-      setErrorMessage("Неможи да патувате до истата локација од која тргате");
+      setErrorMessage(
+        "You cannot travel to the same location you are starting from"
+      );
       setTimeout(() => {
         errorMessageRef.current.scrollIntoView({ behavior: "smooth" });
       }, 0);
@@ -283,7 +285,7 @@ const PostRide = () => {
     e.preventDefault();
     if (!policyCheck) {
       setErrorMessage(
-        "Морате да се согласите со политиката и правилата за користење на платформата"
+        "You must agree to the platform's policy and terms of use"
       );
       setTimeout(() => {
         errorMessageRef.current.scrollIntoView({ behavior: "smooth" });
@@ -302,18 +304,18 @@ const PostRide = () => {
           statusMessage={successMessage}
           nextStepsMessage={nextStepsMessage}
           goTo={"/my-rides"}
-          buttonText={"Патувања"}
+          buttonText={"Trips"}
         />
       )}
       {step === 1 && !success && (
         <div className="post-ride-cta">
           <Container>
             <h2 className="heading-s">
-              Објавете превоз и поделете ги трошоците за патувањето!
+              Post a ride and share the travel costs!
             </h2>
             <p className="body-xs">
-              Патниците чекаат на вас! Објавете превоз и намалете ги трошоците
-              за вашето патување
+              Passengers are waiting for you! Post a ride and reduce your travel
+              costs
             </p>
             <img src="images/cta-underline.svg" alt="cta underline" />
           </Container>
@@ -333,9 +335,9 @@ const PostRide = () => {
               <form onSubmit={handleSubmit1}>
                 <section className="bottom-border mb-3">
                   <div className="mb-2">
-                    <h4 className="heading-xxs">Избери локација на поаѓање</h4>
+                    <h4 className="heading-xxs">Select departure location</h4>
                     <LocationAutocomplete
-                      placeholder="Од каде патувате"
+                      placeholder="From where you are traveling"
                       name={fromName}
                       onSelect={(id, name) => {
                         setFromId(id);
@@ -349,8 +351,8 @@ const PostRide = () => {
                   <div>
                     <div className="d-flex justify-content-between accept-location-suggestions">
                       <h4 className="heading-xxs">
-                        <img src="images/direction-icon.svg" /> Добивај предлог
-                        локација
+                        <img src="images/direction-icon.svg" /> Receive location
+                        suggestion
                       </h4>
                       <Form>
                         <Form.Switch
@@ -364,16 +366,16 @@ const PostRide = () => {
                       </Form>
                     </div>
                     <p className="body-xs">
-                      Доколку се согласите на оваа опција ќе добивате локација
-                      од која би сакале да бидат земени патниците.
+                      If you agree to this option you will receive a location
+                      from where passengers would like to be picked up.
                       <strong>
-                        Ќе имате можност да ја прифатите или одбиете.
+                        You will have the option to accept or decline.
                       </strong>
                     </p>
                   </div>
                 </section>
                 <section>
-                  <h4 className="heading-xxs">Одберете датум на поаѓање</h4>
+                  <h4 className="heading-xxs">Select departure date</h4>
                   <div className="input-container mb-3">
                     <img src="images/date-icon.svg" alt="date icon" />
                     <input
@@ -385,7 +387,7 @@ const PostRide = () => {
                       onChange={(e) => setDepartureDate(e.target.value)}
                     />
                   </div>
-                  <h4 className="heading-xxs">Внесете време на поаѓање</h4>
+                  <h4 className="heading-xxs">Enter departure time</h4>
                   <div className="d-flex justify-content-center time-input">
                     <div className="d-flex flex-column align-items-center me-2">
                       <input
@@ -406,7 +408,7 @@ const PostRide = () => {
                           }
                         }}
                       />
-                      <span>Час</span>
+                      <span>Hour</span>
                     </div>
                     <div className="d-flex align-items-center seperator heading-s">
                       :
@@ -430,7 +432,7 @@ const PostRide = () => {
                           }
                         }}
                       />
-                      <span>Минути</span>
+                      <span>Minutes</span>
                     </div>
                   </div>
                   {/* <div className="input-container mb-4">
@@ -451,7 +453,7 @@ const PostRide = () => {
                   className="col-12 mt-4 dark-button body-bold-medium"
                   type="submit"
                 >
-                  Продолжи
+                  Continue
                 </Button>
               </form>
             )}
@@ -459,11 +461,9 @@ const PostRide = () => {
               <form onSubmit={handleSubmit2}>
                 <section className="bottom-border mb-3">
                   <div className="mb-2">
-                    <h4 className="heading-xxs">
-                      Избери локација на пристигање
-                    </h4>
+                    <h4 className="heading-xxs">Select arrival location</h4>
                     <LocationAutocomplete
-                      placeholder="До каде патувате"
+                      placeholder="To where you are traveling"
                       name={toName}
                       onSelect={(id, name) => {
                         setToId(id);
@@ -478,7 +478,7 @@ const PostRide = () => {
                     <div className="d-flex justify-content-between accept-location-suggestions">
                       <h4 className="heading-xxs">
                         <img src="images/direction-icon.svg" />
-                        Добивај предлог локација
+                        Receive location suggestion
                       </h4>
                       <Form>
                         <Form.Switch
@@ -490,16 +490,16 @@ const PostRide = () => {
                       </Form>
                     </div>
                     <p className="body-xs">
-                      Доколку се согласите на оваа опција ќе добивате локација
-                      до која би сакале да бидат оставени патниците.
+                      If you agree to this option you will receive a location
+                      where passengers would like to be dropped off.
                       <strong>
-                        Ќе имате можност да ја прифатите или одбиете.
+                        You will have the option to accept or decline.
                       </strong>
                     </p>
                   </div>
                 </section>
                 <section>
-                  <h4 className="heading-xxs">Внесете траење на патувањето</h4>
+                  <h4 className="heading-xxs">Enter travel duration</h4>
                   <div className="d-flex justify-content-center time-input">
                     <div className="d-flex flex-column align-items-center me-2">
                       <input
@@ -520,7 +520,7 @@ const PostRide = () => {
                           }
                         }}
                       />
-                      <span>Час</span>
+                      <span>Hour</span>
                     </div>
                     <div className="d-flex align-items-center seperator heading-s">
                       :
@@ -544,7 +544,7 @@ const PostRide = () => {
                           }
                         }}
                       />
-                      <span>Минути</span>
+                      <span>Minutes</span>
                     </div>
                   </div>
                 </section>
@@ -552,7 +552,7 @@ const PostRide = () => {
                   className="col-12 mt-4 dark-button body-bold-medium"
                   type="submit"
                 >
-                  Продолжи
+                  Continue
                 </Button>
               </form>
             )}
@@ -560,7 +560,7 @@ const PostRide = () => {
               <>
                 <section className="bottom-border mb-4">
                   <h4 className="heading-xxs mb-0">
-                    Колку слободни места имате
+                    How many free seats do you have
                   </h4>
                   <div className="d-flex justify-content-center mt-4 mb-4">
                     <button
@@ -582,28 +582,28 @@ const PostRide = () => {
                 </section>
                 <form onSubmit={handleSubmit3}>
                   <section>
-                    <h4 className="heading-xxs">Марка и модел на автомобил</h4>
+                    <h4 className="heading-xxs">Car make and model</h4>
                     <input
                       className="post-input mb-4"
                       type="text"
                       value={carColor}
                       onChange={(e) => setCarColor(e.target.value)}
-                      placeholder="Пр. Шкода Фабиа "
+                      placeholder="E.g. Škoda Fabia "
                     />
-                    <h4 className="heading-xxs">Боја на автомобил</h4>
+                    <h4 className="heading-xxs">Car color</h4>
                     <input
                       className="post-input"
                       type="text"
                       value={carModel}
                       onChange={(e) => setCarModel(e.target.value)}
-                      placeholder="Пр. Бела"
+                      placeholder="E.g. White"
                     />
                   </section>
                   <Button
                     className="col-12 mt-4 dark-button body-bold-medium"
                     type="submit"
                   >
-                    Продолжи
+                    Continue
                   </Button>
                 </form>
               </>
@@ -622,10 +622,10 @@ const PostRide = () => {
                         className="close-modal"
                         onClick={() => setCashNoticeOpen(false)}
                       />
-                      Доколку го изберете овој начин на плаќање, сте согласени
-                      дека патникот ќе ви плати во автомобил за време на
-                      патувањето и rideshare не е должен да исплати никаква сума
-                      доколку не се појави патникот
+                      If you choose this payment method, you agree that the
+                      passenger will pay you in the car during the trip and
+                      rideshare is not obligated to pay any amount if the
+                      passenger does not show up
                     </div>
                   </div>
                   <div className="d-flex payment-types-container justify-content-center">
@@ -634,16 +634,16 @@ const PostRide = () => {
                       onClick={() => setPaymentType("cash")}
                     >
                       <div className="body-s">
-                        <h5 className="text-center">Плаќање во кеш</h5>
-                        патникот ќе ви плати во авомобил
+                        <h5 className="text-center">Cash Payment</h5>
+                        The passenger will pay you in the car
                       </div>
                     </div>
                   </div>
                   <div className="mb-2">
-                    <h4 className="heading-xxs">Сума надоместок за превозот</h4>
+                    <h4 className="heading-xxs">Ride compensation amount</h4>
                     <div className="input-container2 mb-3">
                       <div class="left-corner-div heading-xs d-flex justify-content-center align-items-center">
-                        ден
+                        den
                       </div>
                       <input
                         className="post-input currency-box"
@@ -659,7 +659,7 @@ const PostRide = () => {
                   className="col-12 mt-4 dark-button body-bold-medium"
                   type="submit"
                 >
-                  Продолжи
+                  Continue
                 </Button>
               </form>
             )}
@@ -668,11 +668,11 @@ const PostRide = () => {
                 <section className="mb-3">
                   <div className="mb-2">
                     <h4 className="heading-xxs">
-                      Дали имате напомена/порака за патниците?
+                      Do you have a note/message for the passengers?
                     </h4>
                     <textarea
                       className="post-input text-start p-2"
-                      placeholder="Пр. Мала торба по патник. Паузи по договор. Превоз на миленици со доплата."
+                      placeholder="E.g. Small bag per passenger. Breaks by agreement. Pet transport with extra charge."
                       value={rideNotice}
                       onChange={(e) => setRideNotice(e.target.value)}
                       maxLength={500}
@@ -690,8 +690,7 @@ const PostRide = () => {
                       className="form-check-label d-inline"
                       htmlFor="myCheckbox"
                     >
-                      Се согласувам на политиката и правилата за користење на
-                      апликацијата{" "}
+                      I agree to the policy and terms of use of the application{" "}
                     </label>
                   </div>
                 </section>
@@ -699,7 +698,7 @@ const PostRide = () => {
                   className="col-12 mt-4 dark-button body-bold-medium"
                   type="submit"
                 >
-                  Објави го превозот
+                  Post the ride
                 </Button>
               </form>
             )}

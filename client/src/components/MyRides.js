@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Button } from "react-bootstrap";
+import { Container, Row, Col } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 
@@ -26,22 +26,19 @@ const MyRides = () => {
     if (isLoggedIn()) {
       fetchRideData();
     }
-  }, [location.search, category, setReviewModalOpen, complaintModalOpen]);
+  }, [location.search, category, reviewModalOpen, complaintModalOpen]);
 
   const fetchRideData = async () => {
     try {
       let url = `${backendUrl}/reservations/${userType}/get-my?status=${category}`;
-      if (userType == "driver") {
+      if (userType === "driver") {
         url = `${backendUrl}/rides/get-my?status=${category}`;
       }
-      const response = await axios.get(
-        url, // Using userType directly here
-        {
-          headers: {
-            Authorization: `${token}`,
-          },
-        }
-      );
+      const response = await axios.get(url, {
+        headers: {
+          Authorization: `${token}`,
+        },
+      });
       setRideData(response.data);
     } catch (error) {
       if (error.response && error.response.status === 401) {
@@ -51,18 +48,18 @@ const MyRides = () => {
     }
   };
 
-  function handleCategoryChange(selectedCategory) {
+  const handleCategoryChange = (selectedCategory) => {
     setRideData(null);
     setCategory(selectedCategory);
-  }
+  };
 
   const handleOpenReviewModal = (rideId) => {
-    setModalEntryId(rideId); // Set the selected rideId when opening the modal
+    setModalEntryId(rideId);
     setReviewModalOpen(true);
   };
 
   const handleOpenComplaintModal = (reservationId) => {
-    setModalEntryId(reservationId); // Set the selected rideId when opening the modal
+    setModalEntryId(reservationId);
     setComplaintModalOpen(true);
   };
 
@@ -84,61 +81,53 @@ const MyRides = () => {
         <Row className="category-select justify-content-center mt-3 body-bold-medium">
           <Col className="text-center" xs={4}>
             <a
-              className={` ${
+              className={`${
                 category === "R" ? "selected" : ""
               } d-flex justify-content-center`}
-              onClick={() => {
-                handleCategoryChange("R");
-              }}
+              onClick={() => handleCategoryChange("R")}
             >
-              <span>Активни</span>
+              <span>Active</span>
             </a>
           </Col>
-          {userType == "passenger" && (
+          {userType === "passenger" && (
             <Col className="text-center" xs={4}>
               <a
-                className={` ${
+                className={`${
                   category === "P" ? "selected" : ""
                 } d-flex justify-content-center`}
-                onClick={() => {
-                  handleCategoryChange("P");
-                }}
+                onClick={() => handleCategoryChange("P")}
               >
-                <span>Предложени</span>
+                <span>Proposed</span>
               </a>
             </Col>
           )}
           <Col className="text-center" xs={4}>
             <a
-              className={` ${
+              className={`${
                 category === "C" ? "selected" : ""
               } d-flex justify-content-center`}
-              onClick={() => {
-                handleCategoryChange("C");
-              }}
+              onClick={() => handleCategoryChange("C")}
             >
-              <span>Завршени</span>
+              <span>Completed</span>
             </a>
           </Col>
         </Row>
 
         <div className="my-rides-container">
           {rideData &&
-            rideData.map((ride, index) => {
-              return (
-                <MyRideCard
-                  key={index}
-                  userType={userType}
-                  rideData={ride}
-                  category={category}
-                  token={token}
-                  openReviewModal={() => handleOpenReviewModal(ride.ride.id)}
-                  openComplaintModal={() =>
-                    handleOpenComplaintModal(ride.reservation.id)
-                  }
-                />
-              );
-            })}
+            rideData.map((ride, index) => (
+              <MyRideCard
+                key={index}
+                userType={userType}
+                rideData={ride}
+                category={category}
+                token={token}
+                openReviewModal={() => handleOpenReviewModal(ride.ride.id)}
+                openComplaintModal={() =>
+                  handleOpenComplaintModal(ride.reservation.id)
+                }
+              />
+            ))}
         </div>
       </Container>
     </div>

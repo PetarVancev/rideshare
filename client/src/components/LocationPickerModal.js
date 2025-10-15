@@ -88,15 +88,12 @@ const LocationPickerModal = ({
             onSet(currentPosition);
           } else {
             toast.dismiss();
-            toast.error(
-              "Локацијата не се соовпаѓа со местото на тргање/пристигнување",
-              {
-                position: "top-center",
-                autoClose: 2000,
-                hideProgressBar: false,
-                closeButton: true,
-              }
-            );
+            toast.error("Location does not match the departure/arrival area", {
+              position: "top-center",
+              autoClose: 2000,
+              hideProgressBar: false,
+              closeButton: true,
+            });
           }
         },
         (error) => {
@@ -150,8 +147,8 @@ const LocationPickerModal = ({
           onClick={handleUseCurrentPosition}
         >
           <span className="mx-auto">
-            <img src="images/location-icon.svg" className="me-2" /> Користи
-            моментална локација
+            <img src="images/location-icon.svg" className="me-2" /> Use current
+            location
           </span>
         </h1>
         {renderMap()}
@@ -162,7 +159,7 @@ const LocationPickerModal = ({
               className="col-12 mt-4 dark-button body-bold-medium"
               onClick={() => onSet(markerPosition)}
             >
-              Предложи
+              Suggest
             </Button>
           </Col>
         </Row>

@@ -19,14 +19,14 @@ const SearchRideCard = ({ initials }) => {
   const [date, setDate] = useState(formatDate(new Date(initials.date)));
 
   const seats = [
-    { text: "1 Место", value: 1 },
-    { text: "2 Места", value: 2 },
-    { text: "3 Места", value: 3 },
-    { text: "4 Места", value: 4 },
-    { text: "5 Места", value: 5 },
-    { text: "6 Места", value: 6 },
-    { text: "7 Места", value: 7 },
-    { text: "8 Места", value: 8 },
+    { text: "1 Seat", value: 1 },
+    { text: "2 Seats", value: 2 },
+    { text: "3 Seats", value: 3 },
+    { text: "4 Seats", value: 4 },
+    { text: "5 Seats", value: 5 },
+    { text: "6 Seats", value: 6 },
+    { text: "7 Seats", value: 7 },
+    { text: "8 Seats", value: 8 },
   ];
 
   const handleSubmit = (e) => {
@@ -44,7 +44,7 @@ const SearchRideCard = ({ initials }) => {
             <div className="search-inputs mt-1">
               <img src="images/location-icon.svg" />
               <LocationAutocomplete
-                placeholder="Од каде патувате"
+                placeholder="Where are you traveling from"
                 name={fromName}
                 onSelect={(id, name) => {
                   setFromId(id);
@@ -58,7 +58,7 @@ const SearchRideCard = ({ initials }) => {
             <div className="search-inputs">
               <img src="images/location-icon2.svg" />
               <LocationAutocomplete
-                placeholder="До каде патувате"
+                placeholder="Where are you traveling to"
                 name={toName}
                 onSelect={(id, name) => {
                   setToId(id);
@@ -112,7 +112,7 @@ const SearchRideCard = ({ initials }) => {
           </Form.Group>
         </Card.Body>
         <Button className="dark-button col-12 mt-4 search-button" type="submit">
-          Пребарај
+          Search
         </Button>
       </Form>
     </Card>

@@ -25,13 +25,13 @@ const Registration = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (phone.length < 9) {
-      setError("Телефонскиот број не е валиден.");
+      setError("The phone number is not valid.");
       return;
     }
     const passwordRegex = /^(?=.*[A-ZА-Ш]).{8,}$/i;
     if (!passwordRegex.test(password)) {
       setError(
-        "Лозинката мора да има најмалку 8 карактери и една голема буква"
+        "The password must have at least 8 characters and one uppercase letter"
       );
       return;
     }
@@ -64,12 +64,12 @@ const Registration = () => {
       <Container>
         <BackButton />
         <div className="auth-container">
-          <h2>Податоци за вас</h2>
+          <h2>Your details</h2>
           <Form onSubmit={handleSubmit} className="auth-forms">
             <Form.Group controlId="formBasicName">
               <Form.Control
                 type="text"
-                placeholder="Вашeто име"
+                placeholder="Your name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
@@ -79,7 +79,7 @@ const Registration = () => {
             <Form.Group controlId="formBasicPhone">
               <Form.Control
                 type="tel"
-                placeholder="Телефонски број"
+                placeholder="Phone number"
                 value={phone}
                 pattern="[0-9()+]+"
                 onChange={(e) => {
@@ -106,7 +106,7 @@ const Registration = () => {
             <Form.Group controlId="formBasicEmail">
               <Form.Control
                 type="email"
-                placeholder="Вашата е-пошта"
+                placeholder="Your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -118,7 +118,7 @@ const Registration = () => {
               <div className="input-group">
                 <Form.Control
                   type={showPassword ? "text" : "password"}
-                  placeholder="Лозинка"
+                  placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
@@ -141,12 +141,12 @@ const Registration = () => {
             </Form.Group>
 
             <Form.Group controlId="formBasicUserType">
-              <Form.Label>Апликацијата ќе ја користам како:</Form.Label>
+              <Form.Label>I will use the application as:</Form.Label>
               <Container>
                 <Row>
                   <Col xs={6} className="ml-5">
                     <Form.Check
-                      label="Патник"
+                      label="Passenger"
                       type="radio"
                       id="passengerRadio"
                       name="userType"
@@ -157,7 +157,7 @@ const Registration = () => {
                   </Col>
                   <Col xs={6}>
                     <Form.Check
-                      label="Возач"
+                      label="Driver"
                       type="radio"
                       id="driverRadio"
                       name="userType"
@@ -171,7 +171,7 @@ const Registration = () => {
             </Form.Group>
 
             <Button className="dark-button col-12" type="submit">
-              Креирајте го вашиот профил
+              Create your profile
             </Button>
           </Form>
           {message && <Alert variant="success">{message}</Alert>}

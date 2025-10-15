@@ -9,52 +9,42 @@ const RideIncomeCard = ({ data, userType }) => {
     minute: "2-digit",
   });
 
-  let arrivalDateTime = new Date(departureDateTime); // Initialize with departure datetime
-  let arrivalDate = ""; // Initialize arrival date string
-  let arrivalTime = ""; // Initialize arrival time string
-  let rideDuration = ""; // Initialize ride duration string
+  let arrivalDateTime = new Date(departureDateTime);
+  let arrivalDate = "";
+  let arrivalTime = "";
+  let rideDuration = "";
 
   if (data.ride_duration) {
     const [rideDurationHours, rideDurationMinutes] = data.ride_duration
       .split(":")
       .map(Number);
 
-    // Calculate total minutes for ride duration
     const totalRideMinutes = rideDurationHours * 60 + rideDurationMinutes;
-
-    // Calculate total minutes for arrival time
     let totalArrivalMinutes =
       departureDateTime.getHours() * 60 +
       departureDateTime.getMinutes() +
       totalRideMinutes;
 
-    // Adjust date if arrival time exceeds 24 hours
     if (totalArrivalMinutes >= 24 * 60) {
       arrivalDateTime.setDate(arrivalDateTime.getDate() + 1);
       totalArrivalMinutes -= 24 * 60;
     }
 
-    // Set arrival time
     arrivalDateTime.setHours(Math.floor(totalArrivalMinutes / 60));
     arrivalDateTime.setMinutes(totalArrivalMinutes % 60);
 
-    // Format arrival date
     arrivalDate = arrivalDateTime.toLocaleDateString("en-GB");
-
-    // Format arrival time
     arrivalTime = arrivalDateTime.toLocaleTimeString("en-GB", {
       hour: "2-digit",
       minute: "2-digit",
     });
 
-    // Format ride duration
     rideDuration = `${rideDurationHours
       .toString()
       .padStart(2, "0")}:${rideDurationMinutes.toString().padStart(2, "0")}`;
   }
 
   let totalRideIncome = 0;
-
   if (data && data.transactions && data.transactions.length > 0) {
     data.transactions.forEach((transaction) => {
       totalRideIncome += transaction.amount;
@@ -69,7 +59,7 @@ const RideIncomeCard = ({ data, userType }) => {
           <div className="d-flex destination-info justify-content-between">
             <div className="d-flex flex-column">
               <h4 className="heading-xs">{data.from_location_name}</h4>
-              <span className="body-bold-xs">22:00</span>
+              <span className="body-bold-xs">{departureTime}</span>
             </div>
             <div className="d-flex flex-column pb-2">
               <span className="text-center body-bold-xs">{rideDuration}</span>
@@ -83,28 +73,30 @@ const RideIncomeCard = ({ data, userType }) => {
               <span className="body-bold-xs">{arrivalTime}</span>
             </div>
           </div>
+
           <div className="ride-income">
             <div className="d-flex justify-content-between total-ride-income align-items-center">
               <span className="body-bold-s">
-                {userType == "driver"
-                  ? `Приливи${data.cash_payment ? " во кеш" : ""}`
-                  : `Платено${data.cash_payment ? " во кеш" : ""}`}
+                {userType === "driver"
+                  ? `Income${data.cash_payment ? " (Cash)" : ""}`
+                  : `Paid${data.cash_payment ? " (Cash)" : ""}`}
               </span>
               <span className="green-text btn-text-m">
-                ден
-                {userType == "driver"
+                {userType === "driver"
                   ? totalRideIncome
                   : data.cash_payment
                   ? data.amount
-                  : data.price}
+                  : data.price}{" "}
+                currency
               </span>
             </div>
+
             <div className="income-breakdown">
-              {userType == "driver" &&
+              {userType === "driver" &&
                 data.transactions &&
                 data.transactions.length > 0 &&
                 data.transactions.map((transaction) => {
-                  console.log(transaction); // Log the transaction to the console
+                  console.log(transaction);
                   return (
                     <div
                       className="d-flex justify-content-between"
@@ -114,7 +106,7 @@ const RideIncomeCard = ({ data, userType }) => {
                         {transaction.from_passenger_name}
                       </span>
                       <span className="btn-text-m">
-                        ден{transaction.amount}
+                        {transaction.amount} currency
                       </span>
                     </div>
                   );

@@ -72,27 +72,27 @@ const WriteReviewModal = ({ handleClose, open, rideId }) => {
   return (
     <div className={`write-review-modal ${open ? "" : "hide"}`}>
       <Container>
-        <h3 className="heading-xxs text-center gray-text mt-4">Благодариме</h3>
+        <h3 className="heading-xxs text-center gray-text mt-4">Thank you</h3>
         <h1 className="heading-xxs mt-5 mb-4">
-          Споделете го вашето искуство со возачот
+          Share your experience with the driver
         </h1>
         <form onSubmit={handleSubmit}>
           <div className="text-center review-raitings-inputs pt-3 pb-3">
             <div className="mb-2">
-              <h4 className="body-bold-s mb-1">Поаѓање на време</h4>
+              <h4 className="body-bold-s mb-1">Departure on time</h4>
               <StarSelector name={"departureTime"} />
             </div>
             <div className="mb-2">
-              <h4 className="body-bold-s mb-1">Сигурност</h4>
+              <h4 className="body-bold-s mb-1">Safety</h4>
               <StarSelector name={"safety"} />
             </div>
             <div className="mb-2">
-              <h4 className="body-bold-s mb-1">Комоција</h4>
+              <h4 className="body-bold-s mb-1">Comfort</h4>
               <StarSelector name={"comfort"} />
             </div>
           </div>
           <h3 className="heading-xxs mt-4 mb-4">
-            Оставете краток опис за патувањето
+            Leave a short description of the trip
           </h3>
           <textarea
             className="review-text-input"
@@ -100,7 +100,7 @@ const WriteReviewModal = ({ handleClose, open, rideId }) => {
             onChange={handleReviewTextChange}
           ></textarea>
           <div className="d-flex justify-content-between gray-text body-bold-s">
-            <span>*Полето не е задолжително</span>
+            <span>*The field is not mandatory</span>
             {reviewText.length}/300
           </div>
           <Row className="submission-bottom-bar modal-bottom-bar">
@@ -109,7 +109,7 @@ const WriteReviewModal = ({ handleClose, open, rideId }) => {
                 className="col-12 mt-4 dark-button body-bold-medium dark-outline-button"
                 onClick={handleClose}
               >
-                Затвори
+                Close
               </Button>
             </Col>
             <Col xs={6}>
@@ -117,7 +117,7 @@ const WriteReviewModal = ({ handleClose, open, rideId }) => {
                 type="submit"
                 className="col-12 mt-4 dark-button body-bold-medium"
               >
-                Испрати
+                Submit
               </Button>
             </Col>
           </Row>

@@ -25,11 +25,10 @@ const Home = () => {
           <Row className="mt-5 home-search-row">
             <Col xs={12} xl={6} className="home-cta">
               <h2 className="heading-s white-text">
-                Која е твојата следна дестинација?
+                What is your next destination?
               </h2>
               <p className="body-xs white-text">
-                Најди го твојот најевтин и најбрз превоз до посакуваната
-                дестинација
+                Find your cheapest and fastest ride to your desired destination
               </p>
               <img
                 src="images/cta-underline-green.svg"
@@ -47,39 +46,37 @@ const Home = () => {
           <Col xs={12} xl={4} className="mb-4">
             <img src="images/divide-icon.svg" className="mb-1 icon" />
             <h4 className="heading-xxs">
-              Сподели превоз, патувај по најниски цени
+              Share rides, travel at the lowest prices
             </h4>
             <p className="body-s blue-text">
-              Со нас, патувањето е поевтино и поефикасно. Објавете го вашето
-              патување или приклучете се на веќе објавено патување и заштедете
-              пари. Нашата апликација ви овозможува лесно да најдете превоз до
-              вашата дестинација и да ги поделите трошоците со другите патници.
-              Време е да ги намалите трошоците за патување и да уживате во
-              удобноста на споделениот превоз.
+              With us, traveling is cheaper and more efficient. Post your ride
+              or join an already posted ride and save money. Our app allows you
+              to easily find transportation to your destination and share costs
+              with other passengers. It's time to reduce travel expenses and
+              enjoy the comfort of shared rides.
             </p>
           </Col>
           <Col xs={12} xl={4} className="mb-4">
             <img src="images/shield-icon.svg" className="mb-1 icon" />
-            <h4 className="heading-xxs">Сигурноста ни е на прво место</h4>
+            <h4 className="heading-xxs">Safety is our top priority</h4>
             <p className="body-s blue-text">
-              Вашата сигурност и безбедност се наш приоритет. Сите наши возачи и
-              патници се проверуваат и оценуваат за да ви обезбедиме највисоко
-              ниво на сигурност. Со нашата апликација, можете да го проверите
-              профилот и рејтингот на возачите и патниците пред да се приклучите
-              на патувањето. Ве охрабруваме да оставите повратни информации за
-              вашето искуство за да ја одржиме заедницата безбедна и доверлива.
+              Your safety and security are our priority. All our drivers and
+              passengers are verified and rated to ensure the highest level of
+              security. With our app, you can check the profile and rating of
+              drivers and passengers before joining a ride. We encourage you to
+              leave feedback about your experience to keep the community safe
+              and trustworthy.
             </p>
           </Col>
           <Col xs={12} xl={4} className="mb-4">
             <img src="images/dollar-icon.svg" className="mb-1 icon" />
-            <h4 className="heading-xxs">Плаќање со картичка или во кеш</h4>
+            <h4 className="heading-xxs">Pay by card or cash</h4>
             <p className="body-s blue-text">
-              Нашата платформа ви овозможува да изберете помеѓу плаќање со
-              картичка или во кеш. Доколку преферирате брзо и сигурно плаќање,
-              користете ја вашата картичка преку нашата апликација. За оние кои
-              преферираат кеш, можете да го договорите плаќањето директно со
-              возачот. Ние ја правиме секоја трансакција лесна и безбедна за
-              сите корисници.
+              Our platform allows you to choose between paying by card or cash.
+              If you prefer fast and secure payment, use your card through our
+              app. For those who prefer cash, you can arrange payment directly
+              with the driver. We make every transaction easy and secure for all
+              users.
             </p>
           </Col>
         </Row>
@@ -92,19 +89,18 @@ const Home = () => {
           <Row>
             <Col xs={12} xl={6}>
               <h4 className="heading-m white-text mt-4 mb-3">
-                Заштедете додека возите
+                Save while you drive
               </h4>
               <p className="body-s white-text mb-4">
-                Секое место во вашиот автомобил е можност за заштеда и за ново
-                пријателство. Со секој патник кој ќе се приклучи на вашето
-                патување, вашите трошоци се намалуваат, а патувањето станува
-                попријатно и поинтересно.
+                Every seat in your car is an opportunity for savings and a new
+                friendship. With each passenger who joins your ride, your costs
+                decrease, and the trip becomes more pleasant and interesting.
               </p>
               <button
                 className="green-button"
                 onClick={() => (window.location.href = "/post-ride")}
               >
-                Објавете превоз
+                Post a ride
               </button>
             </Col>
             <Col xs={12} xl={6} className="d-flex mobile-hide">
@@ -124,25 +120,24 @@ const Home = () => {
             </div>
           </Col>
           <Col xs={12} xl={6}>
-            <h4 className="heading-m mt-4 mb-3">За нас</h4>
+            <h4 className="heading-m mt-4 mb-3">About us</h4>
             <p className="body-s blue-text mb-4">
-              Ние сме тим кој со страст и посветеност работи на тоа да го
-              направиме патувањето поефтино, поудобно и попријатно за сите.
-              Нашата идеја е да ви овозможиме да ги споделите трошоците за
-              патувањето со други патници кои патуваат во истиот правец,
-              создавајќи еден поекономичен и поодржлив начин на транспорт.{" "}
-              <br /> <br /> Зад овој проект стоиме ние, тим од трojца основачи и
-              голем тим на поддржувачи. Особена благодарност им изразуваме на
-              сите наши поддржувачи, кои со својата посветеност и верба во
-              нашата идеја придонесоа да станеме тоа што сме денес. <br />{" "}
-              <br /> Ве покануваме да станете дел од нашата заедница и да ги
-              искусите придобивките од споделувањето на превозот.
+              We are a team passionate and dedicated to making travel cheaper,
+              more comfortable, and more enjoyable for everyone. Our idea is to
+              allow you to share travel costs with other passengers going in the
+              same direction, creating a more economical and sustainable way of
+              transportation. <br /> <br /> Behind this project is our team of
+              three founders and a large support team. Special thanks to all our
+              supporters, who with their dedication and belief in our idea
+              contributed to what we are today. <br /> <br /> We invite you to
+              become part of our community and experience the benefits of
+              ride-sharing.
             </p>
             <button
               className="green-button"
               onClick={() => (window.location.href = "/about-us")}
             >
-              Прочитај повеќе
+              Read more
             </button>
           </Col>
         </Row>
@@ -151,12 +146,11 @@ const Home = () => {
         <img src="images/visa-secure-icon.png" className="me-2" />
         <img src="images/mastercard-secure-icon.png" className="ms-2" />
         <p className="text-center body-xs mt-2">
-          Сите ваши трансакции се сигурни со нашата заштита, а истото важи и за
-          податоците што ги внесувате при резервирање.
+          All your transactions are secure with our protection, and the same
+          applies to the data you enter when booking.
         </p>
         <div className="text-center body-xs mt-2">
-          <a href="/privacy-policy">Политика на приватност</a> | © rideshare
-          2024
+          <a href="/privacy-policy">Privacy Policy</a> | © rideshare 2024
         </div>
       </footer>
     </>

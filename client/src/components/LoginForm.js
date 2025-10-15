@@ -39,12 +39,12 @@ const Login = () => {
       <Container>
         <BackButton />
         <div className="auth-container">
-          <h2>Најави се</h2>
+          <h2>Log In</h2>
           <Form onSubmit={handleSubmit} className="auth-forms">
             <Form.Group controlId="formBasicEmail">
               <Form.Control
                 type="email"
-                placeholder="Вашата е-пошта"
+                placeholder="Your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -56,7 +56,7 @@ const Login = () => {
               <div className="input-group">
                 <Form.Control
                   type={showPassword ? "text" : "password"}
-                  placeholder="Лозинка"
+                  placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
@@ -82,16 +82,16 @@ const Login = () => {
                 className="forgot-password"
                 onClick={() => navigate("/request-password-reset")}
               >
-                Ја заборави лозинката?
+                Forgot your password?
               </a>
             </div>
             <Form.Group controlId="formBasicUserType">
-              <Form.Label>Се најавувам како:</Form.Label>
+              <Form.Label>Logging in as:</Form.Label>
               <Container>
                 <Row>
                   <Col xs={6} className="ml-5">
                     <Form.Check
-                      label="Патник"
+                      label="Passenger"
                       type="radio"
                       id="passengerRadio"
                       name="userType"
@@ -102,7 +102,7 @@ const Login = () => {
                   </Col>
                   <Col xs={6}>
                     <Form.Check
-                      label="Возач"
+                      label="Driver"
                       type="radio"
                       id="driverRadio"
                       name="userType"
@@ -116,13 +116,13 @@ const Login = () => {
             </Form.Group>
 
             <Button className="dark-button col-12 mt-4" type="submit">
-              Најави се
+              Log In
             </Button>
             <Button
               className="dark-button dark-outline-button col-12 mt-2"
               onClick={() => navigate("/register")}
             >
-              Регистрирај се
+              Register
             </Button>
           </Form>
           {error && <Alert variant="danger">{error}</Alert>}

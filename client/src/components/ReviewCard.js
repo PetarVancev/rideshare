@@ -21,15 +21,15 @@ const ReviewCard = ({ review }) => {
           <p className="review-text">{review.text}</p>
         </div>
         <div className="d-flex justify-content-between mb-1">
-          <span>Поагање на време</span>
+          <span>Departure on time</span>
           <StarReview filledStars={review.time_correctness_score} />
         </div>
         <div className="d-flex justify-content-between mb-1">
-          <span>Сигурност</span>
+          <span>Safety</span>
           <StarReview filledStars={review.safety_score} />
         </div>
         <div className="d-flex justify-content-between mb-1">
-          <span>Комоција</span>
+          <span>Comfort</span>
           <StarReview filledStars={review.comfort_score} />
         </div>
       </Card.Body>
