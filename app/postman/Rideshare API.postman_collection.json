@@ -1,0 +1,1259 @@
+{
+	"info": {
+		"_postman_id": "6694a83d-df47-4424-9414-470feaecef96",
+		"name": "API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "10993519"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Passengers",
+					"item": [
+						{
+							"name": "Register passenger",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {}
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"phone_num\": \"+389709\",\r\n  \"email\": \"pvancev@yahoo.com\",\r\n  \"name\": \"Petar\",\r\n  \"surname\": \"Vanc\",\r\n  \"password\": \"JasiToj\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/auth/register/passenger",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"auth",
+										"register",
+										"passenger"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Passenger login",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"email\": \"pvancev@yahoo.com\",\r\n  \"password\": \"Password\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/auth/login/passenger",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"auth",
+										"login",
+										"passenger"
+									]
+								},
+								"description": "\n### Auth Login Passenger\nThis endpoint is used to authenticate a passenger for login.\n\n#### Request Body\n- `email` (string, required): The email of the passenger.\n- `password` (string, required): The password of the passenger.\n\n#### Response\n- `token` (string): A token generated upon successful authentication.\n\nUpon a successful request, this endpoint returns a status code of 200 and a JSON object containing the authentication token.\n\n"
+							},
+							"response": []
+						},
+						{
+							"name": "Check passenger email",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://api.rideshare.mk/auth/passenger/check-email?email=pvancev@gmail.com",
+									"protocol": "https",
+									"host": [
+										"api",
+										"rideshare",
+										"mk"
+									],
+									"path": [
+										"auth",
+										"passenger",
+										"check-email"
+									],
+									"query": [
+										{
+											"key": "email",
+											"value": "pvancev@gmail.com"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Check passenger phone",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3000/auth/passenger/check-phone?phone=%2B38970911388",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"auth",
+										"passenger",
+										"check-phone"
+									],
+									"query": [
+										{
+											"key": "phone",
+											"value": "%2B38970911388"
+										}
+									]
+								},
+								"description": "%2B is encoding for +"
+							},
+							"response": []
+						},
+						{
+							"name": "Request a passenger password reset",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"email\": \"pvancev@gmail.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/auth/passenger/request-password-reset",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"auth",
+										"passenger",
+										"request-password-reset"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Reset passenger password",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"resetToken\": \"fa5105a307e28a35cde9d3b7fd0f6d30ada6788d\",\r\n  \"newPassword\": \"23Natasha\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/auth/passenger/password-reset",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"auth",
+										"passenger",
+										"password-reset"
+									]
+								},
+								"description": "This endpoint is used to initiate a password reset for a passenger account. The HTTP POST request should be sent to [http://localhost:3000/auth/passenger/password-reset](http://localhost:3000/auth/passenger/password-reset) with the required parameters in the request body.\n\n### Request Body\n\n- email (text, required): The email address of the passenger for which the password reset is requested.\n- resetToken (text, required): The token received by the passenger to verify the password reset request.\n- newPassword (text, required): The new password that the passenger wants to set.\n    \n\n### Response\n\nUpon successful execution, the endpoint returns a 200 status with a JSON response containing a message indicating the status of the password reset process.\n\nExample:\n\n``` json\n{\n    \"message\": \"Password reset successful\"\n}\n\n ```"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Drivers",
+					"item": [
+						{
+							"name": "Register driver",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"phone_num\": \"+389709\",\r\n  \"email\": \"pvancev@yahoo.com\",\r\n  \"name\": \"Petar\",\r\n  \"surname\": \"Vanc\",\r\n  \"password\": \"JasiToj\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/auth/register/driver",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"auth",
+										"register",
+										"driver"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Driver login",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"email\": \"pvan@gmail.com\",\r\n  \"password\": \"23Natasha\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/auth/login/driver",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"auth",
+										"login",
+										"driver"
+									]
+								},
+								"description": "\n### Auth Login Driver\n\nThis endpoint is used to authenticate a driver for login.\n\n**Request Body**\n- email (text, required): The email of the driver.\n- password (text, required): The password of the driver.\n\n**Response**\n- Status: 200 OK\n- Content-Type: application/json\n- token (string): The authentication token for the driver.\n\n"
+							},
+							"response": []
+						},
+						{
+							"name": "Check driver email",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3000/auth/driver/check-email?email=pvancev@gmai.com",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"auth",
+										"driver",
+										"check-email"
+									],
+									"query": [
+										{
+											"key": "email",
+											"value": "pvancev@gmai.com"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Check driver phone",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3000/auth/driver/check-phone?phone=%2B38970911388",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"auth",
+										"driver",
+										"check-phone"
+									],
+									"query": [
+										{
+											"key": "phone",
+											"value": "%2B38970911388"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Request a driver password reset",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"email\": \"pvancev@yahoo.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/auth/driver/request-password-reset",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"auth",
+										"driver",
+										"request-password-reset"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Reset driver password",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"resetToken\": \"2ef7bff9897cfa1672b1c1cefefdb596a5f930bd\",\r\n  \"newPassword\": \"23Natasha\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/auth/driver/password-reset",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"auth",
+										"driver",
+										"password-reset"
+									]
+								},
+								"description": "### Password Reset for Driver\n\nThis endpoint allows a driver to reset their password.\n\n#### Request Body\n\n- `email` (string): The email address of the driver.\n- `resetToken` (string): The reset token received by the driver.\n- `newPassword` (string): The new password to be set.\n    \n\n#### Response\n\n- Status: 200\n- Content-Type: application/json\n- `message` (string): A message indicating the result of the password reset process."
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Get logged user info",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsInVzZXJUeXBlIjoiZHJpdmVyIiwiZW1haWwiOiJwdmFuQGdtYWlsLmNvbSIsImlhdCI6MTcxMzQ1NTA0NCwiZXhwIjoxNzEzNDc2NjQ0fQ.Qvbh_1qW1jWMoHGuMaxxE6RC3n753g6NFC5Dz1QbaHE",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/auth/get-profile-info",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"auth",
+								"get-profile-info"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Complaints",
+			"item": [
+				{
+					"name": "Send a complaint",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjgsInVzZXJUeXBlIjoicGFzc2VuZ2VyIiwiZW1haWwiOiJwdmFuY2V2QHlhaG9vLmNvbSIsImlhdCI6MTcxMTEzMTkzOSwiZXhwIjoxNzExMTUzNTM5fQ.4yI10ybRIrzrFNhASr6dLXDhRvXBn__0C7cHtGEQn10",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"reservationId\": 1,\r\n    \"text\": \"Driver didn't come\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/complaints/send-complaint",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"complaints",
+								"send-complaint"
+							]
+						},
+						"description": "### Send Complaint\n\nThis endpoint makes an HTTP POST request to send a complaint.\n\n#### Request Body\n\n- `reservationId` (number) - The ID of the reservation.\n- `text` (string) - The text of the complaint.\n    \n\n#### Response\n\n- Status: 200\n- Content-Type: application/json\n- `message` (string) - A message indicating the status of the complaint submission."
+					},
+					"response": []
+				},
+				{
+					"name": "Get all complaints",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/complaints/get-all",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"complaints",
+								"get-all"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "GeoLocations",
+			"item": [
+				{
+					"name": "Locations autocomplete",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:3000/locations/autocomplete?name=Pr",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"locations",
+								"autocomplete"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "Pr"
+								}
+							]
+						},
+						"description": "\n# Location Autocomplete\n\nThis endpoint is used to retrieve location suggestions based on the provided name query parameter.\n\n## Request\n\n### Endpoint\n\n`GET /locations/autocomplete`\n\n### Query Parameters\n\n- `name` (string, required): The partial name of the location to search for.\n\n## Response\n\n- Status: 200\n- Content-Type: application/json\n\nExample response body:\n```json\n[\n    {\n        \"id\": 0,\n        \"name\": \"\"\n    }\n]\n```\nThe response contains an array of location objects, each having an `id` and `name` property.\n"
+					},
+					"response": []
+				},
+				{
+					"name": "Get location info",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://api.rideshare.mk/locations/get-location?locationId=7",
+							"protocol": "http",
+							"host": [
+								"api",
+								"rideshare",
+								"mk"
+							],
+							"path": [
+								"locations",
+								"get-location"
+							],
+							"query": [
+								{
+									"key": "locationId",
+									"value": "7"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Reservations",
+			"item": [
+				{
+					"name": "Passengers",
+					"item": [
+						{
+							"name": "Passenger confirm arrival",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjgsInVzZXJUeXBlIjoicGFzc2VuZ2VyIiwiZW1haWwiOiJwdmFuY2V2QHlhaG9vLmNvbSIsImlhdCI6MTcxMjA5MjE1OSwiZXhwIjoxNzEyMTEzNzU5fQ.K-BP1fqmuonoMByzW3j8HsF21goApTbuDCVN0GBCoPI",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:3000/reservations/passenger/confirm-arrival?reservationId=4",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"reservations",
+										"passenger",
+										"confirm-arrival"
+									],
+									"query": [
+										{
+											"key": "reservationId",
+											"value": "4"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Reserve a ride",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjgsInVzZXJUeXBlIjoicGFzc2VuZ2VyIiwiZW1haWwiOiJwdmFuY2V2QHlhaG9vLmNvbSIsImlhdCI6MTcxMjU5NDY1OCwiZXhwIjoxNzEyNjE2MjU4fQ.-NxYj2mZ4qWFOPSutBINfFS7TgodLqKIOtkhDMBPV6k",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"custom_drop_off\": {\r\n    \"location_lat\": 1.55555,\r\n    \"location_lon\": 6.55555\r\n  }\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/reservations/passenger/reserve?rideId=5&seats=1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"reservations",
+										"passenger",
+										"reserve"
+									],
+									"query": [
+										{
+											"key": "rideId",
+											"value": "5"
+										},
+										{
+											"key": "seats",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Drivers",
+					"item": [
+						{
+							"name": "Driver confirm at pick-up",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInVzZXJUeXBlIjoiZHJpdmVyIiwiZW1haWwiOiJwdmFuY2V2QHlhaG9vLmNvbSIsImlhdCI6MTcxMTIyNjU4MiwiZXhwIjoxNzExMjQ4MTgyfQ._8LTjJ_tEcmN17ye6yLGRGJrrLLHpaRRO0XWHiiztls",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"latitude\": 41.12345,\r\n    \"longitude\": 41.12345\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/reservations/driver/confirm-pickup?reservationId=1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"reservations",
+										"driver",
+										"confirm-pickup"
+									],
+									"query": [
+										{
+											"key": "reservationId",
+											"value": "1"
+										}
+									]
+								},
+								"description": "\nThis endpoint is used to confirm the pickup for a reservation made by a driver. It is an HTTP POST request that is sent to http://localhost:3000/reservations/driver/confirm-pickup with the reservationId as a query parameter.\n\n### Request Body\n- The request body should be sent in raw format and should include the following parameters:\n  - latitude (number): The latitude of the pickup location.\n  - longitude (number): The longitude of the pickup location.\n\n### Response\nUpon a successful execution, the endpoint returns a 200 status with a JSON response containing a message indicating the status of the pickup confirmation.\n\nExample response:\n```json\n{\n    \"message\": \"...\"\n}\n```\n"
+							},
+							"response": []
+						},
+						{
+							"name": "Decline reservation proposal",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsInVzZXJUeXBlIjoiZHJpdmVyIiwiZW1haWwiOiJwdmFuQGdtYWlsLmNvbSIsImlhdCI6MTcxMjA5MjI2MiwiZXhwIjoxNzEyMTEzODYyfQ.EoIaOUIY5zXFSeb938W_nwQAgxig6-i7NYL9tgqN2m8",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:3000/reservations/driver/decline-proposal?reservationId=3",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"reservations",
+										"driver",
+										"decline-proposal"
+									],
+									"query": [
+										{
+											"key": "reservationId",
+											"value": "3"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Accept reservation proposal",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsInVzZXJUeXBlIjoiZHJpdmVyIiwiZW1haWwiOiJwdmFuQGdtYWlsLmNvbSIsImlhdCI6MTcxMjA5MjI2MiwiZXhwIjoxNzEyMTEzODYyfQ.EoIaOUIY5zXFSeb938W_nwQAgxig6-i7NYL9tgqN2m8",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:3000/reservations/driver/accept-proposal?reservationId=4",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"reservations",
+										"driver",
+										"accept-proposal"
+									],
+									"query": [
+										{
+											"key": "reservationId",
+											"value": "4"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Get my reservations",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjgsInVzZXJUeXBlIjoicGFzc2VuZ2VyIiwiZW1haWwiOiJwdmFuY2V2QHlhaG9vLmNvbSIsImlhdCI6MTcxMTc1NDMyMiwiZXhwIjoxNzExNzc1OTIyfQ.gZI8XMAh-MceoFnemLSygFvvrwi1vpLDre4FimI9yJ4",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/reservations/passenger/get-my",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"reservations",
+								"passenger",
+								"get-my"
+							]
+						},
+						"description": "\nThis endpoint retrieves reservations based on the provided status for the authenticated user.\n\n### Request\n\n- Method: GET\n- URL: `http://localhost:3000/reservations/get-my`\n- Query Parameters:\n  - status (string, required): The status of the reservations to retrieve.\n\n### Response\n\n- Status: 200\n- Content-Type: application/json\n- Body: \n  ```json\n  [\n    {\n      \"id\": 0,\n      \"ride_id\": 0,\n      \"passenger_id\": 0,\n      \"num_seats\": 0,\n      \"status\": \"\",\n      \"pick_up_lat\": \"\",\n      \"pick_up_lon\": \"\"\n    }\n  ]\n  ```\n\nThe response contains an array of reservation objects with their respective details such as ID, ride ID, passenger ID, number of seats, status, pick-up latitude, and pick-up longitude.\n"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Reviews",
+			"item": [
+				{
+					"name": "Post a review",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJUeXBlIjoicGFzc2VuZ2VyIiwiZW1haWwiOiJwdmFuY2V2QGdtYWlsLmNvbSIsImlhdCI6MTcxMDc5OTQzNCwiZXhwIjoxNzEwODIxMDM0fQ.ZYiIMJB8ZFgDTzJH4onOnmxwn6Jcvd9-Fufhw-UWoX0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"rideId\": 4,\r\n    \"rating\": 4,\r\n    \"review\": \"Good driver\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/reviews/post-review",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"reviews",
+								"post-review"
+							]
+						},
+						"description": "### Add Review\n\nThis endpoint allows you to submit a review for a ride.\n\n**HTTP Request**  \n`POST http://localhost:3000/reviews/post-review`\n\n**Parameters**\n\n- `rideId` (number, required): The ID of the ride for which the review is being submitted.\n- `rating` (number, required): The rating given for the ride.\n- `review` (string, optional): Any additional comments or review for the ride.\n    \n\n**Response**\n\n- Status: 403 Forbidden\n- Content-Type: application/json\n- `error` (string): An error message indicating the reason for the forbidden status."
+					},
+					"response": []
+				},
+				{
+					"name": "Get all driver reviews",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/reviews/get-all?driverId=4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"reviews",
+								"get-all"
+							],
+							"query": [
+								{
+									"key": "driverId",
+									"value": "4"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Rides",
+			"item": [
+				{
+					"name": "Create a ride",
+					"request": {
+						"auth": {
+							"type": "jwt",
+							"jwt": [
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								},
+								{
+									"key": "algorithm",
+									"value": "HS256",
+									"type": "string"
+								},
+								{
+									"key": "isSecretBase64Encoded",
+									"value": false,
+									"type": "boolean"
+								},
+								{
+									"key": "payload",
+									"value": "{}",
+									"type": "string"
+								},
+								{
+									"key": "headerPrefix",
+									"value": "Bearer",
+									"type": "string"
+								},
+								{
+									"key": "queryParamKey",
+									"value": "token",
+									"type": "string"
+								},
+								{
+									"key": "header",
+									"value": "{}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInVzZXJUeXBlIjoiZHJpdmVyIiwiZW1haWwiOiJwdmFuY2V2QHlhaG9vLmNvbSIsImlhdCI6MTcxMDc3ODUyOCwiZXhwIjoxNzEwODAwMTI4fQ.l7JdrYjoTymzOkPVm9lTNj6zGrNjlFBcbrW_QoRQC64",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"from_loc_id\": 1,\r\n  \"to_loc_id\": 3,\r\n   \"date_time\": \"2024-03-21 14:32:59\",\r\n   \"ride_duration\": \"01:22:00\",\r\n  \"flexible_departure\": true,\r\n  \"flexible_arrival\": true,\r\n    \"total_seats\": 5,\r\n    \"price\": 300,\r\n    \"notice\": \"Nemam nisto\",\r\n    \"car_model\": \"Skoda Fabia\",\r\n    \"car_color\": \"White\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/rides/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"rides",
+								"create"
+							]
+						},
+						"description": "\n### Create Ride\n\nThis endpoint allows you to create a new ride.\n\n#### Request Body\n- `from_loc_id` (integer) - The ID of the location from which the ride will start.\n- `to_loc_id` (integer) - The ID of the location to which the ride will go.\n- `date_time` (string) - The date and time of the ride.\n- `type` (string) - The type of the ride.\n- `total_seats` (integer) - The total number of seats available in the ride.\n- `price` (integer) - The price of the ride.\n- `car_model` (string) - The model of the car for the ride.\n- `car_color` (string) - The color of the car for the ride.\n\n#### Response\n- Status: 201\n- Content-Type: application/json\n- `message` (string) - A message confirming the successful creation of the ride.\n\n"
+					},
+					"response": []
+				},
+				{
+					"name": "Get my rides",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsInVzZXJUeXBlIjoiZHJpdmVyIiwiZW1haWwiOiJwdmFuQGdtYWlsLmNvbSIsImlhdCI6MTcxMjU5NDA2OSwiZXhwIjoxNzEyNjE1NjY5fQ.wEZV88yKvnyTRNiWlnh0U7zJNJtdgVUg7uRasVqvBm4",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/rides/get-my?status=C",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"rides",
+								"get-my"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "C"
+								}
+							]
+						},
+						"description": "This endpoint retrieves the rides associated with the authenticated user.\n\nUpon a successful execution, the response will include an array of ride objects, each containing details such as ride ID, driver ID, location IDs for the origin and destination, date and time, ride type, total seats, free seats, price, driver arrival status, car model, and car color.\n\nExample response:\n\n``` json\n{\n    \"rides\": [\n        {\n            \"id\": 0,\n            \"driver_id\": 0,\n            \"from_loc_id\": 0,\n            \"to_loc_id\": 0,\n            \"date_time\": \"\",\n            \"type\": \"\",\n            \"total_seats\": 0,\n            \"free_seats\": 0,\n            \"price\": 0,\n            \"driver_arrived\": 0,\n            \"car_model\": \"\",\n            \"car_color\": \"\"\n        }\n    ]\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a ride",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInVzZXJUeXBlIjoiZHJpdmVyIiwiZW1haWwiOiJwdmFuY2V2QHlhaG9vLmNvbSIsImlhdCI6MTcxMDYxODMxMSwiZXhwIjoxNzEwNjM5OTExfQ.asyeCQymJi-qeRx5WREzkF5s4_dtZQN8ic4HJSs0yic",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/rides/delete/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"rides",
+								"delete",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search for rides",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/rides/search?from_loc_id=1&to_loc_id=3&date_time=2024-03-21&seats=2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"rides",
+								"search"
+							],
+							"query": [
+								{
+									"key": "from_loc_id",
+									"value": "1"
+								},
+								{
+									"key": "to_loc_id",
+									"value": "3"
+								},
+								{
+									"key": "date_time",
+									"value": "2024-03-21"
+								},
+								{
+									"key": "seats",
+									"value": "2"
+								}
+							]
+						},
+						"description": "# Ride Search\n\nThis endpoint allows users to search for available rides based on the specified parameters.\n\n## Request\n\n### Endpoint\n\n`GET` [http://localhost:3000/rides/search](http://localhost:3000/rides/search)\n\n### Query Parameters\n\n- `from_loc_id` (integer) - The ID of the location from which the ride will start.\n- `to_loc_id` (integer) - The ID of the location to which the ride will go.\n- `date_time` (string) - The date and time for the ride in the format 'YYYY-MM-DD'.\n    \n\n## Response\n\n### Status: 200 OK\n\n### Content-Type: application/json\n\nThe response will be a JSON array containing objects with the following attributes:\n\n- `id` (integer) - The unique identifier of the ride.\n- `driver_id` (integer) - The ID of the driver for the ride.\n- `from_loc_id` (integer) - The ID of the location from which the ride will start.\n- `to_loc_id` (integer) - The ID of the location to which the ride will go.\n- `date_time` (string) - The date and time for the ride in the format 'YYYY-MM-DD'.\n- `total_seats` (integer) - The total number of seats available in the car.\n- `free_seats` (integer) - The number of available seats in the car.\n- `price` (integer) - The price for the ride.\n- `car_model` (string) - The model of the car for the ride.\n- `car_color` (string) - The color of the car for the ride."
+					},
+					"response": []
+				},
+				{
+					"name": "Get ride info",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/rides/get-ride?rideId=4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"rides",
+								"get-ride"
+							],
+							"query": [
+								{
+									"key": "rideId",
+									"value": "4"
+								}
+							]
+						},
+						"description": "\nThis endpoint retrieves details of a specific ride identified by the rideId parameter. The response will include information such as the ride ID, driver ID, date and time of the ride, ride duration, total and free seats available, price, car model and color, additional information, driver name, and the from and to locations.\n\nThe response will be in JSON format with the status code 200.\n"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Wallet",
+			"item": [
+				{
+					"name": "Withdraw",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsInVzZXJUeXBlIjoiZHJpdmVyIiwiZW1haWwiOiJwdmFuQGdtYWlsLmNvbSIsImlhdCI6MTcxMjc3MzYzMiwiZXhwIjoxNzEyNzk1MjMyfQ.baqG7tyJNs7WIABsMGUm5v80X1Pg2f7_wG1635IXYn8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"amount\": 100\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/wallet/withdraw",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"wallet",
+								"withdraw"
+							]
+						},
+						"description": "This POST request is used to withdraw funds from a wallet. The request should include the amount to be withdrawn in the request body.\n\n### Request Body\n\n- amount: (number) The amount to be withdrawn from the wallet.\n    \n\nThe response to the request will have a status code of 201 and a JSON content type. The response body will contain a message indicating the success of the withdrawal, and the new balance in the wallet after the withdrawal.\n\n### Response Body\n\n- message: (string) A message indicating the result of the withdrawal.\n- newBalance: (number) The new balance in the wallet after the withdrawal."
+					},
+					"response": []
+				},
+				{
+					"name": "Deposit",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjgsInVzZXJUeXBlIjoicGFzc2VuZ2VyIiwiZW1haWwiOiJwdmFuY2V2QHlhaG9vLmNvbSIsImlhdCI6MTcxMzIwODg1MCwiZXhwIjoxNzEzMjMwNDUwfQ.xpn1KqjhqKZdpRmtfYDXBbZN63B8HZkXAgxokO5RMY0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"amount\": 300\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/wallet/deposit",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"wallet",
+								"deposit"
+							]
+						},
+						"description": "This endpoint allows the user to deposit funds into their wallet. The HTTP POST request should be made to [http://localhost:3000/wallet/deposit](http://localhost:3000/wallet/deposit) with the raw request body type. The request body should include the \"amount\" parameter indicating the amount to be deposited.\n\n### Request Body\n\n- amount: (number) The amount to be deposited into the wallet.\n    \n\n### Response\n\n- Status: 201\n- Content-Type: application/json\n- message: A message indicating the result of the deposit action.\n- newBalance: The updated balance in the wallet after the deposit.\n    \n\nExample:\n\n``` json\n{\n    \"message\": \"Deposit successful\",\n    \"newBalance\": 100\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "Get ride transactions",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsInVzZXJUeXBlIjoiZHJpdmVyIiwiZW1haWwiOiJwdmFuQGdtYWlsLmNvbSIsImlhdCI6MTcxMjc3MDk4NywiZXhwIjoxNzEyNzkyNTg3fQ.qsER8h_sCO9ZPd0IZ7Zq9OKyUQr0ySvRInP9-goLz5g",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/wallet/get-ride-transactions?rideId=5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"wallet",
+								"get-ride-transactions"
+							],
+							"query": [
+								{
+									"key": "rideId",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get withdrawals",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/wallet/get-withdrawals",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"wallet",
+								"get-withdrawals"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Passenger transactions",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjgsInVzZXJUeXBlIjoicGFzc2VuZ2VyIiwiZW1haWwiOiJwdmFuY2V2QHlhaG9vLmNvbSIsImlhdCI6MTcxMjgzMDg4NywiZXhwIjoxNzEyODUyNDg3fQ.zSSUndeBzQTGg9LgFXvv1Jve4R9r0uv_5r1X1zxQzII",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/wallet/get-passenger-transactions",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"wallet",
+								"get-passenger-transactions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get balance",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjgsInVzZXJUeXBlIjoicGFzc2VuZ2VyIiwiZW1haWwiOiJwdmFuY2V2QHlhaG9vLmNvbSIsImlhdCI6MTcxMjkzMjk1NCwiZXhwIjoxNzEyOTU0NTU0fQ.OnqH_d1SlujP_5qZY00iEzhdXk3PHECOm7iEIDDj56E",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/wallet/get-balance",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"wallet",
+								"get-balance"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get deposits",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "32131",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/wallet/get-deposits",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"wallet",
+								"get-deposits"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
