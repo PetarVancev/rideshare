@@ -19,7 +19,7 @@ const AboutUs = () => {
           creating a more economical and sustainable way of transportation.
         </p>
         <div className=" pb-4 pt-4">
-          <h3 className="heading-xxs mb-3">Мисија</h3>
+          <h3 className="heading-xxs mb-3">Mission</h3>
           <p>
             Our mission is to listen and care for our users. You are the ones
             who help us grow and improve. Any feedback, suggestion or criticism
@@ -29,7 +29,7 @@ const AboutUs = () => {
           </p>
         </div>
         <div className=" pb-4 pt-4">
-          <h3 className="heading-xxs mb-3">Тим</h3>
+          <h3 className="heading-xxs mb-3">Team</h3>
           <p>
             Behind this project are us, a team of three founders and a large
             team of supporters. We express special gratitude to all our
